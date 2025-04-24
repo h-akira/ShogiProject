@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+    commands:
+      - pip3 install -r requirements.txt -t Layer/python/
+      # - pip3 install git+https://github.com/h-akira/hads.git@main
+  build:
+    commands:
+      - aws s3 sync $(jq -r ".static.local" admin.json) $(jq -r ".static.s3" admin.json) --delete
+      - sam build
+      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+      # - hads-admin.py admin.json --static-sync2s3
+      # - hads-admin.py admin.json --build
+      # - hads-admin.py admin.json --deploy --no-confirm-changeset

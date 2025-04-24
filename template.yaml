@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  AWSGITEST
+
+  Sample SAM Template for AWSGITEST
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+    Tracing: Active
+    MemorySize: 512
+    # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
+  Api:
+    TracingEnabled: true
+Resources:
+  MainAPIGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: 'api-hads-sample'
+      StageName: 'stage-01'
+  MainFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: 'lambda-hads-sample'
+      CodeUri: Lambda/
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.12
+      Layers:
+        - !Ref MainLayer
+      Role: !GetAtt LambdaExecutionRole.Arn
+      LoggingConfig:
+        LogFormat: JSON
+      Events:
+        ApiRoot:
+          Type: Api
+          Properties:
+            Path: '/'
+            Method: ANY
+            RestApiId:
+              Ref: MainAPIGateway
+        ApiProxy:
+          Type: Api
+          Properties:
+            Path: '/{proxy+}'
+            Method: ANY
+            RestApiId:
+              Ref: MainAPIGateway
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        - "arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
+      Policies:
+        - PolicyName: "policy-hads-sample-lambda-exec"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "ssm:GetParameter"
+                Resource: "*"
+  ApiGatewayUrlParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: "/HadsSampleProject/APIGW_URL"
+      Type: String
+      Value: !Sub "https://${MainAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/stage-01"
+  MainLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: 'layer-hads-sample'
+      ContentUri: Layer/
+      CompatibleRuntimes:
+        - python3.12
+  ApplicationResourceGroup:
+    Type: AWS::ResourceGroups::Group
+    Properties:
+      Name:
+        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+      ResourceQuery:
+        Type: CLOUDFORMATION_STACK_1_0
+  ApplicationInsightsMonitoring:
+    Type: AWS::ApplicationInsights::Application
+    Properties:
+      ResourceGroupName:
+        Ref: ApplicationResourceGroup
+      AutoConfigurationEnabled: 'true'
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  HelloWorldApi:
+    Description: API Gateway endpoint URL for Prod stage for Hello World function
+    Value: !Sub "https://${MainAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/stage-01/"
