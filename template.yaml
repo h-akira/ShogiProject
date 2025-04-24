@@ -18,12 +18,12 @@ Resources:
   MainAPIGateway:
     Type: AWS::Serverless::Api
     Properties:
-      Name: 'api-hads-sample'
+      Name: 'api-sgp-main'
       StageName: 'stage-01'
   MainFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: 'lambda-hads-sample'
+      FunctionName: 'lambda-sgp-main'
       CodeUri: Lambda/
       Handler: lambda_function.lambda_handler
       Runtime: python3.12
@@ -50,6 +50,7 @@ Resources:
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: 'role-sgp-lamnbda-exec'
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -61,7 +62,7 @@ Resources:
         - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
         - "arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
       Policies:
-        - PolicyName: "policy-hads-sample-lambda-exec"
+        - PolicyName: "policy-sgp-lambda-exec"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -69,16 +70,10 @@ Resources:
                 Action:
                   - "ssm:GetParameter"
                 Resource: "*"
-  ApiGatewayUrlParameter:
-    Type: AWS::SSM::Parameter
-    Properties:
-      Name: "/HadsSampleProject/APIGW_URL"
-      Type: String
-      Value: !Sub "https://${MainAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/stage-01"
   MainLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      LayerName: 'layer-hads-sample'
+      LayerName: 'layer-sgp-main'
       ContentUri: Layer/
       CompatibleRuntimes:
         - python3.12
@@ -95,10 +90,3 @@ Resources:
       ResourceGroupName:
         Ref: ApplicationResourceGroup
       AutoConfigurationEnabled: 'true'
-Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: API Gateway endpoint URL for Prod stage for Hello World function
-    Value: !Sub "https://${MainAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/stage-01/"

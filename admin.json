@@ -3,7 +3,7 @@
   "profile": "hads",
   "static":{
     "local": "static",
-    "s3": "s3://hakira0627-hads-sample/static"
+    "s3": "s3://hakira0627-sgp-main/static"
   },
   "local_server":{
     "port":{

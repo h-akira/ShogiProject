@@ -1,5 +1,5 @@
 import os
-MAPPING_PATH = "stage-01"  # API Gatewayをそのまま使う場合はステージ名、独自ドメインを使う場合は空文字列、Localでは空文字列に上書き
+MAPPING_PATH = ""  # API Gatewayをそのまま使う場合はステージ名、独自ドメインを使う場合は空文字列、Localでは空文字列に上書き
 MAPPING_PATH_LOCAL = ""  # API Gatewayをそのまま使う場合はステージ名、独自ドメインを使う場合は空文字列、Localでは空文字列に上書き
 DEBUG = True
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
@@ -27,15 +27,15 @@ if os.path.exists(os.path.join(BASE_DIR, "../admin.json")):
 else:
   ssm = boto3.client('ssm')
 COGNITO= Cognito(
-  domain = ssm.get_parameter(Name="/HadsSampleProject/Cognito/domain")["Parameter"]["Value"],
-  user_pool_id = ssm.get_parameter(Name="/HadsSampleProject/Cognito/user_pool_id")["Parameter"]["Value"],
-  client_id = ssm.get_parameter(Name="/HadsSampleProject/Cognito/client_id")["Parameter"]["Value"],
-  client_secret = ssm.get_parameter(Name="/HadsSampleProject/Cognito/client_secret")["Parameter"]["Value"],
+  domain= ssm.get_parameter(Name="/ShogiProject/Cognito/domain")["Parameter"]["Value"],
+  user_pool_id = ssm.get_parameter(Name="/ShogiProject/Cognito/user_pool_id")["Parameter"]["Value"],
+  client_id = ssm.get_parameter(Name="/ShogiProject/Cognito/client_id")["Parameter"]["Value"],
+  client_secret = ssm.get_parameter(Name="/ShogiProject/Cognito/client_secret")["Parameter"]["Value"],
   region = "ap-northeast-1"
 )
 AUTH_PAGE = ManagedAuthPage(
   scope = "aws.cognito.signin.user.admin email openid phone",
-  login_redirect_uri = ssm.get_parameter(Name="/HadsSampleProject/APIGW_URL")["Parameter"]["Value"],
+  login_redirect_uri = ssm.get_parameter(Name="/ShogiProject/URL/home")["Parameter"]["Value"],
   local_login_redirect_uri = "http://localhost:3000"
 )
 

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<!-- JQUERY -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- EasyMDE -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+<script>
+  {% if request.auth and request.username %}
+  var username = "{{ request.username }}";
+  {% else %}
+  var username = "";
+  {% endif %}
+</script>
+<script src="{{ 'static:js'|url(item='mde.js') }}"></script>
+<!-- Highlight.js -->
+<script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">
+{% endblock extra_css %}
+
+{% block title %}編集{% endblock title %}
+
+{% block content %}
+{# {{ item.username }} #}
+{# {{ 'wiki:edit'|url_for_slug(username=item.username, slug=item.slug) }} #}
+<div class="padding-side padding-top-10">
+  {% if type == "share_edit" %}
+  <form class="" action="{{ 'wiki:share_edit'|url(share_code=item.share_code) }}" method="post">
+    <button type="submit" name="action" value="end" class="button is-link">保存して終了</button>
+    <button type="submit" name="action" value="continue" class="button is-link">保存して継続</button>
+    <a href="{{'wiki:share_detail'|url(share_code=item.share_code) }}" class="button is-link is-light">戻る</a>
+  {% elif type == "edit" %}
+  <form class="" action="{{ 'wiki:edit'|url_for_slug(username=item.username, slug=item.slug) }}" method="post">
+    <button type="submit" name="action" value="end" class="button is-link">保存して終了</button>
+    <button type="submit" name="action" value="continue" class="button is-link">保存して継続</button>
+    <a href="{{'wiki:detail'|url_for_slug(username=item.username, slug=item.slug) }}" class="button is-link is-light">戻る</a>
+    {% if request.username == item.username %}
+    <a class="button js-modal-trigger is-link is-light" data-target="delete">削除</a>
+    {% endif %}
+  {% elif type == "create" %}
+  <form class="" action="{{ 'wiki:create'|url() }}" method="post">
+    <button type="submit" name="action" value="end" class="button is-link">保存して終了</button>
+    <button type="submit" name="action" value="continue" class="button is-link">保存して継続</button>
+  {% endif %}
+    {% if error_message %}
+    <p>{{ error_message }}</p>
+    {% endif %}
+    <p>タイトル：</p>
+    <p>{{ form.title }}</p>
+    {% if type != "share_edit" %}
+    <p>スラッグ：{{ form.slug }}</p>
+    <p>優先度　：{{ form.priority }}</p>
+    <p>公開　　：{{ form.public }}</p>
+    <p id="edit-permission-p">編集許可：{{ form.edit_permission }}</p>
+    <p>共有　　：{{ form.share }}</p>
+    <p id="share-code-p">共有コード　：{{ form.share_code }}</p>
+    <br>
+    <p id="share-edit-permission-p">共有編集許可：{{ form.share_edit_permission }}</p>
+    {% endif %}
+    {# <div id="editor"> #}
+    <div class="content">
+      {{ form.text }}
+      <script>
+        const mde = initMDE(document.getElementById('text'));
+        {# const easyMDE = new EasyMDE( #}
+        {#   { #}
+        {#     element: document.getElementById('text'), #}
+        {#     renderingConfig: { #}
+        {#       codeSyntaxHighlighting: true #}
+        {#     } #}
+        {#   } #}
+        {# ); #}
+      </script>
+    </div>
+  </form>
+  {% if type == "edit" and request.username == item.username %}
+  {% include 'wiki/delete_modal.html' %}
+  {% endif %}
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+<script>hljs.highlightAll();</script>
+{% if type != "share_edit" %}
+<script src="{{ 'static:js'|url(item='edit_permission.js') }}"></script>
+<script src="{{ 'static:js'|url(item='share_edit_permission.js') }}"></script>
+{% endif %}
+{% if type == "edit" and request.username == item.username %}
+<script src="{{ 'static:js'|url(item='modal.js') }}"></script>
+{% endif %}
+{% endblock extra_js %}

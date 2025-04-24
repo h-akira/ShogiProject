@@ -1,9 +1,5 @@
-/* 横幅が1200px以下の時にカラムを折り返す */
-@media screen and (max-width: 1200px) {
-  .columns.is-multiline .column {
-    flex-basis: 100%;
-    max-width: 100%;
-  }
+.img-center {
+  text-align:center;
 }
 
 /* navbarの背景色とテキストカラー */
@@ -28,6 +24,7 @@
   left: -450px;
   width: 450px;
   max-width: 100%;
+  height: calc(100vh - 3.25rem);
   /* height: 100vh; */
   /* background-color: #4a4a4a; */
   overflow-y: auto;
@@ -44,10 +41,22 @@
     margin-right: 0;
 }
 
-
 .card-bordered {
   border: 1px solid #2b2b2b;
 }
+
+/* .ul-redefinition ul { */
+/*     list-style-type: disc; */
+/*     padding-left: 1em; */
+/* } */
+/*  */
+/* .ul-redefinition ul ul { */
+/*     list-style-type: circle; */
+/* } */
+/*  */
+/* .ul-redefinition ul ul ul { */
+/*     list-style-type: square; /* */
+/* } */
 
 .padding-top-10 {
   padding-top: 10px;
@@ -79,11 +88,48 @@
   text-decoration-color: white;
 }
 
-
-.markdownx table {
-  border-collapse: collapse;
+/* 参考 */
+/* https://chibashi.me/development/html-css/css-treestructure/ */
+.tree ul {
+  list-style-type: none;
+  margin: 0 0 0 15px;
+  padding: 0;
+  position: relative;
+}
+.tree ul li {
+  position: relative;
+  margin: 0;
+  padding: 7px 20px;
+}
+.tree ul li:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 18px;
+  left: 0;
+  width: 13px;
+  height: 0;
+  border-top: 1px solid #666;
+}
+.tree ul li:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  border-left: 1px solid #666;
+}
+.tree ul li:last-child:after {
+  height: 18px;
 }
 
-.markdownx th,td {
-  border: solid 2px;
+.tree > ul > li:before,
+.tree > ul > li:after {
+  border: none;
+}
+.tree i {
+  margin-right: 8px;
 }
