@@ -20,6 +20,7 @@ Resources:
     Properties:
       Name: 'api-sgp-main'
       StageName: 'stage-01'
+      EndpointConfiguration: REGIONAL
   MainFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -38,15 +39,13 @@ Resources:
           Properties:
             Path: '/'
             Method: ANY
-            RestApiId:
-              Ref: MainAPIGateway
+            RestApiId: !Ref MainAPIGateway
         ApiProxy:
           Type: Api
           Properties:
             Path: '/{proxy+}'
             Method: ANY
-            RestApiId:
-              Ref: MainAPIGateway
+            RestApiId: !Ref MainAPIGateway
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
