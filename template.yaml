@@ -50,7 +50,7 @@ Resources:
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: 'role-sgp-lamnbda-exec'
+      RoleName: 'role-sgp-lambda-exec'
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
