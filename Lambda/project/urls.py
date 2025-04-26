@@ -7,5 +7,5 @@ urlpatterns = [
   # Path("home", index, name="home2"),
   # Path("sample/{parameter}", sample, name="sample"),
   # Path("logout", logout, name="logout"),
-  Router("", "kifu.urls", name="example")
+  Router("", "kifu.urls", name="kifu")
 ]
