@@ -5,6 +5,10 @@
     "local": "static",
     "s3": "s3://hakira0627-sgp-main/CloudFront/static"
   },
+  "favicon":{
+    "local": "favicon/favicon.ico",
+    "s3": "s3://hakira0627-sgp-main/CloudFront/favicon.ico"
+  },
   "local_server":{
     "port":{
       "static":8080,
