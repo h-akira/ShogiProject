@@ -30,7 +30,10 @@
     </div>
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item" href="{{ reverse(master, 'kifu:home') }}">ホーム</a>
+        <a class="navbar-item" href="{{ reverse(master, 'home') }}">ホーム</a>
+        {% if master.request.auth %}
+        <a class="navbar-item" href="{{ reverse(master, 'kifu:index', username=master.request.username) }}">マイページ</a>
+        {% endif %}
         <a class="navbar-item sidebar-toggle" role="button">記事一覧</a>
         {# {% if request.auth %} #}
         {# <a class="navbar-item" href="{{ 'kifu:create'|url() }}">新規作成</a>
