@@ -1,6 +1,7 @@
 from hads.urls import Path
-from .views import index
+from .views import index, explorer
 
 urlpatterns = [
-  Path("", index, name="home")
+  Path("{username}", index, name="index"),
+  Path("{username}/explorer", exploler, name="exploler"),
 ]
