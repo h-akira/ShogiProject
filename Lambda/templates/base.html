@@ -36,7 +36,7 @@
         {# <a class="navbar-item" href="{{ reverse(master, 'kifu:create', username=master.request.username) }}">棋譜登録</a> #}
         <a class="navbar-item" href="{{ reverse(master, 'kifu:explorer', username=master.request.username) }}">エクスプローラー</a>
         <a class="navbar-item" href="{{ reverse(master, 'tag:index', username=master.request.username) }}">タグ</a>
-        {% else %}
+        {% endinf %}
         <!-- <a class="navbar-item sidebar-toggle" role="button">記事一覧</a> -->
       </div>
       <div class="navbar-end">
