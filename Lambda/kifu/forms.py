@@ -12,10 +12,10 @@ class KifuForm(Form):
   share = BooleanField()
   share_code = StringField(render_kw={'style': 'width: 500px;'})
   first_or_second = SelectField(
-    choices=[('first', '先手'), ('second', '後手'), ('other', 'その他')]
+    choices=[('None', "---"), ('first', '先手'), ('second', '後手')]
     # validators=[Length(min=1, max=31)]
   )
   win_or_lose = SelectField(
-    choices=[('win', '勝ち'), ('lose', '負け'), ('sennichite', '千日手'), ('jishogi','持将棋'), ('other', 'その他')]
+    choices=[('None', "---"), ('win', '勝ち'), ('lose', '負け'), ('sennichite', '千日手'), ('jishogi','持将棋')]
     # validators=[Length(min=1, max=31)]
   )
