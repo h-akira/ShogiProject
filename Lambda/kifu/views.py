@@ -22,7 +22,7 @@ def explorer(master, username):
 def create(master, username):
   if master.request.method == 'POST':
     master.logger.info(master.request.body)
-    action = request.body["action"]
+    action = master.request.body["action"]
     form = KifuForm(**master.request.body)
     Item = form.data
     context = {
