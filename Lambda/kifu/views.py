@@ -21,8 +21,13 @@ def explorer(master, username):
 @login_required
 def create(master, username):
   if master.request.method == 'POST':
+    master.logger.info(master.request.body)
+    action = request.body["action"]
+    form = KifuForm(**master.request.body)
+    Item = form.data
     context = {
-      'username': username
+      "form": form,
+      "Item": Item
     }
     master.logger.info(master.request.body)
     return redirect(master, 'kifu:create', username=username)

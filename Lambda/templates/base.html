@@ -33,7 +33,7 @@
         <a class="navbar-item" href="{{ reverse(master, 'home') }}">ホーム</a>
         {% if master.request.auth %}
         <a class="navbar-item" href="{{ reverse(master, 'kifu:index', username=master.request.username) }}">マイページ</a>
-        {# <a class="navbar-item" href="{{ reverse(master, 'kifu:create', username=master.request.username) }}">棋譜登録</a> #}
+        <a class="navbar-item" href="{{ reverse(master, 'kifu:create', username=master.request.username) }}">棋譜登録</a>
         <a class="navbar-item" href="{{ reverse(master, 'kifu:explorer', username=master.request.username) }}">エクスプローラー</a>
         <a class="navbar-item" href="{{ reverse(master, 'tag:index', username=master.request.username) }}">タグ</a>
         {% endif %}
