@@ -29,16 +29,12 @@ def create(master, username):
       "form": form,
       "Item": Item
     }
-    master.logger.info(master.request.body)
-    return redirect(master, 'kifu:create', username=username)
-  elif master.request.method == 'GET':
     allow="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     length=32
     share_code = ''.join(random.choice(allow) for i in range(length))
-    initial = {
-      'share_code': share_code
-    }
-    form = KifuForm(data=initial)
+    return redirect(master, 'kifu:create', username=username)
+  elif master.request.method == 'GET':
+    form = KifuForm()
     context = {
       "type": "create",
       "form": form,
