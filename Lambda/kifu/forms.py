@@ -1,4 +1,4 @@
-from wtforms import Form, BooleanField, StringField, validators, IntegerField, TextAreaField
+from wtforms import Form, BooleanField, StringField, validators, IntegerField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Length
 
 class KifuForm(Form):
@@ -11,9 +11,11 @@ class KifuForm(Form):
   memo = TextAreaField()
   share = BooleanField()
   share_code = StringField(render_kw={'style': 'width: 500px;'})
-  first_or_second = StringField(
-    validators=[Length(min=1, max=31)]
+  first_or_second = SelectField(
+    choices=[('first', '先手'), ('second', '後手'), ('other', 'その他')]
+    # validators=[Length(min=1, max=31)]
   )
-  win_or_lose = StringField(
-    validators=[Length(min=1, max=31)]
+  win_or_lose = SelectField(
+    choices=[('win', '勝ち'), ('lose', '負け'), ('sennichite', '千日手'), ('jishogi','持将棋'), ('other', 'その他')]
+    # validators=[Length(min=1, max=31)]
   )

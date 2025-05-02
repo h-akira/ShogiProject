@@ -9,11 +9,13 @@
   <h1 class="title is-1 has-text-centered">ホーム</h1>
   {% if type == "edit" %}
   <form class="" action="{{ reverse(master, 'kifu:edit', kid=kid) }}" method="post">
+    {{ form.csrf_token }}
     <button type="submit" name="action" value="end" class="button is-link">保存して終了</button>
     <button type="submit" name="action" value="continue" class="button is-link">保存して継続</button>
     <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="button is-link is-light">戻る</a>
   {% elif type == "create" %}
   <form class="" action="{{ reverse(master, 'kifu:create', username=master.request.username) }}" method="post">
+    {{ form.csrf_token }}
     <button type="submit" name="action" value="end" class="button is-link">保存して終了</button>
     <button type="submit" name="action" value="continue" class="button is-link">保存して継続</button>
     <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="button is-link is-light">戻る</a>
