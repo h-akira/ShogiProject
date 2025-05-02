@@ -10,7 +10,6 @@ class KifuForm(Form):
   kifu = TextAreaField(render_kw={'style': 'width: 300px; height: 200px;'})
   memo = TextAreaField(render_kw={'style': 'width: 100%; height: 200px;'})
   share = BooleanField()
-  share_code = StringField(render_kw={'style': 'width: 500px;'})
   first_or_second = SelectField(
     choices=[('None', "---"), ('first', '先手'), ('second', '後手')]
     # validators=[Length(min=1, max=31)]
