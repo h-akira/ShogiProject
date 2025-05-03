@@ -4,6 +4,7 @@ from .forms import KifuForm
 import random
 import boto3
 from botocore.exceptions import ClientError
+from boto3.dynamodb.conditions import Key
 import datetime
 
 MAIN_TABLE_NAME = "table-sgp-main"
