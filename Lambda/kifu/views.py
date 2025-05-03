@@ -139,8 +139,8 @@ def create(master, username):
       return render(master, 'kifu/create.html', context)
     Item = {
       "pk": f"kifu#uname#{username}",
-      "sk": f"kid#{gen_code(KID_LENGTH)}",
-      "cgsi_pk": f"scode#{gen_code(SHARE_CODE_LENGTH)}",
+      "sk": f"kid#{_gen_code(KID_LENGTH)}",
+      "cgsi_pk": f"scode#{_gen_code(SHARE_CODE_LENGTH)}",
       "clsi_sk": f"slug#{form.data['slug']}",
       "public": form.data['public'],
       "share": form.data['share'],
