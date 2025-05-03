@@ -1,10 +1,13 @@
 import os
+m botocore.exceptions import ClientError
+
 MAPPING_PATH = ""  # API Gatewayをそのまま使う場合はステージ名、独自ドメインを使う場合は空文字列、Localでは空文字列に上書き
 MAPPING_PATH_LOCAL = ""  # API Gatewayをそのまま使う場合はステージ名、独自ドメインを使う場合は空文字列、Localでは空文字列に上書き
 DEBUG = True
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
-TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
+ = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
+TEMPLATE_DI os.path.join(BASE_DIR, "templates")
 STATIC_URL = "/static"  # 先頭の/はあってもなくても同じ扱
+TIMEZONE = "Asia/Tokyo"
 
 # ログイン周りの設定
 from hads.authenticate import Cognito, ManagedAuthPage

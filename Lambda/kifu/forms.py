@@ -11,10 +11,10 @@ class KifuForm(Form):
   memo = TextAreaField(render_kw={'style': 'width: 100%; height: 200px;'})
   share = BooleanField()
   first_or_second = SelectField(
-    choices=[('None', "---"), ('first', '先手'), ('second', '後手')]
+    choices=[('none', "---"), ('first', '先手'), ('second', '後手')]
     # validators=[Length(min=1, max=31)]
   )
-  win_or_lose = SelectField(
+  result = SelectField(
     choices=[('None', "---"), ('win', '勝ち'), ('lose', '負け'), ('sennichite', '千日手'), ('jishogi','持将棋')]
     # validators=[Length(min=1, max=31)]
   )
