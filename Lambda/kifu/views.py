@@ -81,12 +81,16 @@ def _slug_format_checker_return_error_message(slug: str):
 def _check_slug_exists(username, slug):
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
   try:
+    # response = table.query(
+    #   KeyConditionExpression=Key('username').eq(username)
+    # )
     response = table.query(
       IndexName="CommonLSI",
-      Key={
-        'pk': f"kifu#uname#{username}",
-        'clsi_sk': f"kid#{slug}"
-      }
+      KeyConditionExpression=Key('pk').eq(f"kifu#uname#{username}") & Key('clsi_sk').eq(f"slug#{slug}")
+      # Key={
+      #   'pk': f"kifu#uname#{username}",
+      #   'clsi_sk': f"kid#{slug}"
+      # }
     )
   except ClientError as e:
     raise e
