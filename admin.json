@@ -1,6 +1,6 @@
 {
   "region": "ap-northeast-1",
-  "profile": "hads",
+  "profile": "deploy",
   "static":{
     "local": "static",
     "s3": "s3://hakira0627-sgp-main/CloudFront/static"
