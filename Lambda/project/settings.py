@@ -1,10 +1,9 @@
 import os
-from botocore.exceptions import ClientError
 
 MAPPING_PATH = ""  # API Gatewayをそのまま使う場合はステージ名、独自ドメインを使う場合は空文字列、Localでは空文字列に上書き
 MAPPING_PATH_LOCAL = ""  # API Gatewayをそのまま使う場合はステージ名、独自ドメインを使う場合は空文字列、Localでは空文字列に上書き
 DEBUG = True
- = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
 TEMPLATE_DI os.path.join(BASE_DIR, "templates")
 STATIC_URL = "/static"  # 先頭の/はあってもなくても同じ扱
 TIMEZONE = "Asia/Tokyo"
