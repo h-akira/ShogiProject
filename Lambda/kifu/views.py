@@ -87,7 +87,7 @@ def _check_slug_exists(table, username, slug):
   except ClientError as e:
     raise e
   print(response)
-  if 'Item' in response:
+  if 'Items' in response:
     return True
   else:
     return False
