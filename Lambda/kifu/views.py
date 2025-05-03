@@ -78,8 +78,7 @@ def _slug_format_checker_return_error_message(slug: str):
     return "Slug cannot contain '#'."
   return None
 
-def _check_slug_exists(username, slug):
-  table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+def _check_slug_exists(table, username, slug):
   try:
     response = table.query(
       IndexName="CommonLSI",
@@ -87,6 +86,7 @@ def _check_slug_exists(username, slug):
     )
   except ClientError as e:
     raise e
+  print(response)
   if 'Item' in response:
     return True
   else:
@@ -110,6 +110,9 @@ def explorer(master, username):
 def create(master, username):
   if master.request.method == 'POST':
     master.logger.info(master.request.body)
+    table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+    now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
+    now_str = now.strftime("%Y-%m-%d %H:%M:%S")
     action = master.request.body["action"]
     form = KifuForm(**master.request.body)
     system = _get_system_from_table(master)
@@ -120,8 +123,6 @@ def create(master, username):
         "error_message": "Kifu limit exceeded"
       }
       return render(master, 'kifu/create.html', context)
-    now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
-    now_str = now.strftime("%Y-%m-%d %H:%M:%S")
     error_message = _slug_format_checker_return_error_message(form.data['slug'])
     if error_message is not None:
       context = {
@@ -130,7 +131,7 @@ def create(master, username):
         "error_message": error_message
       }
       return render(master, 'kifu/create.html', context)
-    if _check_slug_exists(username, form.data['slug']):
+    if _check_slug_exists(table, username, form.data['slug']):
       context = {
         "type": "create",
         "form": form,
