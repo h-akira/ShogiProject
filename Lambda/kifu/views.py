@@ -87,16 +87,12 @@ def _check_slug_exists(table, username, slug):
   except ClientError as e:
     raise e
   print(response)
-  if len(response["Items"]) > 1:
+  if response["Count"] > 1:
     raise Exception("Multiple items found with the same slug")
-  elif len(response["Items"]) == 1:
+  elif response["Count"] == 1:
     return True
   else:
     return False
-  # if 'Items' in response:
-  #   return True
-  # else:
-  #   return False
 
 @login_required
 def index(master, username):
