@@ -15,6 +15,6 @@ class KifuForm(Form):
     # validators=[Length(min=1, max=31)]
   )
   result = SelectField(
-    choices=[('None', "---"), ('win', '勝ち'), ('lose', '負け'), ('sennichite', '千日手'), ('jishogi','持将棋')]
+    choices=[('none', "---"), ('win', '勝ち'), ('lose', '負け'), ('sennichite', '千日手'), ('jishogi','持将棋')]
     # validators=[Length(min=1, max=31)]
   )

@@ -81,24 +81,16 @@ def _slug_format_checker_return_error_message(slug: str):
 def _check_slug_exists(username, slug):
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
   try:
-    # response = table.query(
-    #   KeyConditionExpression=Key('username').eq(username)
-    # )
     response = table.query(
       IndexName="CommonLSI",
       KeyConditionExpression=Key('pk').eq(f"kifu#uname#{username}") & Key('clsi_sk').eq(f"slug#{slug}")
-      # Key={
-      #   'pk': f"kifu#uname#{username}",
-      #   'clsi_sk': f"kid#{slug}"
-      # }
     )
   except ClientError as e:
     raise e
+  if 'Item' in response:
+    return True
   else:
-    if 'Item' in response:
-      return True
-    else:
-      return False
+    return False
 
 @login_required
 def index(master, username):
@@ -130,6 +122,14 @@ def create(master, username):
       return render(master, 'kifu/create.html', context)
     now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
     now_str = now.strftime("%Y-%m-%d %H:%M:%S")
+    error_message = _slug_format_checker_return_error_message(form.data['slug'])
+    if error_message is not None:
+      context = {
+        "type": "create",
+        "form": form,
+        "error_message": error_message
+      }
+      return render(master, 'kifu/create.html', context)
     if _check_slug_exists(username, form.data['slug']):
       context = {
         "type": "create",
@@ -151,6 +151,9 @@ def create(master, username):
     }
     # Item["last_updated"] = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M:%S")
     table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+
+
+
     try:
       response = table.put_item(
         Item=Item
