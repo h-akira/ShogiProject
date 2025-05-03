@@ -1,5 +1,5 @@
 import os
-m botocore.exceptions import ClientError
+from botocore.exceptions import ClientError
 
 MAPPING_PATH = ""  # API Gatewayをそのまま使う場合はステージ名、独自ドメインを使う場合は空文字列、Localでは空文字列に上書き
 MAPPING_PATH_LOCAL = ""  # API Gatewayをそのまま使う場合はステージ名、独自ドメインを使う場合は空文字列、Localでは空文字列に上書き
