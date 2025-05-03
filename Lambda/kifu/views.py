@@ -48,7 +48,7 @@ def _get_system_from_table(master):
     return {
       # "year_init": 2025,
       # "kifu_max_per_year": 3000,
-      "kifu_max": 3000
+      "kifu_max": 3000,
       "tag_max": 50
     }
   else:
