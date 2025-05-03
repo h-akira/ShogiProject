@@ -149,7 +149,7 @@ def create(master, username):
       response = table.put_item(
         Item=Item
       )
-      if action = "continue":
+      if action == "continue":
         context = {
           "type": "create",
           "form": form,
