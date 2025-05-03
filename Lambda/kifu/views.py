@@ -116,7 +116,7 @@ def create(master, username):
     action = master.request.body["action"]
     form = KifuForm(**master.request.body)
     system = _get_system_from_table(master)
-    if system["kifu_max"] > _count_partition(boto3.resource('dynamodb').Table(MAIN_TABLE_NAME), f"kifu#uname#{username}"):
+    if system["kifu_max"] < _count_partition(boto3.resource('dynamodb').Table(MAIN_TABLE_NAME), f"kifu#uname#{username}"):
       context = {
         "type": "create",
         "form": form,
