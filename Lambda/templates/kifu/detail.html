@@ -1,80 +1,60 @@
 {% extends 'base.html' %}
-
 {% block extra_css %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css">
-<link rel="stylesheet" href="{{ 'static:css'|url(item='markdownRender.css') }}">
 {% endblock extra_css %}
 
-{% block title %}{{ item.title }}{% endblock title %}
+{% block title %}ホーム{% endblock title %}
+
 {% block content %}
-<div class="has-background-grey has-text-white-bis">
-  <div class="padding-side padding-top-10 padding-bottom-10">
-    <h1 class="title is-1 has-text-white-bis">
-      {{ item.title }}
-      {% if not from_share_code and not item.public %}
-      <i class="bi bi-lock"></i>
-      {% endif %}
-    </h1>
-    <p>
-      (最終更新:{{ item.last_updated }})
-    </p>
-    <p>
-    {% if from_share_code or not item.share %}
-    <span hidden>
-    {% endif %}
-    <a id="share-link" href="{{ 'wiki:share_detail'|url(share_code=item.share_code) }}" class="button is-light is-link">
-      共有ページ
-    </a>
-    {% if from_share_code or not item.share %}
-    </span>
-    {% endif %}
-    {% if item.share %}
-    <button id="copy-button" class="button is-info is-light">
-      共有URLをコピー
-    </button>
-    {% endif %}
-    {% if from_share_code %}
-    {% if item.share_edit_permission %}
-    <a href="{{ "wiki:share_edit"|url(share_code=item.share_code) }}" class="button is-light">
-      編集
-    </a>
-    {% endif %}
-    {% else %}
-    {% if request.username == item.username or item.edit_permission %}
-    <a href="{{ "wiki:edit"|url_for_slug(username=item.username, slug=item.slug) }}" class="button is-light">
-      編集
-      {% if not item.edit_permission %}
-      <i class="bi bi-lock"></i>
-      {% endif %}
-    </a>
-    {% endif %}
-    {% endif %}
-    </p>
-  </div>
+<div class="padding-all">
+  <h1 class="title is-1 has-text-centered">{{ slug }}</h1>
+  <p>
+    {{ kifu }}
+  </p>
+  <p>
+    {{ memo }}
+  </p>
+  {% endfor %}
 </div>
-{# <p>{{ item.markdown }}</p> #}
-<div class="padding-side">
-  <textarea id="markdown">{{ item.text | safe }}</textarea>
-  <div id="preview" class="content"></div>
-  <script>
-    function renderMarkdown(text) {
-      marked.setOptions({
-        breaks: true
-      });
-      return marked.parse(text);
-    }
-    var markdownText = document.getElementById('markdown').value;
-    document.getElementById('preview').innerHTML = renderMarkdown(markdownText);
-  </script>
-</div>
+{# <div class="padding-side"> #}
+{#   <div class="columns"> #}
+{#     <div class="column padding-side"> #}
+{#       <div class="card card-bordered"> #}
+{#         <div class="card-content"> #}
+{#           <h3 class="title is-3 has-text-centered">階層図</h3> #}
+{#           <div class="tree"> #}
+{#             {% for html in tree_htmls %} #}
+{#             {{ html | safe  }} #}
+{#             {% endfor %} #}
+{#           </div> #}
+{#         </div> #}
+{#       </div> #}
+{#     </div> #}
+{#     <div class="column"> #}
+{#       <div class="card card-bordered"> #}
+{#         <div class="card-content"> #}
+{#           <h3 class="title is-3 has-text-centered">最近の更新</h3> #}
+{#           {% for page in pages %} #}
+{#           <h5 class="title is-5"> #}
+{#             {{ page.title }} #}
+{#           </h5> #}
+{#           <p> #}
+{#             <a href="{{ 'wiki:detail'|url_for_slug(username=page.username, slug=page.slug) }}"> #}
+{#               {{ page.username }}/{{ page.slug }} #}
+{#             </a> #}
+{#           </p> #}
+{#           <p> #}
+{#             (最終更新:{{ page.last_updated }}) #}
+{#           </p> #}
+{#           {% if not loop.last %} #}
+{#             <hr> #}
+{#           {% endif %} #}
+{#           {% endfor %} #}
+{#         </div> #}
+{#       </div> #}
+{#     </div> #}
+{#   </div> #}
+{# </div> #}
 {% endblock content %}
 
 {% block extra_js %}
-{% if item.share %}
-<script src="{{ 'static:js'|url(item='clip.js') }}"></script>
-{% endif %}
-<script>hljs.highlightAll();</script>
 {% endblock extra_js %}

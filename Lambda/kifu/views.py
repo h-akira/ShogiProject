@@ -117,6 +117,39 @@ def index(master, username):
   }
   return render(master, 'kifu/index.html', context)
 
+
+@login_required
+def detail(master, username, kid):
+  if username != master.request.username:
+    # 暫定。実際には存在しないことがわからないようにrenderで返したい。
+    return redirect(master, "kifu:index", username=master.request.username)
+  table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+  response = table.get_item(
+    Key={
+      'pk': f"kifu#uname#{username}",
+      'sk': f"kid#{kid}"
+    }
+  )
+  if "Item" not in response:
+    # 暫定。実際には存在しないことがわからないようにrenderで返したい。
+    return redirect(master, "kifu:index", username=username)
+  else:
+    item = response["Item"]
+    context = {
+      'username': username,
+      'kid': kid,
+      'slug': item["clsi_sk"].split("#")[1],
+      'kifu': item["kifu"],
+      'memo': item["memo"],
+      'first_or_second': item["first_or_second"],
+      'result': item["result"],
+      'share': item["share"],
+      'share_code': item["cgsi_pk"].split("#")[1],
+      'public': item["public"]
+    }
+    return render(master, 'kifu/detail.html', context)
+
+
 @login_required
 def explorer(master, username):
   context = {
