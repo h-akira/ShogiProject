@@ -222,7 +222,7 @@ def edit(master, username, kid):
         "#result": "result",
         "#share": "share",
         "#public": "public",
-        "#latest_update": "lastest_updated"
+        "#latest_update": "lastest_update"
       },
       ExpressionAttributeValues={
         ':cl': f"slug#{form.data['slug']}",
