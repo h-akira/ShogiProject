@@ -124,7 +124,7 @@ def create(master, username):
         "form": form,
         "error_message": "Kifu limit exceeded"
       }
-      return render(master, 'kifu/create.html', context)
+      return render(master, 'kifu/edit.html', context)
     error_message = _slug_format_checker_return_error_message(form.data['slug'])
     if error_message is not None:
       context = {
@@ -132,14 +132,14 @@ def create(master, username):
         "form": form,
         "error_message": error_message
       }
-      return render(master, 'kifu/create.html', context)
+      return render(master, 'kifu/edit.html', context)
     if _check_slug_exists(table, username, form.data['slug']):
       context = {
         "type": "create",
         "form": form,
         "error_message": "Slug already exists"
       }
-      return render(master, 'kifu/create.html', context)
+      return render(master, 'kifu/edit.html', context)
     Item = {
       "pk": f"kifu#uname#{username}",
       "sk": f"kid#{_gen_code(KID_LENGTH)}",
@@ -153,10 +153,6 @@ def create(master, username):
       "result": form.data['result']
     }
     # Item["last_updated"] = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M:%S")
-    table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
-
-
-
     try:
       response = table.put_item(
         Item=Item
@@ -167,7 +163,7 @@ def create(master, username):
           "form": form,
           "error_message": None
         }
-        return render(master, 'kifu/create.html', context)
+        return render(master, 'kifu/edit.html', context)
       elif action == "end":
         kid = Item["sk"].split("#")[1]
         # 暫定
@@ -180,13 +176,12 @@ def create(master, username):
       else:
         import traceback
         error_message = traceback.format_exc()
-      # form = PageForm(data=Item)
       context = {
         "type": "create",
         "form": form,
         "error_message": error_message
       }
-      return render(request, 'kifu/create.html', context)
+      return render(request, 'kifu/edit.html', context)
   elif master.request.method == 'GET':
     form = KifuForm()
     context = {
@@ -194,6 +189,89 @@ def create(master, username):
       "form": form,
       "error_message": None
     }
-    return render(master, 'kifu/create.html', context)
+    return render(master, 'kifu/edit.html', context)
   else:
     raise Exception('Invalid request method')
+
+def edit(master, username, kid):
+  if username != master.request.username:
+    # 暫定。実際には存在しないことがわからないようにrenderで返したい。
+    return redirect(master, "kifu:index", username=master.request.username)
+  table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+  if master.request.method == 'POST':
+    master.logger.info(master.request.body)
+    now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
+    now_str = now.strftime("%Y-%m-%d %H:%M:%S")
+    form = KifuForm(**master.request.body)
+    action = master.request.body["action"]
+    table.update_item(
+      Key={
+        'pk': f"kifu#uname#{username}",
+        'sk': f"kid#{kid}"
+      },
+      UpdateExpression="set #clsi_sk=:cl, #kifu=:ki, #memo=:me, #first_or_second=:fi, #result=:re, #share=:sh, #public=:pu #latest_updated=:la",
+      ExpressionAttributeNames={
+        "#clsi_sk": "clsi_sk",
+        "#kifu": "kifu",
+        "#memo": "memo",
+        "#first_or_second": "first_or_second",
+        "#result": "result",
+        "#share": "share",
+        "#public": "public",
+        "#last_updated": "lastest_updated"
+      },
+      ExpressionAttributeValues={
+        ':cl': f"slug#{form.data['slug']}",
+        ':ki': form.data["kifu"],
+        ':me': form.data["memo"],
+        ':fi': form.data["first_or_second"],
+        ':re': form.data["result"],
+        ':sh': form.data["share"],
+        ':pu': form.data["public"],
+        ':la': now_str
+      }
+    )
+    if action == "continue":
+      context = {
+        "type": "edit",
+        "form": form,
+        "error_message": None
+      }
+      return render(master, 'kifu/edit.html', context)
+    elif action == "end":
+      # 暫定
+      return redirect(master, "kifu:index", username=username)
+    else:
+      raise Exception("Invalid action")
+  elif master.request.method == 'GET':
+    response = table.get_item(
+      Key={
+        'pk': f"kifu#uname#{username}",
+        'sk': f"kid#{kid}"
+      }
+    )
+    if "Item" not in response:
+      # 暫定。実際には存在しないことがわからないようにrenderで返したい。
+      return redirect(master, "kifu:index", username=username)
+    else:
+      item = response["Item"]
+      form = KifuForm(
+        slug=item["clsi_sk"].split("#")[1],
+        kifu=item["kifu"],
+        memo=item["memo"],
+        first_or_second=item["first_or_second"],
+        result=item["result"],
+        share=item["share"],
+        public=item["public"]
+      )
+      context = {
+        "type": "edit",
+        "form": form,
+        "error_message": None
+      }
+      return render(master, 'kifu/edit.html', context)
+
+
+
+
+
