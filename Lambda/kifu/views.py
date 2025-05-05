@@ -140,10 +140,12 @@ def create(master, username):
         "error_message": "Slug already exists"
       }
       return render(master, 'kifu/edit.html', context)
+    kid = _gen_code(KID_LENGTH)
+    share_code = _gen_code(SHARE_CODE_LENGTH)
     Item = {
       "pk": f"kifu#uname#{username}",
-      "sk": f"kid#{_gen_code(KID_LENGTH)}",
-      "cgsi_pk": f"scode#{_gen_code(SHARE_CODE_LENGTH)}",
+      "sk": f"kid#{kid}",
+      "cgsi_pk": f"scode#{share_code}",
       "clsi_sk": f"slug#{form.data['slug']}",
       "public": form.data['public'],
       "share": form.data['share'],
@@ -165,7 +167,7 @@ def create(master, username):
           "form": form,
           "error_message": None
         }
-        return render(master, 'kifu/edit.html', context)
+        return redirect(master, "kifu:edit", username=username, kid=kid)
       elif action == "end":
         kid = Item["sk"].split("#")[1]
         # 暫定
