@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block extra_css %}
+<script defer src="https://cdn.jsdelivr.net/npm/shogi-player@1.1.24"></script>
 {% endblock extra_css %}
 
 {% block title %}ホーム{% endblock title %}
@@ -7,12 +8,24 @@
 {% block content %}
 <div class="padding-all">
   <h1 class="title is-1 has-text-centered">{{ slug }}</h1>
-  <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
-    編集
-  </a>
-  <a href="#" class="button is-light">
-    削除
-  </a>
+  <p>
+    <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
+      編集
+    </a>
+    <a href="#" class="button is-light">
+      削除
+    </a>
+  </p>
+  <shogi-player-wc
+    id="sp"
+    sp_body="
+      {{ kifu }}
+    "
+    sp_turn="2"
+    sp_controller="true"
+    sp_slider="true"
+    sp_mode="view"
+  ></shogi-player-wc>
   <p>
     {{ kifu }}
   </p>
