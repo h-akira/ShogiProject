@@ -94,10 +94,26 @@ def _check_slug_exists(table, username, slug):
   else:
     return False
 
+def _get_latest_update_items(table, username, limit=10):
+  response = table.query(
+    IndexName="LatestUpdateIndex",
+    KeyConditionExpression=Key('pk').eq(f"kifu#uname#{username}"),
+    ScanIndexForward=False,
+    Limit=limit
+  )
+  return response["Items"]
+
 @login_required
 def index(master, username):
+  if username != master.request.username:
+    # 暫定。実際には存在しないことがわからないようにrenderで返したい。
+    # 特定のユーザーには許可することも実装する
+    return redirect(master, "kifu:index", username=master.request.username)
+  table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+  latest_update_items = _get_latest_update_items(table, username, limit=10)
   context = {
-    'username': username
+    'username': username,
+    'latest_update_items': [{"kid": item["sk"].split("#")[1], "slug": item["clsi_sk"].split("#")[1], "latest_update": item["latest_update"]} for item in latest_update_items]
   }
   return render(master, 'kifu/index.html', context)
 

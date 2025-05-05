@@ -5,8 +5,14 @@
 {% block title %}ホーム{% endblock title %}
 
 {% block content %}
-<div class="padding-top-10 padding-bottom-10">
-  <h1 class="title is-1 has-text-centered">ホーム</h1>
+<div class="padding-all">
+  <h1 class="title is-1 has-text-centered">{{ username }}</h1>
+  {% for item in latest_update_items %}
+  <p>
+    {# <a href="{{ reverse(master, 'kifu:detail', username=username, kid=item.kid }}"> #}
+      {{ item.slug }}
+    {# </a> #}
+  </p>
 </div>
 {# <div class="padding-side"> #}
 {#   <div class="columns"> #}
