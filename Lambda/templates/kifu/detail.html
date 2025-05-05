@@ -7,6 +7,12 @@
 {% block content %}
 <div class="padding-all">
   <h1 class="title is-1 has-text-centered">{{ slug }}</h1>
+  <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
+    編集
+  </a>
+  <a href="#" class="button is-light">
+    削除
+  </a>
   <p>
     {{ kifu }}
   </p>
