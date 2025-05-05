@@ -9,7 +9,7 @@
   <h1 class="title is-1 has-text-centered">{{ username }}</h1>
   {% for item in latest_update_items %}
   <p>
-    <a href="{{ reverse(master, 'kifu:detail', username=username, kid=item.kid }}">
+    <a href="{{ reverse(master, 'kifu:detail', username=username, kid=item.kid) }}">
       {{ item.slug }}
     </a>
   </p>
