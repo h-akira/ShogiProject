@@ -150,7 +150,9 @@ def create(master, username):
       "kifu": form.data['kifu'],
       "memo": form.data['memo'],
       "first_or_second": form.data['first_or_second'],
-      "result": form.data['result']
+      "result": form.data['result'],
+      "created": now_str,
+      "latest_update": now_str
     }
     # Item["last_updated"] = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M:%S")
     try:
@@ -209,7 +211,7 @@ def edit(master, username, kid):
         'pk': f"kifu#uname#{username}",
         'sk': f"kid#{kid}"
       },
-      UpdateExpression="set #clsi_sk=:cl, #kifu=:ki, #memo=:me, #first_or_second=:fi, #result=:re, #share=:sh, #public=:pu, #latest_updated=:la",
+      UpdateExpression="set #clsi_sk=:cl, #kifu=:ki, #memo=:me, #first_or_second=:fi, #result=:re, #share=:sh, #public=:pu, #latest_update=:la",
       ExpressionAttributeNames={
         "#clsi_sk": "clsi_sk",
         "#kifu": "kifu",
@@ -218,7 +220,7 @@ def edit(master, username, kid):
         "#result": "result",
         "#share": "share",
         "#public": "public",
-        "#last_updated": "lastest_updated"
+        "#latest_update": "lastest_updated"
       },
       ExpressionAttributeValues={
         ':cl': f"slug#{form.data['slug']}",
