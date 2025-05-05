@@ -235,7 +235,9 @@ def edit(master, username, kid):
       context = {
         "type": "edit",
         "form": form,
-        "error_message": None
+        "error_message": None,
+        "username": username,
+        "kid": kid
       }
       return render(master, 'kifu/edit.html', context)
     elif action == "end":
@@ -267,7 +269,9 @@ def edit(master, username, kid):
       context = {
         "type": "edit",
         "form": form,
-        "error_message": None
+        "error_message": None,
+        "username": username,
+        "kid": kid
       }
       return render(master, 'kifu/edit.html', context)
 
