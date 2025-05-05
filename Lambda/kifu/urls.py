@@ -1,5 +1,5 @@
 from hads.urls import Path
-from .views import index, explorer, create
+from .views import index, explorer, create, edit
 
 urlpatterns = [
   Path("{username}", index, name="index"),
