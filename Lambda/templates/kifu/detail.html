@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block extra_css %}
 <script defer src="https://cdn.jsdelivr.net/npm/shogi-player@1.1.24"></script>
+<link rel="stylesheet" href="{{ static(master, 'css/shogi.css') }}">
 {% endblock extra_css %}
 
 {% block title %}ホーム{% endblock title %}
