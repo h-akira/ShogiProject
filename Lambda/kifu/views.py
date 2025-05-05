@@ -209,7 +209,7 @@ def edit(master, username, kid):
         'pk': f"kifu#uname#{username}",
         'sk': f"kid#{kid}"
       },
-      UpdateExpression="set #clsi_sk=:cl, #kifu=:ki, #memo=:me, #first_or_second=:fi, #result=:re, #share=:sh, #public=:pu #latest_updated=:la",
+      UpdateExpression="set #clsi_sk=:cl, #kifu=:ki, #memo=:me, #first_or_second=:fi, #result=:re, #share=:sh, #public=:pu, #latest_updated=:la",
       ExpressionAttributeNames={
         "#clsi_sk": "clsi_sk",
         "#kifu": "kifu",
