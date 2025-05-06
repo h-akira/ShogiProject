@@ -130,22 +130,17 @@ def index(master, username):
     return redirect(master, "kifu:index", username=master.request.username)
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
   latest_update_items = _get_latest_update_items(table, username, limit=10)
-  master.logger.info("-----------")
-  for item in latest_update_items:
-    master.logger.info(item)
   context = {
     'username': username,
     'latest_update_items': [
       {
         "kid": item["sk"].split("#")[1], 
         "slug": item["clsi_sk"].split("#")[1], 
-        "latest_update": item["latest_update"], 
-        "memo": item.get("memo", None)
+        "latest_update": item["latest_update"]
       } for item in latest_update_items
     ]
   }
   return render(master, 'kifu/index.html', context)
-
 
 @login_required
 def detail(master, username, kid):
