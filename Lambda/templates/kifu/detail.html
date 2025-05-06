@@ -20,15 +20,11 @@
     メモ　　:
   </p>
   <pre class="full-width">{{ memo }}</pre>
-  <br>
   {% endif %}
   <p>
     <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
       編集
     </a>
-    {# <a href="#" class="button is-light"> #}
-    {#   削除 #}
-    {# </a> #}
     {% if not share %}
     <span hidden>
     {% endif %}
