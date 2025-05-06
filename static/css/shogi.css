@@ -4,3 +4,7 @@ shogi-player-wc {
   margin: 0 auto;
   display: block;
 }
+
+.full-width {
+  width: 100%;
+}

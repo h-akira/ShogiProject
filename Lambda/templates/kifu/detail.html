@@ -15,6 +15,14 @@
   <p>
     最終更新:{{ latest_update }}
   </p>
+  {% if memo %}
+  <p>
+    メモ　　:
+  </p>
+  <pre class="full-width">
+    {{ memo }}
+  </pre>
+  {% endif %}
   <p>
     <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
       編集
@@ -45,11 +53,8 @@
     sp_slider="true"
     sp_mode="view"
   ></shogi-player-wc>
-  <pre>
+  <pre class="full-width">
     {{ kifu }}
-  </pre>
-  <pre>
-    {{ memo }}
   </pre>
 </div>
 {% endblock content %}
