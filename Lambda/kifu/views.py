@@ -125,9 +125,8 @@ def delete(master, username, kid):
 @login_required
 def index(master, username):
   if username != master.request.username:
-    # 暫定。実際には存在しないことがわからないようにrenderで返したい。
-    # 特定のユーザーには許可することも実装する
-    return redirect(master, "kifu:index", username=master.request.username)
+    # 特定のユーザーには許可することもそのうち実装する
+    return render(master, 'not_found.html')
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
   latest_update_items = _get_latest_update_items(table, username, limit=10)
   context = {
@@ -145,8 +144,7 @@ def index(master, username):
 @login_required
 def detail(master, username, kid):
   if username != master.request.username:
-    # 暫定。実際には存在しないことがわからないようにrenderで返したい。
-    return redirect(master, "kifu:index", username=master.request.username)
+    return render(master, 'not_found.html')
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
   response = table.get_item(
     Key={
@@ -155,8 +153,7 @@ def detail(master, username, kid):
     }
   )
   if "Item" not in response:
-    # 暫定。実際には存在しないことがわからないようにrenderで返したい。
-    return redirect(master, "kifu:index", username=username)
+    return render(master, 'not_found.html')
   else:
     item = response["Item"]
     context = {
@@ -273,8 +270,7 @@ def create(master, username):
 
 def edit(master, username, kid):
   if username != master.request.username:
-    # 暫定。実際には存在しないことがわからないようにrenderで返したい。
-    return redirect(master, "kifu:index", username=master.request.username)
+    return render(master, 'not_found.html')
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
   if master.request.method == 'POST':
     master.logger.info(master.request.body)
@@ -330,8 +326,7 @@ def edit(master, username, kid):
       }
     )
     if "Item" not in response:
-      # 暫定。実際には存在しないことがわからないようにrenderで返したい。
-      return redirect(master, "kifu:index", username=username)
+      return render(master, 'not_found.html')
     else:
       item = response["Item"]
       form = KifuForm(
