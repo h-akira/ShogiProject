@@ -103,6 +103,25 @@ def _get_latest_update_items(table, username, limit=10):
   )
   return response["Items"]
 
+
+
+@login_required
+def delete(master, username, kid):
+  if username != master.request.username:
+    return redirect(master, "kifu:index", username=master.request.username)
+  table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+  try:
+    response = table.delete_item(
+      Key={
+        'pk': f"kifu#uname#{username}",
+        'sk': f"kid#{kid}"
+      },
+      ConditionExpression=Key('pk').eq(f"kifu#uname#{username}") & Key('sk').eq(f"kid#{kid}")
+    )
+  except ClientError as e:
+    master.logger.error(f"Failed to delete item: {e.response['Error']['Message']}")
+  return redirect(master, "kifu:index", username=username)
+
 @login_required
 def index(master, username):
   if username != master.request.username:
