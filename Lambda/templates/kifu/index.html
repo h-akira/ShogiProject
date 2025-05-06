@@ -7,13 +7,29 @@
 {% block content %}
 <div class="padding-all">
   <h1 class="title is-1 has-text-centered">{{ username }}</h1>
-  {% for item in latest_update_items %}
-  <p>
-    <a href="{{ reverse(master, 'kifu:detail', username=username, kid=item.kid) }}">
-      {{ item.slug }}
-    </a>
-  </p>
-  {% endfor %}
+  {# {% for item in latest_update_items %} #}
+  {# <p> #}
+  {#   <a href="{{ reverse(master, 'kifu:detail', username=username, kid=item.kid) }}"> #}
+  {#     {{ item.slug }} #}
+  {#   </a> #}
+  {# </p> #}
+  {# {% endfor %} #}
+  <div class="card card-bordered">
+    <div class="card-content">
+      <h3 class="title is-3 has-text-centered">最近の更新</h3>
+      {% for item in latest_update_items %}
+      <h5 class="title is-5">
+        {{ item.slug }}
+      </h5>
+      <p>
+        (最終更新:{{ page.last_updated }})
+      </p>
+      {% if not loop.last %}
+        <hr>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
 </div>
 {# <div class="padding-side"> #}
 {#   <div class="columns"> #}
