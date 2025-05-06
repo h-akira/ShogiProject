@@ -13,7 +13,7 @@
     {{ form.csrf_token }}
     <button type="submit" name="action" value="end" class="button is-link">保存して終了</button>
     <button type="submit" name="action" value="continue" class="button is-link">保存して継続</button>
-    <a href="{{ reverse(master, 'kifu:delete', username=master.request.username, kid=kid) }}" class="button is-danger is-light">削除</a>
+    <a href="{{ reverse(master, 'kifu:delete', username=master.request.username, kid=kid) }}" onclick="return confirm('本当に削除しますか？');" class="button is-danger is-light">削除</a>
     <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="button is-link is-light">戻る</a>
   {% elif type == "create" %}
   <form class="" action="{{ reverse(master, 'kifu:create', username=master.request.username) }}" method="post">
