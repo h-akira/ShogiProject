@@ -22,7 +22,7 @@
     {# <a href="#" class="button is-light"> #}
     {#   削除 #}
     {# </a> #}
-    {% if share %}
+    {% if not share %}
     <span hidden>
     {% endif %}
     <a id="share-link" href="#" class="button is-light is-link">
@@ -31,7 +31,7 @@
     <button id="copy-button" class="button is-info is-light">
       共有URLをコピー
     </button>
-    {% if share %}
+    {% if not share %}
     </span>
     {% endif %}
   </p>

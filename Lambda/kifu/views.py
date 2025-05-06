@@ -240,8 +240,7 @@ def create(master, username):
         return redirect(master, "kifu:edit", username=username, kid=kid)
       elif action == "end":
         kid = Item["sk"].split("#")[1]
-        # 暫定
-        return redirect(master, "kifu:index", username=username)
+        return redirect(master, "kifu:detail", username=username, kid=kid)
       else:
         raise Exception("Invalid action")
     except ClientError as e:
@@ -315,8 +314,7 @@ def edit(master, username, kid):
       }
       return render(master, 'kifu/edit.html', context)
     elif action == "end":
-      # 暫定
-      return redirect(master, "kifu:index", username=username)
+      return redirect(master, "kifu:detail", username=username, kid=kid)
     else:
       raise Exception("Invalid action")
   elif master.request.method == 'GET':
