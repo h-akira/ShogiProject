@@ -132,7 +132,7 @@ def index(master, username):
   latest_update_items = _get_latest_update_items(table, username, limit=10)
   context = {
     'username': username,
-    'latest_update_items': [{"kid": item["sk"].split("#")[1], "slug": item["clsi_sk"].split("#")[1], "latest_update": item["latest_update"]} for item in latest_update_items]
+    'latest_update_items': [{"kid": item["sk"].split("#")[1], "slug": item["clsi_sk"].split("#")[1], "latest_update": item["latest_update"], "memo": item["memo"]} for item in latest_update_items]
   }
   return render(master, 'kifu/index.html', context)
 
