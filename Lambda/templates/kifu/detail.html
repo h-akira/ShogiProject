@@ -8,14 +8,23 @@
 
 {% block content %}
 <div class="padding-all">
-  <h1 class="title is-1 has-text-centered">{{ slug }}</h1>
+  <h3 class="title is-3 has-text-centered">{{ slug }}</h1>
+  <p>
+    作成日時:{{ created }}
+  </p>
+  <p>
+    最終更新:{{ latest_update }}
+  </p>
   <p>
     <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
       編集
     </a>
-    <a href="#" class="button is-light">
-      削除
-    </a>
+    {# <a href="#" class="button is-light"> #}
+    {#   削除 #}
+    {# </a> #}
+    <button id="copy-button" class="button is-info is-light">
+      共有URLをコピー
+    </button>
   </p>
   <shogi-player-wc
     id="sp"

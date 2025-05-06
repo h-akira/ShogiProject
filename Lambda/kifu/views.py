@@ -145,7 +145,9 @@ def detail(master, username, kid):
       'result': item["result"],
       'share': item["share"],
       'share_code': item["cgsi_pk"].split("#")[1],
-      'public': item["public"]
+      'public': item["public"],
+      'created': item["created"],
+      'latest_update': item["latest_update"]
     }
     return render(master, 'kifu/detail.html', context)
 
