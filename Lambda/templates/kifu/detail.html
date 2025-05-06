@@ -10,7 +10,7 @@
 <div class="padding-all">
   <h3 class="title is-3 has-text-centered">{{ slug }}</h1>
   <p>
-    作成日時:{{ created }}
+    作成　　:{{ created }}
   </p>
   <p>
     最終更新:{{ latest_update }}
@@ -22,6 +22,15 @@
     {# <a href="#" class="button is-light"> #}
     {#   削除 #}
     {# </a> #}
+    {% if share %}
+    <span hidden>
+    {% endif %}
+    <a id="share-link" href="#" class="button is-light is-link">
+      共有ページ
+    </a>
+    {% if share %}
+    </span>
+    {% endif %}
     <button id="copy-button" class="button is-info is-light">
       共有URLをコピー
     </button>
@@ -85,4 +94,7 @@
 {% endblock content %}
 
 {% block extra_js %}
+{% if share %}
+<script src="{{ 'static(master, 'js/clip.js')) }}"></script>
+{% endif %}
 {% endblock extra_js %}
