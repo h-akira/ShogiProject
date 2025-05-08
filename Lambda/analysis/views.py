@@ -15,7 +15,7 @@ def submit(master):
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
   response = table.query(
     KeyConditionExpression=Key('pk').eq('analysis'),
-    IndexName="CreatdIndex",
+    IndexName="CreatedIndex",
     ScanIndexForward=False
   )
   master.logger.info(f"response: {response}")
