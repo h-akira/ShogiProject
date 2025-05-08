@@ -35,9 +35,9 @@ def submit(master):
   response = table.put_item(
     Item=Item
   )
-  return json_response(response)
+  return json_response(master, response)
 
 @login_required
 def inquire(master, aid):
   response = {"hoge": "fuga"}
-  return json_response(response)
+  return json_response(master, response)
