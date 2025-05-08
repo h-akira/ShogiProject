@@ -9,6 +9,7 @@ urlpatterns = [
   # Path("logout", logout, name="logout"),
   Path("", home, name="home"),
   Router("accounts", "accounts.urls", name="accounts"),
+  Router("analysis", "analysis.urls", name="analysis"),
   Router("tag", "tag.urls", name="tag"),
   Router("", "kifu.urls", name="kifu")
 ]

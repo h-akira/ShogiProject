@@ -1,12 +1,12 @@
 from hads.shourtcuts import render
 from hads.shourtcuts import login_required, redirect
 from .forms import KifuForm
-import random
 import boto3
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 import datetime
 from zoneinfo import ZoneInfo
+from project.common import gen_code
 
 MAIN_TABLE_NAME = "table-sgp-main"
 KID_LENGTH = 12
@@ -32,10 +32,6 @@ def _count_partition(table, pk_value):
     if not last_evaluated_key:
       break
   return counter
-
-def _gen_code(length):
-  allow="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-  return ''.join(random.choice(allow) for i in range(length))
 
 def _get_system_from_table(master):
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
@@ -212,8 +208,8 @@ def create(master, username):
         "error_message": "Slug already exists"
       }
       return render(master, 'kifu/edit.html', context)
-    kid = _gen_code(KID_LENGTH)
-    share_code = _gen_code(SHARE_CODE_LENGTH)
+    kid = gen_code(KID_LENGTH)
+    share_code = gen_code(SHARE_CODE_LENGTH)
     Item = {
       "pk": f"kifu#uname#{username}",
       "sk": f"kid#{kid}",
