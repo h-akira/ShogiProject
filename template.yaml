@@ -73,6 +73,8 @@ Resources:
                   - "dynamodb:Query"
                   - "dynamodb:UpdateItem"
                   - "dynamodb:DeleteItem"
+                  - "sqs:getQueueAttributes"
+                  - "sqs:sendMessage"
                 Resource: "*"
   MainLayer:
     Type: AWS::Serverless::LayerVersion
