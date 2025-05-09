@@ -6,6 +6,7 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 import datetime
 from zoneinfo import ZoneInfo
+import json
 
 MAIN_TABLE_NAME = "table-sgp-main"
 AID_LENGTH = 8
