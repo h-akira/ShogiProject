@@ -15,7 +15,7 @@ def submit(master):
   position = "lnsgkgsnl/1r5b1/p1pppp1p1/6p1p/9/2P6/PP1PPPPPP/1B5R1/LNSGKGSNL b - 1"
   sqs = boto3.client('sqs')
   ssm = boto3.client('ssm')
-  QueueUrl=ssm.get_parameter(Name="/ShogiProject/SQS/Analysis/URL")["parameter"]["Value"]
+  QueueUrl=ssm.get_parameter(Name="/ShogiProject/SQS/Analysis/URL")["Parameter"]["Value"]
   # キュー内のメッセージの数が多ければ拒否
   response = sqs.get_queue_attributes(
     QueueUrl=QueueUrl,
