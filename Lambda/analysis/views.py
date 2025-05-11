@@ -89,5 +89,5 @@ def submit(master):
 
 @login_required
 def inquire(master, aid):
-  response = {"hoge": "fuga"}
+  response = {"status": "complete", "message": "aaabbbccc"}
   return json_response(master, response)
