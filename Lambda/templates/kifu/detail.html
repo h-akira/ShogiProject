@@ -62,6 +62,9 @@
 {% endblock content %}
 
 {% block extra_js %}
+{% if master.request.auth %}
+<script src="{{ static(master, 'js/analysis.js') }}"></script>
+{% endif %}
 {% if share %}
 <script src="{{ static(master, 'js/clip.js') }}"></script>
 {% endif %}
