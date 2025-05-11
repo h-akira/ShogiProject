@@ -13,7 +13,7 @@ AID_LENGTH = 8
 
 @login_required
 def submit(master):
-  master.logger.info(f"event: {master.request.event}")
+  master.logger.info(f"event: {master.event}")
   position = "lnsgkgsnl/1r5b1/p1pppp1p1/6p1p/9/2P6/PP1PPPPPP/1B5R1/LNSGKGSNL b - 1"
   sqs = boto3.client('sqs')
   ssm = boto3.client('ssm')
