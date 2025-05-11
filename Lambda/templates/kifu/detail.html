@@ -48,6 +48,13 @@
     sp_slider="true"
     sp_mode="view"
   ></shogi-player-wc>
+  {% if master.request.auth %}
+  <p class="has-text-centered">
+    <button id="analyze-button" class="button is-info is-light">
+      分析
+    </button>
+  </p>
+  {% endif %}
   <br>
   <pre class="full-width">{{ kifu }}</pre>
 </div>
