@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     clearMessages(); // 以前のメッセージをクリア
     analyzeButton.innerText = '分析中';
     analyzeButton.disabled = true;
-
+    alert(latestSfen);
     fetch('/analysis/submit', {
       method: 'POST',
       headers: {

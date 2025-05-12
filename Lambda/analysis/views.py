@@ -13,6 +13,7 @@ AID_LENGTH = 8
 
 @login_required
 def submit(master):
+  master.logger.info(f"event: {master.event}")
   master.logger.info(f"submit: {master.request.body}")
   if master.request.method != "POST":
     master.logger.error("Invalid request method")
