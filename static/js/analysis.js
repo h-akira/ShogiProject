@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
-      fetch(`/analysis/${aid}`)
+      fetch(`/analysis/inquire/${aid}`)
         .then(response => response.json())
         .then(data => {
           if (data.status === 'running') {

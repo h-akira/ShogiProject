@@ -137,7 +137,7 @@ def inquire(master, aid):
         "message": "Not found"
       }
     )
-  if response["cgsi_pk"] != f"analysis#uname#{master.request.username}":
+  if response["Item"]["cgsi_pk"] != f"analysis#uname#{master.request.username}":
     return json_response(
       master, 
       {
