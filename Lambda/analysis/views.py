@@ -15,6 +15,7 @@ AID_LENGTH = 8
 def submit(master):
   master.logger.info(f"event: {master.event}")
   master.logger.info(f"submit: {master.request.body}")
+  body = json.loads(master.event["body"])
   if master.request.method != "POST":
     master.logger.error("Invalid request method")
     return json_response(
@@ -24,7 +25,8 @@ def submit(master):
         "aid": None
       }
     )
-  position = master.request.body.get("position")
+  # position = master.request.body.get("position")
+  position = body.get("position")
   if position is None:
     master.logger.error("Position not found")
     return json_response(
