@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
       fetch(`/analysis/inquire/${aid}`)
         .then(response => response.json())
         .then(data => {
+          console.log(data);
           if (data.status === 'running') {
             // 何もしない
           } else if (data.status === 'complete') {

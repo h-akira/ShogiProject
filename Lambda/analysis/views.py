@@ -158,7 +158,7 @@ def inquire(master, aid):
     return json_response(
       master, 
       {
-        "status": "success",
+        "status": "successed",
         "message": response["Item"]["response"]
       }
     )
