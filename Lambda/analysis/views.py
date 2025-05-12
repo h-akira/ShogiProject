@@ -13,8 +13,37 @@ AID_LENGTH = 8
 
 @login_required
 def submit(master):
-  master.logger.info(f"event: {master.event}")
-  position = "lnsgkgsnl/1r5b1/p1pppp1p1/6p1p/9/2P6/PP1PPPPPP/1B5R1/LNSGKGSNL b - 1"
+  if master.request.method != "POST":
+    master.logger.error("Invalid request method")
+    return json_response(
+      master, 
+      {
+        "submit": "reject",
+        "aid": None
+      }
+    )
+  position = master.request.get("position")
+  if position is None:
+    master.logger.error("Position not found")
+    return json_response(
+      master, 
+      {
+        "submit": "reject",
+        "aid": None
+      }
+    )
+  if position.startswith("position sfen "):
+    position = position.replace("position sfen ","")
+    # position = "lnsgkgsnl/1r5b1/p1pppp1p1/6p1p/9/2P6/PP1PPPPPP/1B5R1/LNSGKGSNL b - 1"
+  else:
+    master.logger.error("Invalid position format")
+    return json_response(
+      master,
+      {
+        "submit": "reject",
+        "aid": None
+      }
+    )
   sqs = boto3.client('sqs')
   ssm = boto3.client('ssm')
   QueueUrl=ssm.get_parameter(Name="/ShogiProject/SQS/Analysis/URL")["Parameter"]["Value"]
@@ -89,5 +118,58 @@ def submit(master):
 
 @login_required
 def inquire(master, aid):
-  response = {"status": "complete", "message": "aaabbbccc"}
+  table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME) 
+  response = table.get_item(
+    Key={
+      "pk": "analysis",
+      "sk": f"aid#{aid}"
+    }
+  )
+  if response.get("Item") is None:
+    return json_response(
+      master, 
+      {
+        "status": None,
+        "message": "Not found"
+      }
+    )
+  if response["cgsi_pk"] != f"analysis#uname#{master.request.username}":
+    return json_response(
+      master, 
+      {
+        "status": None,
+        "message": "Not found"
+      }
+    )
+  if response["Item"]["status"] == "waiting":
+    return json_response(
+      master, 
+      {
+        "status": "running",
+        "message": None
+      }
+    )
+  elif response["Item"]["status"] == "successed":
+    response["Item"]["response"] = json.loads(response["Item"]["response"])
+    return json_response(
+      master, 
+      {
+        "status": "success",
+        "message": response["Item"]["response"]
+      }
+    )
+  else:
+    response["Item"]["response"] = json.loads(response["Item"]["response"])
+    return json_response(
+      master, 
+      {
+        "status": "failed",
+        "message": response["Item"]["response"]
+      }
+    )
+
+
+
+
+
   return json_response(master, response)
