@@ -22,7 +22,7 @@ def submit(master):
         "aid": None
       }
     )
-  position = master.request.get("position")
+  position = master.request.body.get("position")
   if position is None:
     master.logger.error("Position not found")
     return json_response(
