@@ -57,9 +57,13 @@ document.addEventListener('DOMContentLoaded', function() {
           console.log(data);
           if (data.status === 'running') {
             // 何もしない
-          } else if (data.status === 'complete') {
+          } else if (data.status === 'successed') {
             clearInterval(intervalId);
             showResult(data.message);
+            resetButton();
+          } else {
+            clearInterval(intervalId);
+            showError('解析に失敗しました');
             resetButton();
           }
         })

@@ -7,6 +7,7 @@ from boto3.dynamodb.conditions import Key
 import datetime
 from zoneinfo import ZoneInfo
 import json
+from project.common import Shogi
 
 MAIN_TABLE_NAME = "table-sgp-main"
 AID_LENGTH = 8
@@ -154,25 +155,38 @@ def inquire(master, aid):
       }
     )
   elif response["Item"]["status"] == "successed":
-    response["Item"]["response"] = json.loads(response["Item"]["response"])
     return json_response(
       master, 
       {
         "status": "successed",
-        "message": response["Item"]["response"]
+        "message": _response2message(json.loads(response["Item"]["response"]))
       }
     )
   else:
-    response["Item"]["response"] = json.loads(response["Item"]["response"])
     return json_response(
       master, 
       {
         "status": "failed",
-        "message": response["Item"]["response"]
+        "message": "解析に失敗しました。"
       }
     )
 
-
+def _response2message(response:dict):
+  message_rows = []
+  for i in range(1,11):
+    if str(i) in response["result"].keys():
+      shogi = Shogi(response["position"])
+      kifu_jp_list = shogi.moves_by_sfen_moves(
+        response["result"][str(i)]["pv"],
+        return_kifu_jp_list=True
+      )
+      row = f"""\
+候補{i} 評価値={response['result'][str(i)]['score']}
+{' '.join(kifu_jp_list)}"""
+      message_rows.append(row)
+    else:
+      break
+  return "\n".join(message_rows)
 
 
 
