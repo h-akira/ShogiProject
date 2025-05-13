@@ -106,6 +106,8 @@ class Shogi:
     self.count = int(count)
 
   def move_by_sfen_move(self, sfen_move: str, return_kifu_jp = False):
+    if sfen_move.__class__ != str:
+      raise TypeError("sfen_move must be str")
     if len(sfen_move) == 5 and sfen_move[-1] == "*":
       nari = True
     elif len(sfen_move) == 4:
@@ -193,7 +195,9 @@ class Shogi:
       return coordinate[0], coordinate[1]
     else:
       return ord(coordinate[1]) - ord("a"), 9-int(coordinate[0])
-  def moves_by_sfen_moves(self, sfen_moves: str, return_kifu_jp_list = False):
+  def moves_by_sfen_moves(self, sfen_moves: list, return_kifu_jp_list = False):
+    if sfen_moves.__class__ != list:
+      raise TypeError("sfen_moves must be list")
     if return_kifu_jp_list:
       kifu_jp_list = []
     for move in sfen_moves:
