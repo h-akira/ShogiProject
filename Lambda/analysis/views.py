@@ -177,7 +177,7 @@ def _response2message(response:dict):
     if str(i) in response["result"].keys():
       shogi = Shogi(response["position"])
       kifu_jp_list = shogi.moves_by_sfen_moves(
-        response["result"][str(i)]["pv"],
+        response["result"][str(i)]["pv"].split(" "),
         return_kifu_jp_list=True
       )
       row = f"""\
