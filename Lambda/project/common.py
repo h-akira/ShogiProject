@@ -111,6 +111,9 @@ class Shogi:
     elif len(sfen_move) == 4:
       nari = False
     else:
+      print("-------------------------------------")
+      print(f"sfen_move: {sfen_move}")
+      print("-------------------------------------")
       raise ValueError("sfen_move must be 4 characters or 5 characters")
     before_coordinate = sfen_move[:2]
     after_coordinate = sfen_move[2:4]
