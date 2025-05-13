@@ -108,7 +108,7 @@ class Shogi:
   def move_by_sfen_move(self, sfen_move: str, return_kifu_jp = False):
     if sfen_move.__class__ != str:
       raise TypeError("sfen_move must be str")
-    if len(sfen_move) == 5 and sfen_move[-1] == "*":
+    if len(sfen_move) == 5 and sfen_move[-1] == "+":
       nari = True
     elif len(sfen_move) == 4:
       nari = False
