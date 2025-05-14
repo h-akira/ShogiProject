@@ -177,7 +177,7 @@ class Shogi:
       # kifu_jp += str(l+1)
       kifu_jp += str(8-l)
       # kifu_jp += self.__class__.kansuuji_list[8-k]
-      kifu_jp += self.__class__.kansuuji_list[k+1]
+      kifu_jp += self.__class__.kansuuji_list[k]
       kifu_jp += self.__class__.kanji_dic[koma]
       if nari:
         kifu_jp += "成"
