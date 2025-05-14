@@ -175,7 +175,7 @@ class Shogi:
       else:
         raise ValueError("turn must be b or w")
       # kifu_jp += str(l+1)
-      kifu_jp += str(8-l)
+      kifu_jp += str(9-l)
       # kifu_jp += self.__class__.kansuuji_list[8-k]
       kifu_jp += self.__class__.kansuuji_list[k]
       kifu_jp += self.__class__.kanji_dic[koma]
