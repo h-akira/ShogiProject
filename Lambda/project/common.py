@@ -184,7 +184,8 @@ class Shogi:
       if j == "*":
         kifu_jp += "(--)"
       else:
-        kifu_jp += f"({j+1}{9-i})"
+        # kifu_jp += f"({j+1}{9-i})"
+        kifu_jp += f"({8-j}{i+1})"
       return kifu_jp
   def _coordinate2index(self, coordinate):
     if coordinate.__class__ != str:
