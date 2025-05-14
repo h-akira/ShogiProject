@@ -10,6 +10,7 @@
   <h1 class="title is-1 has-text-centered">ホーム</h1>
   {% if type == "edit" %}
   <form class="" action="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" method="post">
+    {{ form.csriiif_token }}
     {{ form.csrf_token }}
     <button type="submit" name="action" value="end" class="button is-link">保存して終了</button>
     <button type="submit" name="action" value="continue" class="button is-link">保存して継続</button>
