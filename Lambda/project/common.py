@@ -105,7 +105,21 @@ class Shogi:
             number = ""
     self.count = int(count)
 
+  def show(self):
+    for row in self.onBoard:
+      row_str = ""
+      for v in row:
+        if v is None:
+          row_str += ".\t"
+        else:
+          row_str += (v + "\t")
+      print(row_str[:-1])
+    print("手番: " + self.turn)
+    print("持ち駒: "+ str(self.inHand))
+
   def move_by_sfen_move(self, sfen_move: str, return_kifu_jp = False):
+    # self.show()
+    # print(f"sfen_move: {sfen_move}")
     if sfen_move.__class__ != str:
       raise TypeError("sfen_move must be str")
     if len(sfen_move) == 5 and sfen_move[-1] == "+":
@@ -124,7 +138,7 @@ class Shogi:
     # 手番側の駒を除去
     if j == "*":
       koma = i
-      if self.turn == "b":
+      if self.turn == "w":
         koma = koma.lower()
       if self.inHand[koma] == 0:
         raise ValueError("inHand must be > 0")
@@ -146,6 +160,7 @@ class Shogi:
         if got_koma.isupper():
           got_koma = got_koma.lower()
         else:
+          # print(got_koma)
           raise ValueError("got_koma is not your koma")
       else:
         raise ValueError("turn must be b or w")
