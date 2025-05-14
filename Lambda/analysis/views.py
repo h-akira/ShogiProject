@@ -174,7 +174,7 @@ def inquire(master, aid):
 def _response2message(response:dict):
   shogi = Shogi(response["position"])
   count = shogi.count
-  message_rows = [f"=== {count}手目 ==="]
+  message_rows = [f"=== {count-1}手目 ==="]
   for i in range(1,11):
     if str(i) in response["result"].keys():
       shogi = Shogi(response["position"])
@@ -184,9 +184,9 @@ def _response2message(response:dict):
         return_kifu_jp_list=True
       )
       row = f"""\
-候補{i}
+候補手{i}
 評価値: {response['result'][str(i)]['score']}
-{' '.join(kifu_jp_list)}"""
+手順　: {' '.join(kifu_jp_list)}"""
       message_rows.append(row)
     else:
       break

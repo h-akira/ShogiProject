@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   analyzeButton.addEventListener('click', function() {
     clearMessages(); // 以前のメッセージをクリア
-    analyzeButton.innerText = '分析中';
+    analyzeButton.innerText = '解析中';
     analyzeButton.disabled = true;
     fetch('/analysis/submit', {
       method: 'POST',
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function resetButton() {
-    analyzeButton.innerText = '分析開始';
+    analyzeButton.innerText = '解析開始';
     analyzeButton.disabled = false;
   }
 
