@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
     clearMessages(); // 以前のメッセージをクリア
     analyzeButton.innerText = '分析中';
     analyzeButton.disabled = true;
-    alert(latestSfen);
     fetch('/analysis/submit', {
       method: 'POST',
       headers: {
@@ -72,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
           clearInterval(intervalId);
           resetButton();
         });
-    }, 3000);
+    }, 2000);
   }
 
   function resetButton() {
@@ -91,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function showResult(message) {
     const result = document.createElement('pre');
     result.innerText = message;
-    result.className = 'analysis-result';
+    result.className = 'analysis-result has-text-left';
     analyzeButton.parentNode.insertBefore(result, analyzeButton.nextSibling);
   }
 
