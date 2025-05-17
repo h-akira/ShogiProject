@@ -227,10 +227,10 @@ def explorer(master, username, slug_base64=None):
         folders_counter_dic[remaining_slug_list[0]] = 1
   rows_folder = [
     {
-      "name": f,
-      "counter": d[f],
+      "name": folder,
+      "counter": folders_counter_dic[folder],
       "fullpath_base64": encode_for_url(os.path.join(init[5:], f))
-    } for f,d in zip(folders, folders_counter_dic)
+    } for folder in folders
   ]
   context = {
     "username": username,
