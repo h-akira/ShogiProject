@@ -185,7 +185,7 @@ def explorer(master, username):
     )
     for item in response["Items"]:
       remaining_slug = item["clsi_sk"][len(init):]
-      if remaining_slug= "":
+      if remaining_slug == "":
         continue
       remaining_slug_list = remaining_slug.split("/")
       if len(remaining_slug_list) == 1:
