@@ -214,7 +214,7 @@ class Shogi:
       return coordinate[0], coordinate[1]
     else:
       return ord(coordinate[1]) - ord("a"), 9-int(coordinate[0])
-  def moves_by_sfen_moves(self, sfen_moves: list, return_kifu_jp_list = False):
+  def moves_by_sfen_moves(self, sfen_moves: list, return_kifu_jp_list = False, same=True):
     if sfen_moves.__class__ != list:
       raise TypeError("sfen_moves must be list")
     if return_kifu_jp_list:
@@ -223,6 +223,10 @@ class Shogi:
       kifu_jp = self.move_by_sfen_move(move, return_kifu_jp=return_kifu_jp_list)
       if return_kifu_jp_list:
         kifu_jp_list.append(kifu_jp)
+    if same:
+      for i in range(len(kifu_jp_list)-1):
+        if kifu_jp_list[len(kifu_jp_list)-1-i][1:3] == kifu_jp_list[len(kifu_jp_list)-2-i][1:3]:
+          kifu_jp_list[len(kifu_jp_list)-1-i] = kifu_jp_list[len(kifu_jp_list)-1-i][0]+"同"+kifu_jp_list[len(kifu_jp_list)-1-i][3:]
     if return_kifu_jp_list:
       return kifu_jp_list
 
