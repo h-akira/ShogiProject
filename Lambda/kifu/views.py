@@ -77,7 +77,7 @@ def _slug_format_checker_return_error_message(slug: str):
     return "'.kif' will be added automatically."
   return None
 
-def _check_slug_exists(table, username, slug):
+def _check_slug_exists(master, table, username, slug):
   try:
     response = table.query(
       IndexName="CommonLSI",
@@ -87,7 +87,7 @@ def _check_slug_exists(table, username, slug):
     raise e
   print(response)
   if response["Count"] > 1:
-    raise Exception("Multiple items found with the same slug")
+    master.logger.error(f"Multiple items found with the same slug: {slug}")
   elif response["Count"] == 1:
     return True
   else:
@@ -272,7 +272,7 @@ def create(master, username):
         "error_message": error_message
       }
       return render(master, 'kifu/edit.html', context)
-    if _check_slug_exists(table, username, form.data['slug']+".kif"):
+    if _check_slug_exists(master, table, username, form.data['slug']+".kif"):
       context = {
         "type": "create",
         "form": form,
@@ -354,7 +354,7 @@ def edit(master, username, kid):
         "kid": kid
       }
       return render(master, 'kifu/edit.html', context)
-    if _check_slug_exists(table, username, form.data['slug']+".kif"):
+    if _check_slug_exists(master, table, username, form.data['slug']+".kif"):
       context = {
         "type": "edit",
         "form": form,
