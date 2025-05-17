@@ -6,7 +6,7 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 import datetime
 from zoneinfo import ZoneInfo
-from project.common import gen_code
+from project.common import gen_code, encode_for_url, decode_from_url
 
 MAIN_TABLE_NAME = "table-sgp-main"
 KID_LENGTH = 12
@@ -171,8 +171,41 @@ def detail(master, username, kid):
 
 @login_required
 def explorer(master, username):
+  if username != master.request.username:
+    return render(master, 'not_found.html')
+  table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+  if master.request.method == 'GET':
+    init = "slug#"
+    folders = []
+    files = []
+    kids = []
+    response = table.query(
+      IndexName="CommonLSI",
+      KeyConditionExpression=Key('pk').eq(f"kifu#uname#{username}") & Key('clsi_sk').begins_with(init)
+    )
+    for item in response["Items"]:
+      remaining_slug = item["clsi_sk"][len(init):]
+      if remaining_slug= "":
+        continue
+      remaining_slug_list = remaining_slug.split("/")
+      if len(remaining_slug_list) == 1:
+        files.append(remaining_slug_list[0])
+        kids.append(item["sk"].split("#")[1])
+      else:
+        folder.append(remaining_slug_list[0])
+  elif master.request.method == 'POST':
+    return error_render(master, "Comming soon")
+  else:
+    raise Exception('Invalid request method')
+  # fullpath_folders = [os.path.join(init[5:], f)  for f in folders]
   context = {
-    'username': username
+    "username": username,
+    "folders": folders,
+    "base64_fullpath_folders": [
+      encode_for_url(os.path.join(init[5:], f))  for f in folders
+    ],
+    "files": files,
+    "kids": kids
   }
   return render(master, 'kifu/explorer.html', context)
 

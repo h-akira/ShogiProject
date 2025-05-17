@@ -225,6 +225,13 @@ class Shogi:
     if return_kifu_jp_list:
       return kifu_jp_list
 
+def encode_for_url(text):
+    return base64.urlsafe_b64encode(text.encode('utf-8')).decode('ascii').rstrip("=")
+
+def decode_from_url(encoded):
+    padding = '=' * ((4 - len(encoded) % 4) % 4)
+    return base64.urlsafe_b64decode((encoded + padding).encode('ascii')).decode('utf-8')
+
 # def main():
 #   SFEN = "lnsgkgsnl/1r5b1/p1pppp1p1/6p1p/9/2P6/PP1PPPPPP/1B5R1/LNSGKGSNL b - 1"
 #   sashite = "7f7e 7a7b 1g1f 5a4b 6i7h 7b8c 2g2f 8c8d 2f2e 8d7e 2e2d 2c2d 2h2d 4a3b 2d2h P*2c".split(" ")
