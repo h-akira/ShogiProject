@@ -8,9 +8,9 @@
 <div class="padding-all">
   <h1 class="title is-1 has-text-centered">エクスプローラー</h1>
   <p>
+    <a href="{{ reverse(master, 'kifu:explorer', username=username) }}">{{ username }}</a>/
     {% for p in parent_folders %}
-    <a href="{{ reverse(master, 'kifu:explorer_with_slug_base64', username=username, slug_base64=p.fullpath_base64) }}">{{ p.name }}</a>
-    {% if not loop.last %} / {% endif %}
+    <a href="{{ reverse(master, 'kifu:explorer_with_slug_base64', username=username, slug_base64=p.fullpath_base64) }}">{{ p.name }}</a>/
     {% endfor %}
   </p>
   <table class="table is-fullwidth">
