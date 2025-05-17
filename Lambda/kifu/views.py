@@ -315,6 +315,25 @@ def edit(master, username, kid):
     now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
     now_str = now.strftime("%Y-%m-%d %H:%M:%S")
     form = KifuForm(**master.request.body)
+    error_message = _slug_format_checker_return_error_message(form.data['slug'])
+    if error_message is not None:
+      context = {
+        "type": "edit",
+        "form": form,
+        "error_message": error_message,
+        "username": username,
+        "kid": kid
+      }
+      return render(master, 'kifu/edit.html', context)
+    if _check_slug_exists(table, username, form.data['slug']):
+      context = {
+        "type": "edit",
+        "form": form,
+        "error_message": "Slug already exists",
+        "username": username,
+        "kid": kid
+      }
+      return render(master, 'kifu/edit.html', context)
     action = master.request.body["action"]
     table.update_item(
       Key={
