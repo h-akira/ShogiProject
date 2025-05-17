@@ -229,8 +229,8 @@ def explorer(master, username, slug_base64=None):
     {
       "name": f,
       "counter": d[f],
-      "fullpath_base64": encode_for_url(os.path.join(init[5:], f)),
-    } for f,d in zip(floders, folders_counter_dic):
+      "fullpath_base64": encode_for_url(os.path.join(init[5:], f))
+    } for f,d in zip(folders, folders_counter_dic)
   ]
   context = {
     "username": username,
