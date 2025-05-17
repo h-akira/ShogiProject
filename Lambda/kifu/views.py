@@ -88,6 +88,7 @@ def _check_slug_exists(master, table, username, slug):
   print(response)
   if response["Count"] > 1:
     master.logger.error(f"Multiple items found with the same slug: {slug}")
+    return True
   elif response["Count"] == 1:
     return True
   else:
