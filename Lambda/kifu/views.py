@@ -192,7 +192,7 @@ def explorer(master, username):
         files.append(remaining_slug_list[0])
         kids.append(item["sk"].split("#")[1])
       else:
-        folder.append(remaining_slug_list[0])
+        folders.append(remaining_slug_list[0])
   elif master.request.method == 'POST':
     return error_render(master, "Comming soon")
   else:
