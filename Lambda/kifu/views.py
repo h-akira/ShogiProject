@@ -7,6 +7,7 @@ from boto3.dynamodb.conditions import Key
 import datetime
 from zoneinfo import ZoneInfo
 from project.common import gen_code, encode_for_url, decode_from_url
+import os
 
 MAIN_TABLE_NAME = "table-sgp-main"
 KID_LENGTH = 12
