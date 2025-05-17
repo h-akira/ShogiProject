@@ -178,6 +178,7 @@ def explorer(master, username):
   if master.request.method == 'GET':
     init = "slug#"
     folders = []
+    floders_dic = {}
     files = []
     kids = []
     response = table.query(
@@ -193,7 +194,11 @@ def explorer(master, username):
         files.append(remaining_slug_list[0])
         kids.append(item["sk"].split("#")[1])
       else:
-        folders.append(remaining_slug_list[0])
+        if remaining_slug_list[0] in folders:
+          floders_dic[remaining_slug_list[0]] += 1
+        else:
+          folders.append(remaining_slug_list[0])
+          floders_dic[remaining_slug_list[0]] = 0
   elif master.request.method == 'POST':
     return error_render(master, "Comming soon")
   else:
@@ -202,6 +207,7 @@ def explorer(master, username):
   context = {
     "username": username,
     "folders": folders,
+    "floders_dic": floders_dic,
     "base64_fullpath_folders": [
       encode_for_url(os.path.join(init[5:], f))  for f in folders
     ],
@@ -360,7 +366,7 @@ def edit(master, username, kid):
     else:
       item = response["Item"]
       form = KifuForm(
-        slug=item["clsi_sk"].split("#")[1],
+        slug=item["clsi_sk"].split("#")[1][:-4],
         kifu=item["kifu"],
         memo=item["memo"],
         first_or_second=item["first_or_second"],
