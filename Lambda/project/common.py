@@ -1,4 +1,5 @@
 import random
+import base64
 
 def gen_code(length):
   allow="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
