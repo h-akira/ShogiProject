@@ -272,7 +272,7 @@ def create(master, username):
         "error_message": error_message
       }
       return render(master, 'kifu/edit.html', context)
-    if _check_slug_exists(table, username, form.data['slug']):
+    if _check_slug_exists(table, username, form.data['slug']+".kif"):
       context = {
         "type": "create",
         "form": form,
@@ -354,7 +354,7 @@ def edit(master, username, kid):
         "kid": kid
       }
       return render(master, 'kifu/edit.html', context)
-    if _check_slug_exists(table, username, form.data['slug']):
+    if _check_slug_exists(table, username, form.data['slug']+".kif"):
       context = {
         "type": "edit",
         "form": form,
