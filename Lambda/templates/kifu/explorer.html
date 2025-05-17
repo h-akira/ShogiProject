@@ -22,7 +22,7 @@
   {% endfor %}
   {% for row in rows_file %}
   <p>
-    <a href="{{ reverse(master, 'kifu:explorer', username=username, kid=row.kid) }}">{{ row.name }}</a>
+    <a href="{{ reverse(master, 'kifu:detail', username=username, kid=row.kid) }}">{{ row.name }}</a>
     row.counter
   </p>
   {% endfor %}
