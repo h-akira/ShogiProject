@@ -173,48 +173,77 @@ def detail(master, username, kid):
 
 
 @login_required
-def explorer(master, username):
+def explorer(master, username, slug_base64=None):
   if username != master.request.username:
     return render(master, 'not_found.html')
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
-  if master.request.method == 'GET':
-    init = "slug#"
-    folders = []
-    floders_dic = {}
-    files = []
-    kids = []
-    response = table.query(
-      IndexName="CommonLSI",
-      KeyConditionExpression=Key('pk').eq(f"kifu#uname#{username}") & Key('clsi_sk').begins_with(init)
+  init = "slug#"
+  done_slug_list = []
+  if slug_base64 is not None:
+    init += decode_from_url(slug_base64)
+    if init[-1] != "/":
+      init += "/"
+    done_slug_list = init.split("/")
+    if done_slug_list[-1] == "":
+      done_slug_list.pop(-1)
+  parent_folders_fullpath_base64 = []
+  parent_folders_fullpath = ""
+  for v in done_slug_list:
+    parent_folders_fullpath = os.path.join(parent_folders_fullpath, v)
+    parent_folders_fullpath_base64.append(encode_for_url(parent_folders_fullpath))
+  parent_folders = [
+    {
+      "folder": folder,
+      "fullpath_base64": fullpath_base64
+    } for folder, fullpath_base64 in zip(
+      done_slug_list,
+      parent_folders_fullpath_base64
     )
-    for item in response["Items"]:
-      remaining_slug = item["clsi_sk"][len(init):]
-      if remaining_slug == "":
-        continue
-      remaining_slug_list = remaining_slug.split("/")
-      if len(remaining_slug_list) == 1:
-        files.append(remaining_slug_list[0])
-        kids.append(item["sk"].split("#")[1])
+  ]
+  rows_file = []
+  folders = []
+  folders_counter_dic = {}
+  response = table.query(
+    IndexName="CommonLSI",
+    KeyConditionExpression=Key('pk').eq(f"kifu#uname#{username}") & Key('clsi_sk').begins_with(init)
+  )
+  for item in response["Items"]:
+    remaining_slug = item["clsi_sk"][len(init):]
+    if remaining_slug == "":
+      continue
+    remaining_slug_list = remaining_slug.split("/")
+    if len(remaining_slug_list) == 1:
+      rows_file.append(
+        {
+          "name": remaining_slug_list[0],
+          "kid": item["sk"].split("#")[1],
+        }
+      )
+    else:
+      if remaining_slug_list[0] in folders:
+        folders_counter_dic[remaining_slug_list[0]] += 1
       else:
-        if remaining_slug_list[0] in folders:
-          floders_dic[remaining_slug_list[0]] += 1
-        else:
-          folders.append(remaining_slug_list[0])
-          floders_dic[remaining_slug_list[0]] = 0
-  elif master.request.method == 'POST':
-    return error_render(master, "Comming soon")
-  else:
-    raise Exception('Invalid request method')
-  # fullpath_folders = [os.path.join(init[5:], f)  for f in folders]
+        folders.append(remaining_slug_list[0])
+        folders_counter_dic[remaining_slug_list[0]] = 1
+  rows_folder = [
+    {
+      "name": f,
+      "counter": d[f],
+      "fullpath_base64": encode_for_url(os.path.join(init[5:], f)),
+    } for f,d in zip(floders, folders_counter_dic):
+  ]
   context = {
     "username": username,
-    "folders": folders,
-    "floders_dic": floders_dic,
-    "base64_fullpath_folders": [
-      encode_for_url(os.path.join(init[5:], f))  for f in folders
-    ],
-    "files": files,
-    "kids": kids
+    "rows_file": rows_file,
+    "rows_folder": rows_folder,
+    "parent_folders": parent_folders
+    # "folders": folders,
+    # "floders_dic": floders_dic,
+    # "base64_fullpath_folders": [
+    #   encode_for_url(os.path.join(init[5:], f))  for f in folders
+    # ],
+    # "files": files,
+    # "kids": kids
   }
   return render(master, 'kifu/explorer.html', context)
 
