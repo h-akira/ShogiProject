@@ -73,6 +73,8 @@ def _slug_format_checker_return_error_message(slug: str):
     return "Slug cannot start with '/'."
   if "#" in slug:
     return "Slug cannot contain '#'."
+  if len(slug) > 4 and slug[-4:] == ".kif":
+    return "'.kif' will be added automatically."
   return None
 
 def _check_slug_exists(table, username, slug):
@@ -254,7 +256,7 @@ def create(master, username):
       "pk": f"kifu#uname#{username}",
       "sk": f"kid#{kid}",
       "cgsi_pk": f"scode#{share_code}",
-      "clsi_sk": f"slug#{form.data['slug']}",
+      "clsi_sk": f"slug#{form.data['slug']}"+".kif",
       "public": form.data['public'],
       "share": form.data['share'],
       "kifu": form.data['kifu'],
@@ -331,7 +333,7 @@ def edit(master, username, kid):
         "#latest_update": "lastest_update"
       },
       ExpressionAttributeValues={
-        ':cl': f"slug#{form.data['slug']}",
+        ':cl': f"slug#{form.data['slug']}"+".kif",
         ':ki': form.data["kifu"],
         ':me': form.data["memo"],
         ':fi': form.data["first_or_second"],
