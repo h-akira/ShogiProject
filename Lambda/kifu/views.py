@@ -229,7 +229,7 @@ def explorer(master, username, slug_base64=None):
     {
       "name": folder,
       "counter": folders_counter_dic[folder],
-      "fullpath_base64": encode_for_url(os.path.join(init[5:], f))
+      "fullpath_base64": encode_for_url(os.path.join(init[5:], folder))
     } for folder in folders
   ]
   context = {
