@@ -10,13 +10,19 @@
   <p>comming soon...</p>
   <p>
     {% for p in parent_folders %}
-    <a href="{{ reverse(master, 'explorer', username=username, slug_base64=p.fullpath_base64) }}">{{ p.name }}</a>
+    <a href="{{ reverse(master, 'kifu:explorer', username=username, slug_base64=p.fullpath_base64) }}">{{ p.name }}</a>
     {% if not loop.last %} / {% endif %}
     {% endfor %}
   </p>
   {% for row in rows_folder %}
   <p>
-    <a href="{{ reverse(master, 'explorer', username=username, slug_base64=row.fullpath_base64) }}">{{ row.name }}</a>
+    <a href="{{ reverse(master, 'kifu:explorer', username=username, slug_base64=row.fullpath_base64) }}">{{ row.name }}</a>
+    row.counter
+  </p>
+  {% endfor %}
+  {% for row in rows_file %}
+  <p>
+    <a href="{{ reverse(master, 'kifu:explorer', username=username, kid=row.kid) }}">{{ row.name }}</a>
     row.counter
   </p>
   {% endfor %}
