@@ -193,7 +193,7 @@ def explorer(master, username, slug_base64=None):
     parent_folders_fullpath_base64.append(encode_for_url(parent_folders_fullpath))
   parent_folders = [
     {
-      "folder": folder,
+      "name": folder,
       "fullpath_base64": fullpath_base64
     } for folder, fullpath_base64 in zip(
       done_slug_list,

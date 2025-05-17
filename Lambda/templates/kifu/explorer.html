@@ -10,7 +10,7 @@
   <p>comming soon...</p>
   <p>
     {% for p in parent_folders %}
-    <a href="{{ url_for('explorer', path=p) }}">{{ p }}</a>
+    <a href="{{ reverse(master, 'explorer', username=username, slug_base64=p.fullpath_base64) }}">{{ p.name }}</a>
     {% if not loop.last %} / {% endif %}
     {% endfor %}
   {# {% for v in folders %} #}
