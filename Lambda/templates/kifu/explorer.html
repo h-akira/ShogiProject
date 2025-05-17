@@ -7,7 +7,6 @@
 {% block content %}
 <div class="padding-all">
   <h1 class="title is-1 has-text-centered">エクスプローラー</h1>
-  <p>comming soon...</p>
   <p>
     {% for p in parent_folders %}
     <a href="{{ reverse(master, 'kifu:explorer_with_slug_base64', username=username, slug_base64=p.fullpath_base64) }}">{{ p.name }}</a>
@@ -17,27 +16,27 @@
   <table class="table is-fullwidth">
     <thead>
       <tr>
-        <th>名前</th>
         <th>種別</th>
+        <th>名前</th>
         <th>ファイル数</th>
       </tr>
     </thead>
     <tbody>
       {% for row in rows_folder %}
       <tr>
+        <td>Folder</td>
         <td>
           <a href="{{ reverse(master, 'kifu:explorer_with_slug_base64', username=username, slug_base64=row.fullpath_base64) }}">{{ row.name }}</a>
         </td>
-        <td>folder</td>
         <td>{{ row.counter }}</td>
       </tr>
       {% endfor %}
       {% for row in rows_file %}
       <tr>
+        <td>File</td>
         <td>
           <a href="{{ reverse(master, 'kifu:detail', username=username, kid=row.kid) }}">{{ row.name }}</a>
         </td>
-        <td>file</td>
         <td> - </td>
       </tr>
       {% endfor %}
