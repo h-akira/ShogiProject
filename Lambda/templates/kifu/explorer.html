@@ -14,7 +14,7 @@
     {% if not loop.last %} / {% endif %}
     {% endfor %}
   </p>
-  <table class="table">
+  <table class="table is-fullwidth">
     <thead>
       <tr>
         <th>名前</th>
@@ -28,7 +28,7 @@
         <td>
           <a href="{{ reverse(master, 'kifu:explorer_with_slug_base64', username=username, slug_base64=row.fullpath_base64) }}">{{ row.name }}</a>
         </td>
-        <td>フォルダ</td>
+        <td>folder</td>
         <td>{{ row.counter }}</td>
       </tr>
       {% endfor %}
@@ -37,26 +37,25 @@
         <td>
           <a href="{{ reverse(master, 'kifu:detail', username=username, kid=row.kid) }}">{{ row.name }}</a>
         </td>
-        <td>ファイル</td>
-        <td>{{ row.counter }}</td>
+        <td>file</td>
         <td> - </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 
-  {% for row in rows_folder %}
-  <p>
-    <a href="{{ reverse(master, 'kifu:explorer_with_slug_base64', username=username, slug_base64=row.fullpath_base64) }}">{{ row.name }}</a>
-    row.counter
-  </p>
-  {% endfor %}
-  {% for row in rows_file %}
-  <p>
-    <a href="{{ reverse(master, 'kifu:detail', username=username, kid=row.kid) }}">{{ row.name }}</a>
-    row.counter
-  </p>
-  {% endfor %}
+  {# {% for row in rows_folder %} #}
+  {# <p> #}
+  {#   <a href="{{ reverse(master, 'kifu:explorer_with_slug_base64', username=username, slug_base64=row.fullpath_base64) }}">{{ row.name }}</a> #}
+  {#   row.counter #}
+  {# </p> #}
+  {# {% endfor %} #}
+  {# {% for row in rows_file %} #}
+  {# <p> #}
+  {#   <a href="{{ reverse(master, 'kifu:detail', username=username, kid=row.kid) }}">{{ row.name }}</a> #}
+  {#   row.counter #}
+  {# </p> #}
+  {# {% endfor %} #}
   {# {% for v in folders %} #}
   {# <p>{{ v }}</p> #}
   {# {% endfor %} #}

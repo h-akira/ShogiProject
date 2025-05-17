@@ -183,7 +183,7 @@ def explorer(master, username, slug_base64=None):
     init += decode_from_url(slug_base64)
     if init[-1] != "/":
       init += "/"
-    done_slug_list = init.split("/")
+    done_slug_list = init[5:].split("/")
     if done_slug_list[-1] == "":
       done_slug_list.pop(-1)
   parent_folders_fullpath_base64 = []
