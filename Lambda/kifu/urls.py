@@ -1,5 +1,5 @@
 from hads.urls import Path
-from .views import index, explorer, create, edit, detail, delete
+from .views import index, explorer, create, edit, detail, delete, share
 
 urlpatterns = [
   Path("index/{username}", index, name="index"),
@@ -9,5 +9,5 @@ urlpatterns = [
   Path("detail/{username}/{kid}", detail, name="detail"),
   Path("edit/{username}/{kid}", edit, name="edit"),
   Path("delete/{username}/{kid}", delete, name="delete"),
-  Path("share/{share_code}", delete, name="share")
+  Path("share/{share_code}", share, name="share")
 ]
