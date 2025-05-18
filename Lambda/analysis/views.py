@@ -178,11 +178,15 @@ def _response2message(response:dict):
   for i in range(1,11):
     if str(i) in response["result"].keys():
       shogi = Shogi(response["position"])
+      turn = shogi.turn
       count = shogi.count
       kifu_jp_list = shogi.moves_by_sfen_moves(
         response["result"][str(i)]["pv"].split(" "),
         return_kifu_jp_list=True
       )
+      score = response["result"][str(i)]["score"]
+      if turn == "w":
+        score = -score
       row = f"""\
 候補手{i}
 評価値: {response['result'][str(i)]['score']}
