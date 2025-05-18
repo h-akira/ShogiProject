@@ -179,8 +179,8 @@ def detail(master, username, kid):
 def share(master, share_code):
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
   response = table.query(
-    IndexName="CommonLSI",
-    KeyConditionExpression=Key('pk').eq(f"scode#{share_code}")
+    IndexName="CommonGSI",
+    KeyConditionExpression=Key('cgsi_pk').eq(f"scode#{share_code}")
   )
   if response["Count"] == 0:
     return render(master, 'not_found.html')
