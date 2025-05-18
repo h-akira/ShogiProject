@@ -192,7 +192,7 @@ def _response2message(response:dict):
           score = "+" + score
       row = f"""\
 候補手{i}
-評価値: {response['result'][str(i)]['score']}
+評価値: {score}
 手順　: {' '.join(kifu_jp_list)}"""
       message_rows.append(row)
     else:
