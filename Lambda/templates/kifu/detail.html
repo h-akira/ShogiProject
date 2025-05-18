@@ -4,10 +4,11 @@
 <link rel="stylesheet" href="{{ static(master, 'css/shogi.css') }}">
 {% endblock extra_css %}
 
-{% block title %}ホーム{% endblock title %}
+{% block title %}棋譜{% endblock title %}
 
 {% block content %}
 <div class="padding-all">
+  {% if type == 'normal' %}
   <h3 class="title is-3 has-text-centered">{{ slug }}</h1>
   <p>
     作成　　:{{ created }}
@@ -15,12 +16,14 @@
   <p>
     最終更新:{{ latest_update }}
   </p>
+  {% endif %}
   {% if memo %}
   <p>
     メモ　　:
   </p>
   <pre class="full-width">{{ memo }}</pre>
   {% endif %}
+  {% if type == 'normal' %}
   <p>
     <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
       編集
@@ -28,7 +31,7 @@
     {% if not share %}
     <span hidden>
     {% endif %}
-    <a id="share-link" href="#" class="button is-light is-link">
+    <a id="share-link" href="{{ reverse(master, 'kifu:share', share_code=share_code) }}" class="button is-light is-link">
       共有ページ
     </a>
     <button id="copy-button" class="button is-info is-light">
@@ -38,6 +41,7 @@
     </span>
     {% endif %}
   </p>
+  {% endif %}
   <shogi-player-wc
     id="sp"
     sp_body="

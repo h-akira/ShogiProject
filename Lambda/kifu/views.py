@@ -160,6 +160,7 @@ def detail(master, username, kid):
   else:
     item = response["Item"]
     context = {
+      'type' = "normal",
       'username': username,
       'kid': kid,
       'slug': item["clsi_sk"].split("#")[1],
@@ -175,6 +176,36 @@ def detail(master, username, kid):
     }
     return render(master, 'kifu/detail.html', context)
 
+def share(master, share_code):
+  table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+  response = table.query(
+    IndexName="CommonLSI",
+    KeyConditionExpression=Key('pk').eq(f"scode#{share_code}")
+  )
+  if response["Count"] == 0:
+    return render(master, 'not_found.html')
+  elif response["Count"] > 1:
+    return render(master, 'not_found.html')
+  else:
+    item = response["Items"][0]
+    if not item["share"]:
+      return render(master, 'not_found.html')
+    context = {
+      # 'username': item["pk"].split("#")[2],
+      # 'kid': item["sk"].split("#")[1],
+      # 'slug': item["clsi_sk"].split("#")[1],
+      'type' = "share",
+      'share_code': item["cgsi_pk"].split("#")[1],
+      'kifu': item["kifu"],
+      'memo': item["memo"],
+      'first_or_second': item["first_or_second"],
+      'result': item["result"],
+      'share': item["share"],
+      'public': item["public"],
+      'created': item["created"],
+      'latest_update': item["latest_update"]
+    }
+    return render(master, 'kifu/detail.html', context)
 
 @login_required
 def explorer(master, username, slug_base64=None):
