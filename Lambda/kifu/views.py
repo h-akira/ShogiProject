@@ -160,7 +160,7 @@ def detail(master, username, kid):
   else:
     item = response["Item"]
     context = {
-      'type' = "normal",
+      'type' : "normal",
       'username': username,
       'kid': kid,
       'slug': item["clsi_sk"].split("#")[1],
@@ -194,7 +194,7 @@ def share(master, share_code):
       # 'username': item["pk"].split("#")[2],
       # 'kid': item["sk"].split("#")[1],
       # 'slug': item["clsi_sk"].split("#")[1],
-      'type' = "share",
+      'type': "share",
       'share_code': item["cgsi_pk"].split("#")[1],
       'kifu': item["kifu"],
       'memo': item["memo"],
