@@ -8,6 +8,6 @@ urlpatterns = [
   Path("create/{username}", create, name="create"),
   Path("detail/{username}/{kid}", detail, name="detail"),
   Path("edit/{username}/{kid}", edit, name="edit"),
-  Path("delete/{username}/{kid}", delete, name="delete")
+  Path("delete/{username}/{kid}", delete, name="delete"),
   Path("share/{share_code}", delete, name="delete")
 ]
