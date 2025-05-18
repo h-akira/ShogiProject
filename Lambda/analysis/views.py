@@ -185,8 +185,11 @@ def _response2message(response:dict):
         return_kifu_jp_list=True
       )
       score = response["result"][str(i)]["score"]
-      if turn == "w":
-        score = -score
+      if score[0] != "#":
+        if turn == "w":
+          score = str(-int(score))
+        if score[0] != "-":
+          score = "+" + score
       row = f"""\
 候補手{i}
 評価値: {response['result'][str(i)]['score']}
