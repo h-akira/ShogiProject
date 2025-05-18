@@ -9,5 +9,5 @@ urlpatterns = [
   Path("detail/{username}/{kid}", detail, name="detail"),
   Path("edit/{username}/{kid}", edit, name="edit"),
   Path("delete/{username}/{kid}", delete, name="delete"),
-  Path("share/{share_code}", delete, name="delete")
+  Path("share/{share_code}", delete, name="share")
 ]
