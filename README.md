@@ -2,17 +2,18 @@
 ## 概要
 将棋の棋譜の管理を管理するシステムです。
 AIによる局面の解析機能も有しています。
-
 このシステムは本リポジトリと
 [ShogiProject_Analysis](https://github.com/h-akira/ShogiProject_Analysis)
-2つのリポジトリからなります。
+の2つのリポジトリからなります。
 また、フレームワークとして
 [hads](https://github.com/h-akira/hads)
 を使用しています。
 
 ## 構成
-本システムはAWS上に構築され、構成図は下記の通りです。
+本システムはAWS上に構築され、構成図は下記の通りです。  
 ![structure](images/structure.png)  
+赤枠と青枠に囲まれた部分はそれぞれのリポジトリに対応しており、SAMで展開されます。
+それ以外の部分は別途構築します。
 
 ## 機能
 - 棋譜登録
