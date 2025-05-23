@@ -1,1 +1,1 @@
-hads @ git+https://github.com/h-akira/hads.git@main
+hads @ git+https://github.com/h-akira/hads.git@develop
