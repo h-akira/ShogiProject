@@ -2,6 +2,7 @@
 {% block extra_css %}
 <script defer src="https://cdn.jsdelivr.net/npm/shogi-player@1.1.24"></script>
 <link rel="stylesheet" href="{{ static(master, 'css/shogi.css') }}">
+<link rel="stylesheet" href="{{ static(master, 'css/detail.css') }}">
 {% endblock extra_css %}
 
 {% block title %}棋譜{% endblock title %}
@@ -11,17 +12,17 @@
   {% if type == 'normal' %}
   <div class="card">
     <div class="card-content">
-      <h3 class="title is-3 has-text-centered mb-4">{{ slug }}</h3>
+      <h3 class="title is-3 has-text-centered">{{ slug }}</h3>
       
-      <div class="columns is-mobile">
+      <div class="columns">
         <div class="column">
-          <div class="field">
+          <div class="meta-info">
             <label class="label">作成日時</label>
-            <p class="is-size-6">{{ created }}</p>
+            <p>{{ created }}</p>
           </div>
-          <div class="field">
+          <div class="meta-info">
             <label class="label">最終更新</label>
-            <p class="is-size-6">{{ latest_update }}</p>
+            <p>{{ latest_update }}</p>
           </div>
         </div>
       </div>
@@ -30,18 +31,18 @@
   {% endif %}
 
   {% if memo %}
-  <div class="card mt-4">
+  <div class="card">
     <div class="card-content">
-      <h4 class="title is-5">メモ</h4>
+      <h4 class="title is-4">メモ</h4>
       <div class="content">
-        <pre class="has-background-light p-3 is-family-monospace">{{ memo }}</pre>
+        <pre class="kifu-text">{{ memo }}</pre>
       </div>
     </div>
   </div>
   {% endif %}
 
   {% if type == 'normal' %}
-  <div class="field is-grouped mt-4">
+  <div class="action-buttons field is-grouped">
     <p class="control">
       <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
         <span class="icon">
@@ -54,7 +55,7 @@
     <span hidden>
     {% endif %}
     <p class="control">
-      <a id="share-link" href="{{ reverse(master, 'kifu:share', share_code=share_code) }}" class="button is-light is-link">
+      <a id="share-link" href="{{ reverse(master, 'kifu:share', share_code=share_code) }}" class="button is-light is-info">
         <span class="icon">
           <i class="fas fa-share-alt"></i>
         </span>
@@ -75,7 +76,7 @@
   </div>
   {% endif %}
 
-  <div class="card mt-4">
+  <div class="card shogi-player-container">
     <div class="card-content">
       <shogi-player-wc
         id="sp"
@@ -91,7 +92,7 @@
   </div>
 
   {% if master.request.auth %}
-  <div class="mt-4">
+  <div class="field">
     <button id="analyze-button" class="button is-info is-light is-fullwidth">
       <span class="icon">
         <i class="fas fa-chart-line"></i>
@@ -101,10 +102,10 @@
   </div>
   {% endif %}
 
-  <div class="card mt-4">
+  <div class="card">
     <div class="card-content">
-      <h4 class="title is-5">棋譜</h4>
-      <pre class="has-background-light p-3 is-family-monospace">{{ kifu }}</pre>
+      <h4 class="title is-4">棋譜</h4>
+      <pre class="kifu-text">{{ kifu }}</pre>
     </div>
   </div>
 </div>

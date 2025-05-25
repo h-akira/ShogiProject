@@ -6,71 +6,120 @@
 {% block title %}ホーム{% endblock title %}
 
 {% block content %}
-<div class="hero-section">
+<section class="hero is-primary is-medium">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title is-1">
+        将棋棋譜管理システム
+      </h1>
+      <p class="subtitle is-4">
+        あなたの大切な棋譜を、安全に、効率的に管理
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
   <div class="container">
-    <h1 class="display-4 text-center mb-4">将棋棋譜管理システム</h1>
-    <p class="lead text-center">あなたの大切な棋譜を、安全に、効率的に管理</p>
-  </div>
-</div>
-
-<div class="container content-section">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="feature-card">
-        <h3 class="h4 mb-3">📋 概要</h3>
-        <p>
-          将棋棋譜管理システムは、将棋の棋譜を管理するためのシステムです。
-          ユーザーは棋譜を登録し、他のユーザーと共有することができます。
-          また、AIによる局面の解析機能も提供しています。
-        </p>
-      </div>
-    </div>
-    
-    <div class="col-md-6">
-      <div class="feature-card">
-        <h3 class="h4 mb-3">🔍 AIによる解析</h3>
-        <p>
-          AIによる局面解析機能はログインしているユーザーのみ利用可能です。
-          共有URLを知っているだけでログインしていないユーザーはAIによる局面解析機能を利用することはできません。
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <div class="alert-custom mt-4">
-    <h4 class="mb-3">⚠️ アカウント作成について</h4>
-    <p class="mb-0">
-      現在、管理者によってアカウントの新規作成はブロックされています。
-    </p>
-  </div>
-
-  <div class="feature-card mt-4">
-    <h3 class="h4 mb-3">💡 利用方法</h3>
-    <div class="row">
-      <div class="col-md-4">
-        <div class="text-center mb-4">
-          <i class="fas fa-user-plus fa-2x mb-3"></i>
-          <h5>1. アカウント作成</h5>
-          <p>まずはアカウントを作成してください</p>
+    <div class="columns is-variable is-6">
+      <div class="column is-half">
+        <div class="box feature-card">
+          <h3 class="title is-4">
+            <span class="icon-text">
+              <span class="icon">
+                <i class="fas fa-book"></i>
+              </span>
+              <span>概要</span>
+            </span>
+          </h3>
+          <div class="content">
+            <p>
+              将棋棋譜管理システムは、将棋の棋譜を管理するためのシステムです。
+              ユーザーは棋譜を登録し、他のユーザーと共有することができます。
+              また、AIによる局面の解析機能も提供しています。
+            </p>
+          </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="text-center mb-4">
-          <i class="fas fa-chess fa-2x mb-3"></i>
-          <h5>2. 棋譜登録</h5>
-          <p>棋譜を簡単に登録できます</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="text-center mb-4">
-          <i class="fas fa-share-alt fa-2x mb-3"></i>
-          <h5>3. 共有機能</h5>
-          <p>URLで簡単に棋譜を共有</p>
+      
+      <div class="column is-half">
+        <div class="box feature-card">
+          <h3 class="title is-4">
+            <span class="icon-text">
+              <span class="icon">
+                <i class="fas fa-robot"></i>
+              </span>
+              <span>AIによる解析</span>
+            </span>
+          </h3>
+          <div class="content">
+            <p>
+              AIによる局面解析機能はログインしているユーザーのみ利用可能です。
+              共有URLを知っているだけでログインしていないユーザーはAIによる局面解析機能を利用することはできません。
+            </p>
+          </div>
         </div>
       </div>
     </div>
+
+    <div class="warning-box">
+      <h4 class="title is-4 has-text-danger">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </span>
+          <span>アカウント作成について</span>
+        </span>
+      </h4>
+      <p class="has-text-danger">
+        現在、管理者によってアカウントの新規作成はブロックされています。
+      </p>
+    </div>
+
+    <div class="box mt-6">
+      <h3 class="title is-4">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-info-circle"></i>
+          </span>
+          <span>利用方法</span>
+        </span>
+      </h3>
+      
+      <div class="columns is-multiline">
+        <div class="column is-one-third">
+          <div class="has-text-centered">
+            <p class="mb-4">
+              <span class="step-number">1</span>
+              <span class="title is-5">アカウント作成</span>
+            </p>
+            <p>まずはアカウントを作成してください</p>
+          </div>
+        </div>
+        
+        <div class="column is-one-third">
+          <div class="has-text-centered">
+            <p class="mb-4">
+              <span class="step-number">2</span>
+              <span class="title is-5">棋譜登録</span>
+            </p>
+            <p>棋譜を簡単に登録できます</p>
+          </div>
+        </div>
+        
+        <div class="column is-one-third">
+          <div class="has-text-centered">
+            <p class="mb-4">
+              <span class="step-number">3</span>
+              <span class="title is-5">共有機能</span>
+            </p>
+            <p>URLで簡単に棋譜を共有</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 {% endblock content %}
 
 {% block extra_js %}
