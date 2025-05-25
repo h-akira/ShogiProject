@@ -1,72 +1,161 @@
 {% extends 'base.html' %}
 {% block extra_css %}
+<style>
+.hero.is-primary {
+  background: linear-gradient(135deg, #485fc7, #3e8ed0);
+}
+
+.feature-card {
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.icon-text {
+  align-items: center;
+}
+
+.warning-box {
+  border-left: 5px solid #ff3860;
+  padding: 1.5rem;
+  background-color: #feecf0;
+  margin: 2rem 0;
+}
+
+.step-number {
+  background: #485fc7;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+}
+</style>
 {% endblock extra_css %}
 
 {% block title %}ホーム{% endblock title %}
 
 {% block content %}
-<div class="padding-all">
-  <h1 class="title is-1 has-text-centered">将棋棋譜管理システム</h1>
-  <h3 class="title is-3">概要</h3>
-  <p>
-    将棋棋譜管理システムは、将棋の棋譜を管理するためのシステムです。
-    ユーザーは棋譜を登録し、他のユーザーと共有することができます。
-    また、AIによる局面の解析機能も提供しています。
-  </p>
-  <br>
-  <h3 class="title is-3">利用方法</h3>
-  <p class="has-text-danger">
-    現在、管理者によってアカウントの新規作成はブロックされています。
-  </p>
-  <p>
-    利用するには、まずアカウントを作成してください。
-    アカウントを作成したら、棋譜を登録することができます。
-    登録した棋譜は、他のユーザーと共有URLを利用して共有することができます。
-  </p>
-  <p>
-    AIによる局面解析機能はログインしているユーザーのみ利用可能です。
-    共有URLを知っているだけでログインしていないユーザーはAIによる局面解析機能を利用することはできません。
-  </p>
-</div>
-{# <div class="padding-side"> #}
-{#   <div class="columns"> #}
-{#     <div class="column padding-side"> #}
-{#       <div class="card card-bordered"> #}
-{#         <div class="card-content"> #}
-{#           <h3 class="title is-3 has-text-centered">階層図</h3> #}
-{#           <div class="tree"> #}
-{#             {% for html in tree_htmls %} #}
-{#             {{ html | safe  }} #}
-{#             {% endfor %} #}
-{#           </div> #}
-{#         </div> #}
-{#       </div> #}
-{#     </div> #}
-{#     <div class="column"> #}
-{#       <div class="card card-bordered"> #}
-{#         <div class="card-content"> #}
-{#           <h3 class="title is-3 has-text-centered">最近の更新</h3> #}
-{#           {% for page in pages %} #}
-{#           <h5 class="title is-5"> #}
-{#             {{ page.title }} #}
-{#           </h5> #}
-{#           <p> #}
-{#             <a href="{{ 'wiki:detail'|url_for_slug(username=page.username, slug=page.slug) }}"> #}
-{#               {{ page.username }}/{{ page.slug }} #}
-{#             </a> #}
-{#           </p> #}
-{#           <p> #}
-{#             (最終更新:{{ page.last_updated }}) #}
-{#           </p> #}
-{#           {% if not loop.last %} #}
-{#             <hr> #}
-{#           {% endif %} #}
-{#           {% endfor %} #}
-{#         </div> #}
-{#       </div> #}
-{#     </div> #}
-{#   </div> #}
-{# </div> #}
+<section class="hero is-primary is-medium">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title is-1">
+        将棋棋譜管理システム
+      </h1>
+      <p class="subtitle is-4">
+        あなたの大切な棋譜を、安全に、効率的に管理
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-variable is-6">
+      <div class="column is-half">
+        <div class="box feature-card">
+          <h3 class="title is-4">
+            <span class="icon-text">
+              <span class="icon">
+                <i class="fas fa-book"></i>
+              </span>
+              <span>概要</span>
+            </span>
+          </h3>
+          <div class="content">
+            <p>
+              将棋棋譜管理システムは、将棋の棋譜を管理するためのシステムです。
+              ユーザーは棋譜を登録し、他のユーザーと共有することができます。
+              また、AIによる局面の解析機能も提供しています。
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="column is-half">
+        <div class="box feature-card">
+          <h3 class="title is-4">
+            <span class="icon-text">
+              <span class="icon">
+                <i class="fas fa-robot"></i>
+              </span>
+              <span>AIによる解析</span>
+            </span>
+          </h3>
+          <div class="content">
+            <p>
+              AIによる局面解析機能はログインしているユーザーのみ利用可能です。
+              共有URLを知っているだけでログインしていないユーザーはAIによる局面解析機能を利用することはできません。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="warning-box">
+      <h4 class="title is-4 has-text-danger">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </span>
+          <span>アカウント作成について</span>
+        </span>
+      </h4>
+      <p class="has-text-danger">
+        現在、管理者によってアカウントの新規作成はブロックされています。
+      </p>
+    </div>
+
+    <div class="box mt-6">
+      <h3 class="title is-4">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-info-circle"></i>
+          </span>
+          <span>利用方法</span>
+        </span>
+      </h3>
+      
+      <div class="columns is-multiline">
+        <div class="column is-one-third">
+          <div class="has-text-centered">
+            <p class="mb-4">
+              <span class="step-number">1</span>
+              <span class="title is-5">アカウント作成</span>
+            </p>
+            <p>まずはアカウントを作成してください</p>
+          </div>
+        </div>
+        
+        <div class="column is-one-third">
+          <div class="has-text-centered">
+            <p class="mb-4">
+              <span class="step-number">2</span>
+              <span class="title is-5">棋譜登録</span>
+            </p>
+            <p>棋譜を簡単に登録できます</p>
+          </div>
+        </div>
+        
+        <div class="column is-one-third">
+          <div class="has-text-centered">
+            <p class="mb-4">
+              <span class="step-number">3</span>
+              <span class="title is-5">共有機能</span>
+            </p>
+            <p>URLで簡単に棋譜を共有</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock content %}
 
 {% block extra_js %}
