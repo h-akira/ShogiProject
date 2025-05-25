@@ -9,59 +9,104 @@
 {% block content %}
 <div class="padding-all">
   {% if type == 'normal' %}
-  <h3 class="title is-3 has-text-centered">{{ slug }}</h1>
-  <p>
-    作成　　:{{ created }}
-  </p>
-  <p>
-    最終更新:{{ latest_update }}
-  </p>
+  <div class="card">
+    <div class="card-content">
+      <h3 class="title is-3 has-text-centered mb-4">{{ slug }}</h3>
+      
+      <div class="columns is-mobile">
+        <div class="column">
+          <div class="field">
+            <label class="label">作成日時</label>
+            <p class="is-size-6">{{ created }}</p>
+          </div>
+          <div class="field">
+            <label class="label">最終更新</label>
+            <p class="is-size-6">{{ latest_update }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   {% endif %}
+
   {% if memo %}
-  <p>
-    メモ　　:
-  </p>
-  <pre class="full-width">{{ memo }}</pre>
+  <div class="card mt-4">
+    <div class="card-content">
+      <h4 class="title is-5">メモ</h4>
+      <div class="content">
+        <pre class="has-background-light p-3 is-family-monospace">{{ memo }}</pre>
+      </div>
+    </div>
+  </div>
   {% endif %}
+
   {% if type == 'normal' %}
-  <p>
-    <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
-      編集
-    </a>
+  <div class="field is-grouped mt-4">
+    <p class="control">
+      <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
+        <span class="icon">
+          <i class="fas fa-edit"></i>
+        </span>
+        <span>編集</span>
+      </a>
+    </p>
     {% if not share %}
     <span hidden>
     {% endif %}
-    <a id="share-link" href="{{ reverse(master, 'kifu:share', share_code=share_code) }}" class="button is-light is-link">
-      共有ページ
-    </a>
-    <button id="copy-button" class="button is-info is-light">
-      共有URLをコピー
-    </button>
+    <p class="control">
+      <a id="share-link" href="{{ reverse(master, 'kifu:share', share_code=share_code) }}" class="button is-light is-link">
+        <span class="icon">
+          <i class="fas fa-share-alt"></i>
+        </span>
+        <span>共有ページ</span>
+      </a>
+    </p>
+    <p class="control">
+      <button id="copy-button" class="button is-info is-light">
+        <span class="icon">
+          <i class="fas fa-copy"></i>
+        </span>
+        <span>共有URLをコピー</span>
+      </button>
+    </p>
     {% if not share %}
     </span>
     {% endif %}
-  </p>
+  </div>
   {% endif %}
-  <shogi-player-wc
-    id="sp"
-    sp_body="
-      {{ kifu }}
-    "
-    sp_turn="0"
-    sp_controller="true"
-    sp_slider="true"
-    sp_mode="view"
-  ></shogi-player-wc>
-  <br>
+
+  <div class="card mt-4">
+    <div class="card-content">
+      <shogi-player-wc
+        id="sp"
+        sp_body="
+          {{ kifu }}
+        "
+        sp_turn="0"
+        sp_controller="true"
+        sp_slider="true"
+        sp_mode="view"
+      ></shogi-player-wc>
+    </div>
+  </div>
+
   {% if master.request.auth %}
-  <p class="has-text-centered">
+  <div class="mt-4">
     <button id="analyze-button" class="button is-info is-light is-fullwidth">
-      解析
+      <span class="icon">
+        <i class="fas fa-chart-line"></i>
+      </span>
+      <span>解析</span>
     </button>
-  </p>
+  </div>
   {% endif %}
-  <br>
-  <pre class="full-width">{{ kifu }}</pre>
+
+  <div class="card mt-4">
+    <div class="card-content">
+      <h4 class="title is-5">棋譜</h4>
+      <pre class="has-background-light p-3 is-family-monospace">{{ kifu }}</pre>
+    </div>
+  </div>
 </div>
 {% endblock content %}
 
