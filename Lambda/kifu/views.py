@@ -272,13 +272,6 @@ def explorer(master, username, slug_base64=None):
     "rows_file": rows_file,
     "rows_folder": rows_folder,
     "parent_folders": parent_folders
-    # "folders": folders,
-    # "floders_dic": floders_dic,
-    # "base64_fullpath_folders": [
-    #   encode_for_url(os.path.join(init[5:], f))  for f in folders
-    # ],
-    # "files": files,
-    # "kids": kids
   }
   return render(master, 'kifu/explorer.html', context)
 
