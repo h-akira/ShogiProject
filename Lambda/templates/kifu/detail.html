@@ -3,7 +3,6 @@
 <script defer src="https://cdn.jsdelivr.net/npm/shogi-player@1.1.24"></script>
 <link rel="stylesheet" href="{{ static(master, 'css/shogi.css') }}">
 <link rel="stylesheet" href="{{ static(master, 'css/detail.css') }}">
-<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 {% endblock extra_css %}
 
 {% block title %}棋譜{% endblock title %}
@@ -46,9 +45,6 @@
   <div class="action-buttons field is-grouped">
     <p class="control">
       <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
-        <span class="icon">
-          <i class="fas fa-edit"></i>
-        </span>
         <span>編集</span>
       </a>
     </p>
@@ -57,17 +53,11 @@
     {% endif %}
     <p class="control">
       <a id="share-link" href="{{ reverse(master, 'kifu:share', share_code=share_code) }}" class="button is-light is-info">
-        <span class="icon">
-          <i class="fas fa-share-alt"></i>
-        </span>
         <span>共有ページ</span>
       </a>
     </p>
     <p class="control">
       <button id="copy-button" class="button is-info is-light">
-        <span class="icon">
-          <i class="fas fa-copy"></i>
-        </span>
         <span>共有URLをコピー</span>
       </button>
     </p>
