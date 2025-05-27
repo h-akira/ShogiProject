@@ -351,7 +351,7 @@ def create(master, username):
         "form": form,
         "error_message": error_message
       }
-      return render(request, 'kifu/edit.html', context)
+      return render(master, 'kifu/edit.html', context)
   elif master.request.method == 'GET':
     form = KifuForm()
     context = {
