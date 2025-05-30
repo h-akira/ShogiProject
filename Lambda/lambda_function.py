@@ -12,7 +12,7 @@ def lambda_handler(event, context):
     view, kwargs = master.router.path2view(master.request.path)
     response = view(master, **kwargs)
     master.settings.COGNITO.add_set_cookie_to_header(master, response)
-    master.logger.info(f"response: {response}")
+    # master.logger.info(f"response: {response}")
     return response
   except Exception as e:
     if master.request.path == "/favicon.ico":
