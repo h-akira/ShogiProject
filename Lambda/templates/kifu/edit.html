@@ -27,9 +27,9 @@
     {% endif %}
     <p>
       スラッグ：{{ form.slug }}.kif
-        <button type="button" id="generate-slug" class="button is-info">
-          生成
-        </button>
+      <button type="button" id="generate-slug">
+        生成
+      </button>
     </p>
     <p>公開　　：{{ form.public }}</p>
     <p>共有　　：{{ form.share }}</p>
@@ -44,18 +44,5 @@
 {% endblock content %}
 
 {% block extra_js %}
-<script>
-document.getElementById('generate-slug').addEventListener('click', function() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const seconds = String(now.getSeconds()).padStart(2, '0');
-  
-  const slug = `未分類/${year}/${month}${day}/${hours}${minutes}${seconds}`;
-  document.getElementById('slug').value = slug;
-});
-</script>
+<script src="{{ static('js/slug.js') }}"></script>
 {% endblock extra_js %}
