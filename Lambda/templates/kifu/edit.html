@@ -25,26 +25,12 @@
     {% if error_message %}
     <p>{{ error_message }}</p>
     {% endif %}
-    <div class="field is-horizontal">
-      <div class="field-label is-normal">
-        <label class="label">スラッグ：</label>
-      </div>
-      <div class="field-body">
-        <div class="field has-addons">
-          <div class="control">
-            {{ form.slug }}
-          </div>
-          <div class="control">
-            <button type="button" id="generate-slug" class="button is-info">
-              生成
-            </button>
-          </div>
-          <div class="control">
-            <span class="button is-static">.kif</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <p>
+      スラッグ：{{ form.slug }}.kif
+        <button type="button" id="generate-slug" class="button is-info">
+          生成
+        </button>
+    </p>
     <p>公開　　：{{ form.public }}</p>
     <p>共有　　：{{ form.share }}</p>
     <p>先後　　：{{ form.first_or_second }}</p>
