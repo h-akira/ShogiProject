@@ -25,7 +25,26 @@
     {% if error_message %}
     <p>{{ error_message }}</p>
     {% endif %}
-    <p>スラッグ：{{ form.slug }}.kif</p>
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label">スラッグ：</label>
+      </div>
+      <div class="field-body">
+        <div class="field has-addons">
+          <div class="control">
+            {{ form.slug }}
+          </div>
+          <div class="control">
+            <button type="button" id="generate-slug" class="button is-info">
+              生成
+            </button>
+          </div>
+          <div class="control">
+            <span class="button is-static">.kif</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <p>公開　　：{{ form.public }}</p>
     <p>共有　　：{{ form.share }}</p>
     <p>先後　　：{{ form.first_or_second }}</p>
@@ -39,4 +58,18 @@
 {% endblock content %}
 
 {% block extra_js %}
+<script>
+document.getElementById('generate-slug').addEventListener('click', function() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+  const slug = `未分類/${year}/${month}${day}/${hours}${minutes}${seconds}`;
+  document.getElementById('slug').value = slug;
+});
+</script>
 {% endblock extra_js %}
