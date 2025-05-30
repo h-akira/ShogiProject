@@ -6,7 +6,6 @@ document.getElementById('generate-slug').addEventListener('click', function() {
   const hours = String(now.getHours()).padStart(2, '0');
   const minutes = String(now.getMinutes()).padStart(2, '0');
   const seconds = String(now.getSeconds()).padStart(2, '0');
-  
-  const slug = `未分類/${year}/${month}${day}/${hours}${minutes}${seconds}`;
+  const slug = `000_未分類/${year}/${month}${day}/${hours}${minutes}${seconds}`;
   document.getElementById('slug').value = slug;
 });
