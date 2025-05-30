@@ -27,9 +27,11 @@
     {% endif %}
     <p>
       スラッグ：{{ form.slug }}.kif
-      <button type="button" id="generate-slug">
+      {% if type == "create" %}
+      <button type="button" id="generate-slug" class="button is-info is-small">
         生成
       </button>
+      {% endif %}
     </p>
     <p>公開　　：{{ form.public }}</p>
     <p>共有　　：{{ form.share }}</p>
