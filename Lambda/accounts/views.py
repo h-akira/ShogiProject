@@ -1,5 +1,5 @@
-from hads.shourtcuts import render
-from hads.shourtcuts import login_required, redirect
+from hads.shortcuts import render
+from hads.shortcuts import login_required, redirect
 
 @login_required
 def logout(master):

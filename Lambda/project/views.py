@@ -1,4 +1,4 @@
-from hads.shourtcuts import render
+from hads.shortcuts import render
 
 def home(master):
   context = {}

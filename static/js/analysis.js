@@ -1,7 +1,12 @@
 let latestSfen = ""; // 局面を記録する変数
 const el = document.querySelector("shogi-player-wc")
+// 局面を記録する変数
 el.addEventListener("ev_short_sfen_change", e => {
   latestSfen = e.detail[0];
+});
+// 手番を記録する変数
+el.addEventListener("ev_turn_offset_change", e => {
+  latestTurn = e.detail[0];
 });
 
 document.addEventListener('DOMContentLoaded', function() {

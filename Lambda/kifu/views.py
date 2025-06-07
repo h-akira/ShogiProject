@@ -238,28 +238,49 @@ def explorer(master, username, slug_base64=None):
   rows_file = []
   folders = []
   folders_counter_dic = {}
-  response = table.query(
-    IndexName="CommonLSI",
-    KeyConditionExpression=Key('pk').eq(f"kifu#uname#{username}") & Key('clsi_sk').begins_with(init)
-  )
-  for item in response["Items"]:
-    remaining_slug = item["clsi_sk"][len(init):]
-    if remaining_slug == "":
-      continue
-    remaining_slug_list = remaining_slug.split("/")
-    if len(remaining_slug_list) == 1:
-      rows_file.append(
-        {
-          "name": remaining_slug_list[0],
-          "kid": item["sk"].split("#")[1],
-        }
-      )
-    else:
-      if remaining_slug_list[0] in folders:
-        folders_counter_dic[remaining_slug_list[0]] += 1
+
+  # ページネーション用の変数
+  last_evaluated_key = None
+  
+  while True:
+    # クエリパラメータの準備
+    query_params = {
+      'IndexName': "CommonLSI",
+      'KeyConditionExpression': Key('pk').eq(f"kifu#uname#{username}") & Key('clsi_sk').begins_with(init)
+    }
+    
+    # 前回のクエリで LastEvaluatedKey が返された場合は、それを使用
+    if last_evaluated_key:
+      query_params['ExclusiveStartKey'] = last_evaluated_key
+    
+    # クエリ実行
+    response = table.query(**query_params)
+    
+    # 結果の処理
+    for item in response["Items"]:
+      remaining_slug = item["clsi_sk"][len(init):]
+      if remaining_slug == "":
+        continue
+      remaining_slug_list = remaining_slug.split("/")
+      if len(remaining_slug_list) == 1:
+        rows_file.append(
+          {
+            "name": remaining_slug_list[0],
+            "kid": item["sk"].split("#")[1],
+          }
+        )
       else:
-        folders.append(remaining_slug_list[0])
-        folders_counter_dic[remaining_slug_list[0]] = 1
+        if remaining_slug_list[0] in folders:
+          folders_counter_dic[remaining_slug_list[0]] += 1
+        else:
+          folders.append(remaining_slug_list[0])
+          folders_counter_dic[remaining_slug_list[0]] = 1
+    
+    # LastEvaluatedKey が無い場合は全データを取得完了
+    last_evaluated_key = response.get('LastEvaluatedKey')
+    if not last_evaluated_key:
+      break
+
   rows_folder = [
     {
       "name": folder,
