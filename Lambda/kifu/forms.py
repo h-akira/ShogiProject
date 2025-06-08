@@ -6,7 +6,6 @@ class KifuForm(Form):
     render_kw={'style': 'width: 500px;'},
     validators=[DataRequired(), Length(min=1, max=127)]
   )
-  public = BooleanField()
   kifu = TextAreaField(render_kw={'style': 'width: 300px; height: 200px;'})
   memo = TextAreaField(render_kw={'style': 'width: 100%; height: 200px;'})
   share = BooleanField()

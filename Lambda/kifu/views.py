@@ -170,7 +170,6 @@ def detail(master, username, kid):
       'result': item["result"],
       'share': item["share"],
       'share_code': item["cgsi_pk"].split("#")[1],
-      'public': item["public"],
       'created': item["created"],
       'latest_update': item["latest_update"]
     }
@@ -201,7 +200,6 @@ def share(master, share_code):
       'first_or_second': item["first_or_second"],
       'result': item["result"],
       'share': item["share"],
-      'public': item["public"],
       'created': item["created"],
       'latest_update': item["latest_update"]
     }
@@ -335,7 +333,6 @@ def create(master, username):
       "sk": f"kid#{kid}",
       "cgsi_pk": f"scode#{share_code}",
       "clsi_sk": f"slug#{form.data['slug']}"+".kif",
-      "public": form.data['public'],
       "share": form.data['share'],
       "kifu": form.data['kifu'],
       "memo": form.data['memo'],
@@ -418,7 +415,7 @@ def edit(master, username, kid):
         'pk': f"kifu#uname#{username}",
         'sk': f"kid#{kid}"
       },
-      UpdateExpression="set #clsi_sk=:cl, #kifu=:ki, #memo=:me, #first_or_second=:fi, #result=:re, #share=:sh, #public=:pu, #latest_update=:la",
+      UpdateExpression="set #clsi_sk=:cl, #kifu=:ki, #memo=:me, #first_or_second=:fi, #result=:re, #share=:sh, #latest_update=:la",
       ExpressionAttributeNames={
         "#clsi_sk": "clsi_sk",
         "#kifu": "kifu",
@@ -426,7 +423,6 @@ def edit(master, username, kid):
         "#first_or_second": "first_or_second",
         "#result": "result",
         "#share": "share",
-        "#public": "public",
         "#latest_update": "latest_update"
       },
       ExpressionAttributeValues={
@@ -436,7 +432,6 @@ def edit(master, username, kid):
         ':fi': form.data["first_or_second"],
         ':re': form.data["result"],
         ':sh': form.data["share"],
-        ':pu': form.data["public"],
         ':la': now_str
       }
     )
@@ -470,8 +465,7 @@ def edit(master, username, kid):
         memo=item["memo"],
         first_or_second=item["first_or_second"],
         result=item["result"],
-        share=item["share"],
-        public=item["public"]
+        share=item["share"]
       )
       context = {
         "type": "edit",
