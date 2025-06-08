@@ -104,6 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+const playButton = document.getElementById("play-button");
+const viewButton = document.getElementById("view-button");
 
 document.getElementById("play-button").addEventListener("click", () => {
   el.setAttribute("sp_mode", "play");
