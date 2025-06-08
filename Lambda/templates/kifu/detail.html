@@ -81,13 +81,20 @@
       ></shogi-player-wc>
     </div>
   </div>
+  
+
+  <div class="field"></div>
+    <button id="view-button" class="button is-info is-fullwidth">
+      <span>閲覧モード</span>
+    </button>
+    <button id="play-button" class="button is-light is-fullwidth">
+      <span>継盤モード</span>
+    </button>
+  </div>
 
   {% if master.request.auth %}
   <div class="field">
     <button id="analyze-button" class="button is-info is-light is-fullwidth">
-      <span class="icon">
-        <i class="fas fa-chart-line"></i>
-      </span>
       <span>解析</span>
     </button>
   </div>

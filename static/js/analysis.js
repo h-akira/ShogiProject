@@ -103,3 +103,24 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.analysis-error, .analysis-result').forEach(el => el.remove());
   }
 });
+
+
+document.getElementById("play-button").addEventListener("click", () => {
+  el.setAttribute("sp_mode", "play");
+  el.setAttribute("sp_turn", latestTurn.toString());
+  // ボタンを強調表示
+  playButton.classList.add("is-info");
+  playButton.classList.remove("is-light");
+  viewButton.classList.remove("is-info");
+  viewButton.classList.add("is-light");
+});
+
+document.getElementById("view-button").addEventListener("click", () => {
+  el.setAttribute("sp_mode", "view");
+  el.setAttribute("sp_turn", latestTurn.toString());
+  // ボタンを強調表示
+  playButton.classList.remove("is-info");
+  playButton.classList.add("is-light");
+  viewButton.classList.add("is-info");
+  viewButton.classList.remove("is-light");
+});
