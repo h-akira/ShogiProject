@@ -106,6 +106,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 const playButton = document.getElementById("play-button");
 const viewButton = document.getElementById("view-button");
+const viewpointButton = document.getElementById("viewpoint-button");
+const viewpoint = "black"
 
 document.getElementById("play-button").addEventListener("click", () => {
   el.setAttribute("sp_mode", "play");
@@ -125,4 +127,14 @@ document.getElementById("view-button").addEventListener("click", () => {
   playButton.classList.add("is-light");
   viewButton.classList.add("is-info");
   viewButton.classList.remove("is-light");
+});
+
+document.getElementById("viewpoint-button").addEventListener("click", () => {
+  if (viewpoint === "black"){
+    viewpoint = "white";
+    el.setAttribute("sp_viewpoint", "white");
+  } else{
+    viewpoint = "black";
+    el.setAttribute("sp_viewpoint", "black");
+  }
 });
