@@ -17,3 +17,8 @@ class KifuForm(Form):
     choices=[('none', "---"), ('win', '勝ち'), ('lose', '負け'), ('sennichite', '千日手'), ('jishogi','持将棋')]
     # validators=[Length(min=1, max=31)]
   )
+  tags = StringField(
+    render_kw={'style': 'width: 100%;'},
+    description='カンマ区切りで複数タグを入力できます',
+    validators=[Length(max=255)]
+  )

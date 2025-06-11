@@ -8,6 +8,7 @@ import datetime
 from zoneinfo import ZoneInfo
 from project.common import gen_code, encode_for_url, decode_from_url
 import os
+import re
 
 MAIN_TABLE_NAME = "table-sgp-main"
 KID_LENGTH = 12
@@ -132,13 +133,19 @@ def index(master, username):
     return render(master, 'not_found.html')
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
   latest_update_items = _get_latest_update_items(table, username, limit=10)
+  # タグを取得
+  for item in latest_update_items:
+      kid = item["sk"].split("#")[1]
+      tag_items = table.query(KeyConditionExpression=Key('pk').eq(f'tag#kid#{kid}'))['Items']
+      item['tags'] = [t['tname'] for t in tag_items]
   context = {
     'username': username,
     'latest_update_items': [
       {
-        "kid": item["sk"].split("#")[1], 
-        "slug": item["clsi_sk"].split("#")[1], 
-        "latest_update": item["latest_update"]
+        "kid": item["sk"].split("#")[1],
+        "slug": item["clsi_sk"].split("#")[1],
+        "latest_update": item["latest_update"],
+        "tags": item.get('tags', [])
       } for item in latest_update_items
     ]
   }
@@ -159,6 +166,9 @@ def detail(master, username, kid):
     return render(master, 'not_found.html')
   else:
     item = response["Item"]
+    # タグ取得
+    tag_items = table.query(KeyConditionExpression=Key('pk').eq(f'tag#kid#{kid}'))['Items']
+    tags = [t['tname'] for t in tag_items]
     context = {
       'type' : "normal",
       'username': username,
@@ -171,7 +181,8 @@ def detail(master, username, kid):
       'share': item["share"],
       'share_code': item["cgsi_pk"].split("#")[1],
       'created': item["created"],
-      'latest_update': item["latest_update"]
+      'latest_update': item["latest_update"],
+      'tags': tags
     }
     return render(master, 'kifu/detail.html', context)
 
@@ -326,6 +337,8 @@ def create(master, username):
         "error_message": "Slug already exists"
       }
       return render(master, 'kifu/edit.html', context)
+    tags_raw = form.data.get('tags', '')
+    tags = [t.strip() for t in re.split(r'[、,\s]+', tags_raw) if t.strip()]
     kid = gen_code(KID_LENGTH)
     share_code = gen_code(SHARE_CODE_LENGTH)
     Item = {
@@ -346,6 +359,23 @@ def create(master, username):
       response = table.put_item(
         Item=Item
       )
+      # タグ保存
+      for tag in tags:
+        tid = gen_code(8)
+        table.put_item(Item={
+          'pk': f'tag#kid#{kid}',
+          'sk': f'tid#{tid}',
+          'tname': tag,
+          'created': now_str,
+          'latest_update': now_str
+        })
+        table.put_item(Item={
+          'pk': f'tag#uname#{username}',
+          'sk': f'tid#{tid}',
+          'tname': tag,
+          'created': now_str,
+          'latest_update': now_str
+        })
       if action == "continue":
         context = {
           "type": "create",
@@ -410,6 +440,27 @@ def edit(master, username, kid):
       }
       return render(master, 'kifu/edit.html', context)
     action = master.request.body["action"]
+    tags_raw = form.data.get('tags', '')
+    tags = [t.strip() for t in re.split(r'[、,\s]+', tags_raw) if t.strip()]
+    # 既存のタグを一旦削除
+    tag_items = table.query(KeyConditionExpression=Key('pk').eq(f'tag#kid#{kid}'))['Items']
+    for item in tag_items:
+      table.delete_item(Key={'pk': item['pk'], 'sk': item['sk']})
+    # 新しいタグを保存
+    for tag in tags:
+      tid = gen_code(8)
+      table.put_item(Item={
+        'pk': f'tag#kid#{kid}',
+        'sk': f'tid#{tid}',
+        'tname': tag,
+        'latest_update': now_str
+      })
+      table.put_item(Item={
+        'pk': f'tag#uname#{username}',
+        'sk': f'tid#{tid}',
+        'tname': tag,
+        'latest_update': now_str
+      })
     table.update_item(
       Key={
         'pk': f"kifu#uname#{username}",
@@ -459,13 +510,17 @@ def edit(master, username, kid):
       return render(master, 'not_found.html')
     else:
       item = response["Item"]
+      # タグ取得
+      tag_items = table.query(KeyConditionExpression=Key('pk').eq(f'tag#kid#{kid}'))['Items']
+      tags = [t['tname'] for t in tag_items]
       form = KifuForm(
         slug=item["clsi_sk"].split("#")[1][:-4],
         kifu=item["kifu"],
         memo=item["memo"],
         first_or_second=item["first_or_second"],
         result=item["result"],
-        share=item["share"]
+        share=item["share"],
+        tags=", ".join(tags)
       )
       context = {
         "type": "edit",
