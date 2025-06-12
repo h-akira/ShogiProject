@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}タグ作成{% endblock title %}
+{% block content %}
+<div class="padding-all">
+  <h1 class="title is-2">タグ作成</h1>
+  <form method="post">
+    {{ form.csrf_token }}
+    <div class="field">
+      <label class="label">タグ名</label>
+      <div class="control">
+        {{ form.slug(class_="input", placeholder="例: 四間飛車") }}
+      </div>
+    </div>
+    {% if error_message %}
+      <p class="help is-danger">{{ error_message }}</p>
+    {% endif %}
+    <button type="submit" class="button is-info">作成</button>
+    <a href="{{ reverse(master, 'tag:index', username=username) }}" class="button is-light">戻る</a>
+  </form>
+</div>
+{% endblock content %}
