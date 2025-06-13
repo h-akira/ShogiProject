@@ -395,6 +395,7 @@ def edit(master, username, kid):
         KeyConditionExpression=Key('pk').eq(f'tag#kid#{kid}')
     )
     kifu_tag_tids = set([item['sk'].split('#')[1] for item in kifu_tag_response['Items']])
+    master.logger.info(f"Kifu tag tids: {kifu_tag_tids}")
     if master.request.method == 'POST':
         master.logger.info(master.request.body)
         now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
@@ -426,8 +427,10 @@ def edit(master, username, kid):
         action = master.request.body["action"]
         # タグ付与処理（差分更新）
         checked_tids = set(master.request.body.getlist('tag_tids')) if hasattr(master.request.body, 'getlist') else set(master.request.body.get('tag_tids', []))
+        master.logger.info(f"Checked tids: {checked_tids}")
         # 追加が必要なタグ
         add_tids = checked_tids - kifu_tag_tids
+        master.logger.info(f"Add tids: {add_tids}")
         # 削除が必要なタグ
         remove_tids = kifu_tag_tids - checked_tids
         # 追加
