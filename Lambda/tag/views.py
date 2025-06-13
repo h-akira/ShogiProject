@@ -8,8 +8,15 @@ MAIN_TABLE_NAME = "table-sgp-main"
 TID_LENGTH = 8
 
 def index(master, username):
+    table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+    # 自分のタグ一覧を取得
+    response = table.query(
+        KeyConditionExpression=boto3.dynamodb.conditions.Key('pk').eq(f'tag#uname#{username}')
+    )
+    tags = [item['tname'] for item in response['Items']]
     context = {
-        'username': username
+        'username': username,
+        'tags': tags
     }
     return render(master, 'tag/index.html', context)
 
@@ -33,3 +40,27 @@ def create(master, username):
     else:
         form = TagForm()
         return render(master, 'tag/create.html', {'form': form, 'username': username})
+
+def edit(master, username, tag_name):
+    table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+    if master.request.method == 'POST':
+        form = TagForm(**master.request.body)
+        if not form.validate():
+            return render(master, 'tag/edit.html', {'form': form, 'error_message': 'タグ名を入力してください', 'username': username, 'tag_name': tag_name})
+        new_tag_name = form.data['slug'].strip()
+        # 既存タグを削除
+        table.delete_item(Key={'pk': f'tag#uname#{username}', 'sk': f'tname#{tag_name}'})
+        now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE)).strftime("%Y-%m-%d %H:%M:%S")
+        # 新しいタグで保存
+        table.put_item(Item={
+            'pk': f'tag#uname#{username}',
+            'sk': f'tname#{new_tag_name}',
+            'tname': new_tag_name,
+            'created': now,
+            'latest_update': now
+        })
+        return redirect(master, 'tag:index', username=username)
+    else:
+        # GET: 既存タグ名をフォームにセット
+        form = TagForm(slug=tag_name)
+        return render(master, 'tag/edit.html', {'form': form, 'username': username, 'tag_name': tag_name})

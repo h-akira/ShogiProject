@@ -7,7 +7,19 @@
 {% block content %}
 <div class="padding-all">
   <h1 class="title is-1 has-text-centered">タグ</h1>
-  <p>comming soon...</p>
+  <a href="{{ reverse(master, 'tag:create', username=username) }}" class="button is-info mb-4">新規作成</a>
+  {% if tags %}
+    <ul>
+      {% for tag in tags %}
+        <li>
+          <span class="tag is-info is-light">{{ tag }}</span>
+          <a href="{{ reverse(master, 'tag:edit', username=username, tag_name=tag) }}" class="button is-small is-light ml-2">編集</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>タグがありません。</p>
+  {% endif %}
 </div>
 {% endblock content %}
 
