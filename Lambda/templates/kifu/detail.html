@@ -13,7 +13,6 @@
   <div class="card">
     <div class="card-content">
       <h3 class="title is-3 has-text-centered">{{ slug }}</h3>
-      
       <div class="columns">
         <div class="column">
           <div class="meta-info">
@@ -24,6 +23,16 @@
             <label class="label">最終更新</label>
             <p>{{ latest_update }}</p>
           </div>
+          {% if kifu_tags and kifu_tags|length > 0 %}
+          <div class="meta-info">
+            <label class="label">タグ</label>
+            <div class="tags">
+              {% for tag in kifu_tags %}
+                <span class="tag is-info is-light">{{ tag.tname }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
         </div>
       </div>
     </div>

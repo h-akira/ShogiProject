@@ -146,34 +146,43 @@ def index(master, username):
 
 @login_required
 def detail(master, username, kid):
-  if username != master.request.username:
-    return render(master, 'not_found.html')
-  table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
-  response = table.get_item(
-    Key={
-      'pk': f"kifu#uname#{username}",
-      'sk': f"kid#{kid}"
-    }
-  )
-  if "Item" not in response:
-    return render(master, 'not_found.html')
-  else:
-    item = response["Item"]
-    context = {
-      'type' : "normal",
-      'username': username,
-      'kid': kid,
-      'slug': item["clsi_sk"].split("#")[1],
-      'kifu': item["kifu"],
-      'memo': item["memo"],
-      'first_or_second': item["first_or_second"],
-      'result': item["result"],
-      'share': item["share"],
-      'share_code': item["cgsi_pk"].split("#")[1],
-      'created': item["created"],
-      'latest_update': item["latest_update"]
-    }
-    return render(master, 'kifu/detail.html', context)
+    if username != master.request.username:
+        return render(master, 'not_found.html')
+    table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+    response = table.get_item(
+        Key={
+            'pk': f"kifu#uname#{username}",
+            'sk': f"kid#{kid}"
+        }
+    )
+    if "Item" not in response:
+        return render(master, 'not_found.html')
+    else:
+        item = response["Item"]
+        # 棋譜に付与されたタグ一覧を取得
+        kifu_tag_response = table.query(
+            KeyConditionExpression=Key('pk').eq(f'tag#kid#{kid}')
+        )
+        kifu_tags = [
+            {'tname': tag_item['tname'], 'tid': tag_item['sk'].split('#')[1]}
+            for tag_item in kifu_tag_response['Items']
+        ]
+        context = {
+            'type' : "normal",
+            'username': username,
+            'kid': kid,
+            'slug': item["clsi_sk"].split("#")[1],
+            'kifu': item["kifu"],
+            'memo': item["memo"],
+            'first_or_second': item["first_or_second"],
+            'result': item["result"],
+            'share': item["share"],
+            'share_code': item["cgsi_pk"].split("#")[1],
+            'created': item["created"],
+            'latest_update': item["latest_update"],
+            'kifu_tags': kifu_tags
+        }
+        return render(master, 'kifu/detail.html', context)
 
 def share(master, share_code):
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
