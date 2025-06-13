@@ -77,3 +77,32 @@ def edit(master, username, tid):
         # GET: 既存タグ名をフォームにセット
         form = TagForm(slug=tag_name)
         return render(master, 'tag/edit.html', {'form': form, 'username': username, 'tid': tid})
+
+def delete(master, username, tid):
+    table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+    
+    # まず、このタグが棋譜に付与されているかチェック
+    kifu_tag_response = table.query(
+        IndexName="SwapIndex",
+        KeyConditionExpression=boto3.dynamodb.conditions.Key('sk').eq(f'tid#{tid}') & boto3.dynamodb.conditions.Key('pk').begins_with('tag#kid#')
+    )
+    
+    if kifu_tag_response['Count'] > 0:
+        # タグが棋譜に付与されている場合は、それらも削除
+        for item in kifu_tag_response['Items']:
+            table.delete_item(
+                Key={
+                    'pk': item['pk'],
+                    'sk': item['sk']
+                }
+            )
+    
+    # タグ本体を削除
+    table.delete_item(
+        Key={
+            'pk': f'tag#uname#{username}',
+            'sk': f'tid#{tid}'
+        }
+    )
+    
+    return redirect(master, 'tag:index', username=username)

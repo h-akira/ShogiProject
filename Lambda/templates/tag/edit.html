@@ -14,8 +14,19 @@
     {% if error_message %}
       <p class="help is-danger">{{ error_message }}</p>
     {% endif %}
-    <button type="submit" class="button is-info">保存</button>
-    <a href="{{ reverse(master, 'tag:index', username=username) }}" class="button is-light">戻る</a>
+    <div class="field is-grouped">
+      <div class="control">
+        <button type="submit" class="button is-info">保存</button>
+      </div>
+      <div class="control">
+        <a href="{{ reverse(master, 'tag:index', username=username) }}" class="button is-light">戻る</a>
+      </div>
+      <div class="control">
+        <a href="{{ reverse(master, 'tag:delete', username=username, tid=tid) }}" 
+           onclick="return confirm('このタグを削除しますか？\n付与されている棋譜からも削除されます。');" 
+           class="button is-danger is-light">削除</a>
+      </div>
+    </div>
   </form>
 </div>
 {% endblock content %}
