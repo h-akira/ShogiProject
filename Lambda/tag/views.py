@@ -3,6 +3,8 @@ from .forms import TagForm
 import boto3
 import datetime
 from zoneinfo import ZoneInfo
+import urllib.parse
+from project.common import gen_code
 
 MAIN_TABLE_NAME = "table-sgp-main"
 TID_LENGTH = 8
@@ -28,10 +30,11 @@ def create(master, username):
             return render(master, 'tag/create.html', {'form': form, 'error_message': 'タグ名を入力してください', 'username': username})
         tag_name = form.data['slug'].strip()
         now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE)).strftime("%Y-%m-%d %H:%M:%S")
-        tid = tag_name  # タグ名をtidとして使う（重複管理は省略）
+        tid = gen_code(8)
         table.put_item(Item={
             'pk': f'tag#uname#{username}',
-            'sk': f'tname#{tag_name}',
+            'sk': f'tid#{tid}',
+            'clsi_sk': f'tname#{tag_name}',
             'tname': tag_name,
             'created': now,
             'latest_update': now
@@ -42,23 +45,34 @@ def create(master, username):
         return render(master, 'tag/create.html', {'form': form, 'username': username})
 
 def edit(master, username, tag_name):
+    tag_name = urllib.parse.unquote(tag_name)
     table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+    # 既存タグを取得
+    response = table.query(
+        KeyConditionExpression=boto3.dynamodb.conditions.Key('pk').eq(f'tag#uname#{username}')
+    )
+    tag_item = None
+    for item in response['Items']:
+        if item.get('tname') == tag_name:
+            tag_item = item
+            break
     if master.request.method == 'POST':
         form = TagForm(**master.request.body)
         if not form.validate():
             return render(master, 'tag/edit.html', {'form': form, 'error_message': 'タグ名を入力してください', 'username': username, 'tag_name': tag_name})
         new_tag_name = form.data['slug'].strip()
-        # 既存タグを削除
-        table.delete_item(Key={'pk': f'tag#uname#{username}', 'sk': f'tname#{tag_name}'})
         now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE)).strftime("%Y-%m-%d %H:%M:%S")
-        # 新しいタグで保存
-        table.put_item(Item={
-            'pk': f'tag#uname#{username}',
-            'sk': f'tname#{new_tag_name}',
-            'tname': new_tag_name,
-            'created': now,
-            'latest_update': now
-        })
+        # 削除せずclsi_skとtnameを更新
+        if tag_item:
+            table.update_item(
+                Key={'pk': tag_item['pk'], 'sk': tag_item['sk']},
+                UpdateExpression="set clsi_sk=:clsi, tname=:tname, latest_update=:lu",
+                ExpressionAttributeValues={
+                    ':clsi': f'tname#{new_tag_name}',
+                    ':tname': new_tag_name,
+                    ':lu': now
+                }
+            )
         return redirect(master, 'tag:index', username=username)
     else:
         # GET: 既存タグ名をフォームにセット
