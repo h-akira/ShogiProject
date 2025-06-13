@@ -426,10 +426,11 @@ def edit(master, username, kid):
             return render(master, 'kifu/edit.html', context)
         action = master.request.body["action"]
         # タグ付与処理（差分更新）
-        checked_tids = set(master.request.body.get('tag_tids', []))
-        if isinstance(next(iter(checked_tids), None), str) and len(checked_tids) == 1 and ',' in next(iter(checked_tids)):
-            # もしカンマ区切りの文字列で来ていた場合（tag_tids: "tid1,tid2"）
-            checked_tids = set(next(iter(checked_tids)).split(','))
+        tids_raw = master.request.body.get('tag_tids', [])
+        if isinstance(tids_raw, str):
+            checked_tids = set([tids_raw])
+        else:
+            checked_tids = set(tids_raw)
         master.logger.info(f"Checked tids: {checked_tids}")
         # 追加が必要なタグ
         add_tids = checked_tids - kifu_tag_tids
