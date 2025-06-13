@@ -26,7 +26,15 @@
       <p>
         (最終更新:{{ item.latest_update }})
       </p>
-      <p>タグ: comming soon</p>
+      {% if item.tags and item.tags|length > 0 %}
+      <div class="tags">
+        {% for tag in item.tags %}
+          <span class="tag is-info is-light">{{ tag.tname }}</span>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p>タグ: なし</p>
+      {% endif %}
       {% if not loop.last %}
         <hr>
       {% endif %}

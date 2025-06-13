@@ -132,15 +132,29 @@ def index(master, username):
     return render(master, 'not_found.html')
   table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
   latest_update_items = _get_latest_update_items(table, username, limit=10)
+  
+  # 各棋譜のタグ情報を取得
+  latest_update_items_with_tags = []
+  for item in latest_update_items:
+    kid = item["sk"].split("#")[1]
+    # 棋譜に付与されたタグ一覧を取得
+    kifu_tag_response = table.query(
+      KeyConditionExpression=Key('pk').eq(f'tag#kid#{kid}')
+    )
+    kifu_tags = [
+      {'tname': tag_item['tname'], 'tid': tag_item['sk'].split('#')[1]}
+      for tag_item in kifu_tag_response['Items']
+    ]
+    latest_update_items_with_tags.append({
+      "kid": kid,
+      "slug": item["clsi_sk"].split("#")[1],
+      "latest_update": item["latest_update"],
+      "tags": kifu_tags
+    })
+  
   context = {
     'username': username,
-    'latest_update_items': [
-      {
-        "kid": item["sk"].split("#")[1], 
-        "slug": item["clsi_sk"].split("#")[1], 
-        "latest_update": item["latest_update"]
-      } for item in latest_update_items
-    ]
+    'latest_update_items': latest_update_items_with_tags
   }
   return render(master, 'kifu/index.html', context)
 
