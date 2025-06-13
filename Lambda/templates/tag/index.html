@@ -12,7 +12,9 @@
     <ul>
       {% for tag in tags %}
         <li class="mb-2">
-          <span class="tag is-info is-light">{{ tag.tname }}</span>
+          <a href="{{ reverse(master, 'tag:detail', username=username, tid=tag.tid) }}">
+            <span class="tag is-info is-light">{{ tag.tname }}</span>
+          </a>
           <a href="{{ reverse(master, 'tag:edit', username=username, tid=tag.tid) }}" class="button is-small is-light ml-2">編集</a>
           <a href="{{ reverse(master, 'tag:delete', username=username, tid=tag.tid) }}" 
              onclick="return confirm('タグ「{{ tag.tname }}」を削除しますか？\n付与されている棋譜からも削除されます。');" 

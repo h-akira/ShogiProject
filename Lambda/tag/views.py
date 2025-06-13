@@ -106,3 +106,62 @@ def delete(master, username, tid):
     )
     
     return redirect(master, 'tag:index', username=username)
+
+def detail(master, username, tid):
+    table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+    
+    # タグ情報を取得
+    tag_response = table.get_item(
+        Key={
+            'pk': f'tag#uname#{username}',
+            'sk': f'tid#{tid}'
+        }
+    )
+    
+    if 'Item' not in tag_response:
+        return render(master, 'not_found.html')
+    
+    tag_item = tag_response['Item']
+    
+    # このタグが付与されている棋譜一覧を取得
+    kifu_tag_response = table.query(
+        IndexName="SwapIndex",
+        KeyConditionExpression=boto3.dynamodb.conditions.Key('sk').eq(f'tid#{tid}') & boto3.dynamodb.conditions.Key('pk').begins_with('tag#kid#')
+    )
+    
+    # 棋譜の詳細情報を取得
+    kifu_list = []
+    for item in kifu_tag_response['Items']:
+        kid = item['pk'].split('#')[2]  # tag#kid#{kid} から kid を取得
+        
+        # 棋譜の詳細を取得
+        kifu_response = table.get_item(
+            Key={
+                'pk': f'kifu#uname#{username}',
+                'sk': f'kid#{kid}'
+            }
+        )
+        
+        if 'Item' in kifu_response:
+            kifu_item = kifu_response['Item']
+            kifu_list.append({
+                'kid': kid,
+                'slug': kifu_item['clsi_sk'].split('#')[1],
+                'latest_update': kifu_item['latest_update'],
+                'created': kifu_item['created']
+            })
+    
+    # 最終更新日でソート
+    kifu_list.sort(key=lambda x: x['latest_update'], reverse=True)
+    
+    context = {
+        'username': username,
+        'tid': tid,
+        'tag_name': tag_item['tname'],
+        'tag_created': tag_item.get('created', ''),
+        'tag_latest_update': tag_item.get('latest_update', ''),
+        'kifu_list': kifu_list,
+        'kifu_count': len(kifu_list)
+    }
+    
+    return render(master, 'tag/detail.html', context)

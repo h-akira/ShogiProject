@@ -28,7 +28,9 @@
             <label class="label">タグ</label>
             <div class="tags">
               {% for tag in kifu_tags %}
-                <span class="tag is-info is-light">{{ tag.tname }}</span>
+                <a href="{{ reverse(master, 'tag:detail', username=username, tid=tag.tid) }}">
+                  <span class="tag is-info is-light">{{ tag.tname }}</span>
+                </a>
               {% endfor %}
             </div>
           </div>

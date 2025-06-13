@@ -29,7 +29,9 @@
       {% if item.tags and item.tags|length > 0 %}
       <div class="tags">
         {% for tag in item.tags %}
-          <span class="tag is-info is-light">{{ tag.tname }}</span>
+          <a href="{{ reverse(master, 'tag:detail', username=username, tid=tag.tid) }}">
+            <span class="tag is-info is-light">{{ tag.tname }}</span>
+          </a>
         {% endfor %}
       </div>
       {% else %}
