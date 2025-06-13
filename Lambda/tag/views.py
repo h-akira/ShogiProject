@@ -15,7 +15,7 @@ def index(master, username):
     response = table.query(
         KeyConditionExpression=boto3.dynamodb.conditions.Key('pk').eq(f'tag#uname#{username}')
     )
-    tags = [item['tname'] for item in response['Items']]
+    tags = [{'tname': item['tname'], 'tid': item['sk'].split('#')[1]} for item in response['Items']]
     context = {
         'username': username,
         'tags': tags
@@ -44,25 +44,24 @@ def create(master, username):
         form = TagForm()
         return render(master, 'tag/create.html', {'form': form, 'username': username})
 
-def edit(master, username, tag_name):
-    tag_name = urllib.parse.unquote(tag_name)
+def edit(master, username, tid):
     table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
-    # 既存タグを取得
-    response = table.query(
-        KeyConditionExpression=boto3.dynamodb.conditions.Key('pk').eq(f'tag#uname#{username}')
+    # tidで既存タグを取得
+    response = table.get_item(
+        Key={
+            'pk': f'tag#uname#{username}',
+            'sk': f'tid#{tid}'
+        }
     )
-    tag_item = None
-    for item in response['Items']:
-        if item.get('tname') == tag_name:
-            tag_item = item
-            break
+    tag_item = response.get('Item')
+    tag_name = tag_item['tname'] if tag_item else ''
     if master.request.method == 'POST':
         form = TagForm(**master.request.body)
         if not form.validate():
-            return render(master, 'tag/edit.html', {'form': form, 'error_message': 'タグ名を入力してください', 'username': username, 'tag_name': tag_name})
+            return render(master, 'tag/edit.html', {'form': form, 'error_message': 'タグ名を入力してください', 'username': username, 'tid': tid})
         new_tag_name = form.data['slug'].strip()
         now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE)).strftime("%Y-%m-%d %H:%M:%S")
-        # 削除せずclsi_skとtnameを更新
+        # clsi_skとtnameを更新
         if tag_item:
             table.update_item(
                 Key={'pk': tag_item['pk'], 'sk': tag_item['sk']},
@@ -77,4 +76,4 @@ def edit(master, username, tag_name):
     else:
         # GET: 既存タグ名をフォームにセット
         form = TagForm(slug=tag_name)
-        return render(master, 'tag/edit.html', {'form': form, 'username': username, 'tag_name': tag_name})
+        return render(master, 'tag/edit.html', {'form': form, 'username': username, 'tid': tid})

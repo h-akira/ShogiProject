@@ -12,8 +12,8 @@
     <ul>
       {% for tag in tags %}
         <li>
-          <span class="tag is-info is-light">{{ tag }}</span>
-          <a href="{{ reverse(master, 'tag:edit', username=username, tag_name=tag) }}" class="button is-small is-light ml-2">編集</a>
+          <span class="tag is-info is-light">{{ tag.tname }}</span>
+          <a href="{{ reverse(master, 'tag:edit', username=username, tid=tag.tid) }}" class="button is-small is-light ml-2">編集</a>
         </li>
       {% endfor %}
     </ul>
