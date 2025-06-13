@@ -382,99 +382,138 @@ def create(master, username):
     raise Exception('Invalid request method')
 
 def edit(master, username, kid):
-  if username != master.request.username:
-    return render(master, 'not_found.html')
-  table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
-  if master.request.method == 'POST':
-    master.logger.info(master.request.body)
-    now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
-    now_str = now.strftime("%Y-%m-%d %H:%M:%S")
-    form = KifuForm(**master.request.body)
-    error_message = _slug_format_checker_return_error_message(form.data['slug'])
-    if error_message is not None:
-      context = {
-        "type": "edit",
-        "form": form,
-        "error_message": error_message,
-        "username": username,
-        "kid": kid
-      }
-      return render(master, 'kifu/edit.html', context)
-    if _check_slug_exists(master, table, username, form.data['slug']+".kif", allow_one=True):
-      context = {
-        "type": "edit",
-        "form": form,
-        "error_message": "Slug already exists",
-        "username": username,
-        "kid": kid
-      }
-      return render(master, 'kifu/edit.html', context)
-    action = master.request.body["action"]
-    table.update_item(
-      Key={
-        'pk': f"kifu#uname#{username}",
-        'sk': f"kid#{kid}"
-      },
-      UpdateExpression="set #clsi_sk=:cl, #kifu=:ki, #memo=:me, #first_or_second=:fi, #result=:re, #share=:sh, #latest_update=:la",
-      ExpressionAttributeNames={
-        "#clsi_sk": "clsi_sk",
-        "#kifu": "kifu",
-        "#memo": "memo",
-        "#first_or_second": "first_or_second",
-        "#result": "result",
-        "#share": "share",
-        "#latest_update": "latest_update"
-      },
-      ExpressionAttributeValues={
-        ':cl': f"slug#{form.data['slug']}"+".kif",
-        ':ki': form.data["kifu"],
-        ':me': form.data["memo"],
-        ':fi': form.data["first_or_second"],
-        ':re': form.data["result"],
-        ':sh': form.data["share"],
-        ':la': now_str
-      }
+    if username != master.request.username:
+        return render(master, 'not_found.html')
+    table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+    # 自分のタグ一覧を取得
+    tag_response = table.query(
+        KeyConditionExpression=Key('pk').eq(f'tag#uname#{username}')
     )
-    if action == "continue":
-      context = {
-        "type": "edit",
-        "form": form,
-        "error_message": None,
-        "username": username,
-        "kid": kid
-      }
-      return render(master, 'kifu/edit.html', context)
-    elif action == "end":
-      return redirect(master, "kifu:detail", username=username, kid=kid)
-    else:
-      raise Exception("Invalid action")
-  elif master.request.method == 'GET':
-    response = table.get_item(
-      Key={
-        'pk': f"kifu#uname#{username}",
-        'sk': f"kid#{kid}"
-      }
+    all_tags = [{'tname': item['tname'], 'tid': item['sk'].split('#')[1]} for item in tag_response['Items']]
+    # 棋譜に付与済みのタグ取得
+    kifu_tag_response = table.query(
+        KeyConditionExpression=Key('pk').eq(f'tag#kid#{kid}')
     )
-    if "Item" not in response:
-      return render(master, 'not_found.html')
-    else:
-      item = response["Item"]
-      form = KifuForm(
-        slug=item["clsi_sk"].split("#")[1][:-4],
-        kifu=item["kifu"],
-        memo=item["memo"],
-        first_or_second=item["first_or_second"],
-        result=item["result"],
-        share=item["share"]
-      )
-      context = {
-        "type": "edit",
-        "form": form,
-        "error_message": None,
-        "username": username,
-        "kid": kid
-      }
-      return render(master, 'kifu/edit.html', context)
+    kifu_tag_tids = set([item['sk'].split('#')[1] for item in kifu_tag_response['Items']])
+    if master.request.method == 'POST':
+        master.logger.info(master.request.body)
+        now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
+        now_str = now.strftime("%Y-%m-%d %H:%M:%S")
+        form = KifuForm(**master.request.body)
+        error_message = _slug_format_checker_return_error_message(form.data['slug'])
+        if error_message is not None:
+            context = {
+                "type": "edit",
+                "form": form,
+                "error_message": error_message,
+                "username": username,
+                "kid": kid,
+                "all_tags": all_tags,
+                "kifu_tag_tids": kifu_tag_tids
+            }
+            return render(master, 'kifu/edit.html', context)
+        if _check_slug_exists(master, table, username, form.data['slug']+".kif", allow_one=True):
+            context = {
+                "type": "edit",
+                "form": form,
+                "error_message": "Slug already exists",
+                "username": username,
+                "kid": kid,
+                "all_tags": all_tags,
+                "kifu_tag_tids": kifu_tag_tids
+            }
+            return render(master, 'kifu/edit.html', context)
+        action = master.request.body["action"]
+        # タグ付与処理（差分更新）
+        checked_tids = set(master.request.body.getlist('tag_tids')) if hasattr(master.request.body, 'getlist') else set(master.request.body.get('tag_tids', []))
+        # 追加が必要なタグ
+        add_tids = checked_tids - kifu_tag_tids
+        # 削除が必要なタグ
+        remove_tids = kifu_tag_tids - checked_tids
+        # 追加
+        for tag in all_tags:
+            if tag['tid'] in add_tids:
+                table.put_item(Item={
+                    'pk': f'tag#kid#{kid}',
+                    'sk': f'tid#{tag['tid']}',
+                    'clsi_sk': f'tname#{tag['tname']}',
+                    'tname': tag['tname'],
+                    'latest_update': now_str
+                })
+        # 削除
+        for item in kifu_tag_response['Items']:
+            tid = item['sk'].split('#')[1]
+            if tid in remove_tids:
+                table.delete_item(Key={'pk': item['pk'], 'sk': item['sk']})
+        table.update_item(
+            Key={
+                'pk': f"kifu#uname#{username}",
+                'sk': f"kid#{kid}"
+            },
+            UpdateExpression="set #clsi_sk=:cl, #kifu=:ki, #memo=:me, #first_or_second=:fi, #result=:re, #share=:sh, #latest_update=:la",
+            ExpressionAttributeNames={
+                "#clsi_sk": "clsi_sk",
+                "#kifu": "kifu",
+                "#memo": "memo",
+                "#first_or_second": "first_or_second",
+                "#result": "result",
+                "#share": "share",
+                "#latest_update": "latest_update"
+            },
+            ExpressionAttributeValues={
+                ':cl': f"slug#{form.data['slug']}"+".kif",
+                ':ki': form.data["kifu"],
+                ':me': form.data["memo"],
+                ':fi': form.data["first_or_second"],
+                ':re': form.data["result"],
+                ':sh': form.data["share"],
+                ':la': now_str
+            }
+        )
+        if action == "continue":
+            context = {
+                "type": "edit",
+                "form": form,
+                "error_message": None,
+                "username": username,
+                "kid": kid,
+                "all_tags": all_tags,
+                "kifu_tag_tids": checked_tids
+            }
+            return render(master, 'kifu/edit.html', context)
+        elif action == "end":
+            return redirect(master, "kifu:detail", username=username, kid=kid)
+        else:
+            raise Exception("Invalid action")
+    elif master.request.method == 'GET':
+        response = table.get_item(
+            Key={
+                'pk': f"kifu#uname#{username}",
+                'sk': f"kid#{kid}"
+            }
+        )
+        if "Item" not in response:
+            return render(master, 'not_found.html')
+        else:
+            item = response["Item"]
+            form = KifuForm(
+                slug=item["clsi_sk"].split("#")[1][:-4],
+                kifu=item["kifu"],
+                memo=item["memo"],
+                first_or_second=item["first_or_second"],
+                result=item["result"],
+                share=item["share"]
+            )
+            context = {
+                "type": "edit",
+                "form": form,
+                "error_message": None,
+                "username": username,
+                "kid": kid,
+                "all_tags": all_tags,
+                "kifu_tag_tids": kifu_tag_tids
+            }
+            return render(master, 'kifu/edit.html', context)
 
 
 

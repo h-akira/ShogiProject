@@ -40,6 +40,17 @@
     <p>{{ form.kifu }}</p>
     <p>メモ</p>
     <p>{{ form.memo }}</p>
+    <div class="field">
+      <label class="label">タグ付与</label>
+      <div class="tags">
+        {% for tag in all_tags %}
+          <label class="checkbox mr-2">
+            <input type="checkbox" name="tag_tids" value="{{ tag.tid }}" {% if tag.tid in kifu_tag_tids %}checked{% endif %}>
+            <span class="tag is-info is-light">{{ tag.tname }}</span>
+          </label>
+        {% endfor %}
+      </div>
+    </div>
   </form>
 </div>
 {% endblock content %}
