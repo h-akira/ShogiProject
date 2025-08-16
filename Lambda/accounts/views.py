@@ -30,13 +30,15 @@ def signup_view(master):
         email = form.email.data
         password = form.password.data
         if signup(master, username, email, password):
-            verify_form = VerifyForm()
-            verify_form.username.data = username
-            context = {
-                'form': verify_form,
-                'message': 'サインアップが完了しました。確認コードをメールで送信しました。'
+            # サインアップ成功後は/accounts/verifyにリダイレクトし、ユーザー名をクエリパラメータで渡す
+            from hads.shortcuts import reverse
+            verify_url = reverse(master, 'accounts:verify') + f'?username={username}&message=signup_success'
+            return {
+                'statusCode': 302,
+                'headers': {
+                    'Location': verify_url
+                }
             }
-            return render(master, 'accounts/verify.html', context)
         else:
             context = {'form': form, 'error': 'サインアップに失敗しました'}
             return render(master, 'accounts/signup.html', context)
@@ -49,27 +51,36 @@ def verify_view(master):
     else:
         form = VerifyForm()
     
-    # URLパラメータからユーザー名を取得してフォームに設定
+    context = {'form': form}
+    
+    # URLパラメータからユーザー名とメッセージを取得
     if master.request.method == 'GET':
-        username = master.event.get('queryStringParameters', {}).get('username', '')
+        query_params = master.event.get('queryStringParameters') or {}
+        username = query_params.get('username', '')
+        message_type = query_params.get('message', '')
+        
         if username:
             form.username.data = username
+        
+        # メッセージ設定
+        if message_type == 'signup_success':
+            context['message'] = 'サインアップが完了しました。確認コードをメールで送信しました。'
     
     if master.request.method == 'POST' and form.validate():
         username = form.username.data
         code = form.code.data
         if verify(master, username, code):
             login_form = LoginForm()
-            context = {
+            login_context = {
                 'form': login_form,
                 'message': 'メールアドレスの確認が完了しました'
             }
-            return render(master, 'accounts/login.html', context)
+            return render(master, 'accounts/login.html', login_context)
         else:
-            context = {'form': form, 'error': '確認に失敗しました'}
+            context['error'] = '確認に失敗しました'
             return render(master, 'accounts/verify.html', context)
     
-    return render(master, 'accounts/verify.html', {'form': form})
+    return render(master, 'accounts/verify.html', context)
 
 def logout_view(master):
     from hads.authenticate import sign_out
