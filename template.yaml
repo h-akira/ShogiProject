@@ -14,14 +14,14 @@ Parameters:
       - 'true'
       - 'false'
     Description: 'Set to true to enable debug mode for the Lambda function.'
-  USE_MOCK:
+  UseMock:
     Type: String
     Default: 'false'
     AllowedValues:
       - 'true'
       - 'false'
     Description: 'Set to true to use mock data instead of real data in the Lambda function.'
-  NO_AUTH:
+  NoAuth:
     Type: String
     Default: 'false'
     AllowedValues:
@@ -71,8 +71,8 @@ Resources:
       Environment:
         Variables:
           HADS_DEBUG: !Ref DEBUG
-          HADS_USE_MOCK: !Ref USE_MOCK
-          HADS_NO_AUTH: !Ref NO_AUTH
+          HADS_USE_MOCK: !Ref UseMock
+          HADS_NO_AUTH: !Ref NoAuth
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
