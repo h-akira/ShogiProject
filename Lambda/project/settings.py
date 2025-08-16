@@ -22,15 +22,5 @@ LOGOUT_URL = "accounts:logout"  # ログアウトページのURL
 
 # テスト用の設定
 DEBUG = os.environ.get("HADS_DEBUG", "False").lower() == "true" if os.environ.get("HADS_DEBUG") else True
-USE_MOCK = os.environ.get("HADS_USE_MOCK", "False").lower() == "true" if os.environ.get("HADS_USE_MOCK") else True
-NO_AUTH = os.environ.get("HADS_NO_AUTH", "False").lower() == "true" if os.environ.get("HADS_NO_AUTH") else True
-
-print("---------------------")
-print(f"HADS_DEBUG: {os.environ.get('HADS_DEBUG', 'False')}")
-print(f"HADS_USE_MOCK: {os.environ.get('HADS_USE_MOCK', 'False')}")
-print(f"HADS_NO_AUTH: {os.environ.get('HADS_NO_AUTH', 'False')}")
-print(f"DEBUG: {DEBUG}")
-print(f"USE_MOCK: {USE_MOCK}")
-print(f"NO_AUTH: {NO_AUTH}")
-print("---------------------")
-
+USE_MOCK = os.environ.get("HADS_USE_MOCK", "False").lower() == "true" if os.environ.get("HADS_USE_MOCK") else False
+NO_AUTH = os.environ.get("HADS_NO_AUTH", "False").lower() == "true" if os.environ.get("HADS_NO_AUTH") else False

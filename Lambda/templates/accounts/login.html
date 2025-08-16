@@ -65,7 +65,7 @@
                         </form>
                     </div>
                     <footer class="card-footer">
-                        <a href="{{ reverse(master, 'accounts:signup') }}" class="card-footer-item">
+                        <a href="{{ get_signup_url(master) }}" class="card-footer-item">
                             アカウント作成
                         </a>
                         <a href="{{ reverse(master, 'home') }}" class="card-footer-item">

@@ -15,5 +15,4 @@ phases:
       - aws s3 sync static/ s3://hakira0627-sgp-main/CloudFront/static --delete
       - aws s3 cp favicon/favicon.ico s3://hakira0627-sgp-main/CloudFront/favicon.ico
       - sam build
-      # - sam build --parameter-overrides ParameterKey=DEBUG,ParameterValue=$HADS_DEBUG ParameterKey=UseMock,ParameterValue=$HADS_USE_MOCK ParameterKey=NoAuth,ParameterValue=$HADS_NO_AUTH
       - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --parameter-overrides ParameterKey=DEBUG,ParameterValue=$HADS_DEBUG ParameterKey=UseMock,ParameterValue=$HADS_USE_MOCK ParameterKey=NoAuth,ParameterValue=$HADS_NO_AUTH

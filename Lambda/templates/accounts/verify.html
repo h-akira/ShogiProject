@@ -69,7 +69,7 @@
                         </form>
                     </div>
                     <footer class="card-footer">
-                        <a href="{{ reverse(master, 'accounts:login') }}" class="card-footer-item">
+                        <a href="{{ get_login_url(master) }}" class="card-footer-item">
                             ログイン
                         </a>
                         <a href="{{ reverse(master, 'home') }}" class="card-footer-item">
