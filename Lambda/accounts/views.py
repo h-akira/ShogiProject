@@ -8,16 +8,27 @@ def login_view(master):
     else:
         form = LoginForm()
     
+    context = {'form': form}
+    
+    # URLパラメータからメッセージを取得
+    if master.request.method == 'GET':
+        query_params = master.event.get('queryStringParameters') or {}
+        message_type = query_params.get('message', '')
+        
+        # メッセージ設定
+        if message_type == 'verify_success':
+            context['message'] = 'メールアドレスの確認が完了しました'
+    
     if master.request.method == 'POST' and form.validate():
         username = form.username.data
         password = form.password.data
         if login(master, username, password):
             return redirect(master, 'home')
         else:
-            context = {'form': form, 'error': 'ログインに失敗しました'}
+            context['error'] = 'ログインに失敗しました'
             return render(master, 'accounts/login.html', context)
     
-    return render(master, 'accounts/login.html', {'form': form})
+    return render(master, 'accounts/login.html', context)
 
 def signup_view(master):
     if master.request.method == 'POST':
@@ -31,14 +42,10 @@ def signup_view(master):
         password = form.password.data
         if signup(master, username, email, password):
             # サインアップ成功後は/accounts/verifyにリダイレクトし、ユーザー名をクエリパラメータで渡す
-            from hads.shortcuts import reverse
-            verify_url = reverse(master, 'accounts:verify') + f'?username={username}&message=signup_success'
-            return {
-                'statusCode': 302,
-                'headers': {
-                    'Location': verify_url
-                }
-            }
+            return redirect(master, 'accounts:verify', query_params={
+                'username': username,
+                'message': 'signup_success'
+            })
         else:
             context = {'form': form, 'error': 'サインアップに失敗しました'}
             return render(master, 'accounts/signup.html', context)
@@ -70,12 +77,10 @@ def verify_view(master):
         username = form.username.data
         code = form.code.data
         if verify(master, username, code):
-            login_form = LoginForm()
-            login_context = {
-                'form': login_form,
-                'message': 'メールアドレスの確認が完了しました'
-            }
-            return render(master, 'accounts/login.html', login_context)
+            # verify成功後は/accounts/loginにリダイレクトしてメッセージを表示
+            return redirect(master, 'accounts:login', query_params={
+                'message': 'verify_success'
+            })
         else:
             context['error'] = '確認に失敗しました'
             return render(master, 'accounts/verify.html', context)
