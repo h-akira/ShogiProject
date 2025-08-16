@@ -103,12 +103,6 @@ Resources:
                   - "sqs:getQueueAttributes"
                   - "sqs:sendMessage"
                 Resource: "*"
-  ApiGatewayUrlParameter:
-    Type: AWS::SSM::Parameter
-    Properties:
-      Name: "/ShogiProject/APIGW_URL"
-      Type: String
-      Value: !Sub "https://${MainAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/stage-01"
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
