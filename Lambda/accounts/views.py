@@ -28,8 +28,8 @@ def login_view(master):
             else:
                 context['error'] = 'ログインに失敗しました'
                 return render(master, 'accounts/login.html', context)
-        except MaintenanceOptionError as e:
-            context['error'] = str(e)
+        except MaintenanceOptionError:
+            context['error'] = '現在、メンテナンスのためログインできません。しばらくお待ちください。'
             return render(master, 'accounts/login.html', context)
     
     return render(master, 'accounts/login.html', context)
@@ -54,8 +54,8 @@ def signup_view(master):
             else:
                 context = {'form': form, 'error': 'サインアップに失敗しました'}
                 return render(master, 'accounts/signup.html', context)
-        except MaintenanceOptionError as e:
-            context = {'form': form, 'error': str(e)}
+        except MaintenanceOptionError:
+            context = {'form': form, 'error': '現在、メンテナンスのため新規登録を停止しております。ご迷惑をおかけして申し訳ございません。'}
             return render(master, 'accounts/signup.html', context)
     
     return render(master, 'accounts/signup.html', {'form': form})
