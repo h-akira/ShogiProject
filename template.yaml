@@ -1,9 +1,33 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  AWSGITEST
+  ShogiProject
 
-  Sample SAM Template for AWSGITEST
+  Shogi game record management system with HADS framework
+
+
+Parameters:
+  DEBUG:
+    Type: String
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: 'Set to true to enable debug mode for the Lambda function.'
+  USE_MOCK:
+    Type: String
+    Default: 'false'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: 'Set to true to use mock data instead of real data in the Lambda function.'
+  NO_AUTH:
+    Type: String
+    Default: 'false'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: 'Set to true to allow unconditional login without authentication.'
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -27,9 +51,7 @@ Resources:
       FunctionName: 'lambda-sgp-main'
       CodeUri: Lambda/
       Handler: lambda_function.lambda_handler
-      Runtime: python3.12
-      Layers:
-        - !Ref MainLayer
+      Runtime: python3.13
       Role: !GetAtt LambdaExecutionRole.Arn
       LoggingConfig:
         LogFormat: JSON
@@ -46,6 +68,11 @@ Resources:
             Path: '/{proxy+}'
             Method: ANY
             RestApiId: !Ref MainAPIGateway
+      Environment:
+        Variables:
+          HADS_DEBUG: !Ref DEBUG
+          HADS_USE_MOCK: !Ref USE_MOCK
+          HADS_NO_AUTH: !Ref NO_AUTH
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -76,13 +103,12 @@ Resources:
                   - "sqs:getQueueAttributes"
                   - "sqs:sendMessage"
                 Resource: "*"
-  MainLayer:
-    Type: AWS::Serverless::LayerVersion
+  ApiGatewayUrlParameter:
+    Type: AWS::SSM::Parameter
     Properties:
-      LayerName: 'layer-sgp-main'
-      ContentUri: Layer/
-      CompatibleRuntimes:
-        - python3.12
+      Name: "/ShogiProject/APIGW_URL"
+      Type: String
+      Value: !Sub "https://${MainAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/stage-01"
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
@@ -96,3 +122,10 @@ Resources:
       ResourceGroupName:
         Ref: ApplicationResourceGroup
       AutoConfigurationEnabled: 'true'
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  ShogiProjectApi:
+    Description: API Gateway endpoint URL for Prod stage for ShogiProject function
+    Value: !Sub "https://${MainAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/stage-01/"

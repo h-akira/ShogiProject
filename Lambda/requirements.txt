@@ -1,0 +1,2 @@
+hads @ git+https://github.com/h-akira/hads.git@develop
+moto[dynamodb,ssm]

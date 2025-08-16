@@ -43,10 +43,10 @@
         {% if master.request.auth %}
         <a class="navbar-item" href="{{ reverse(master, 'accounts:logout') }}">{{ master.request.username }} - Logout</a>
         {% else %}
-        <a href="{{ get_login_url(master) }}" class="navbar-item">
+        <a href="{{ reverse(master, 'accounts:login') }}" class="navbar-item">
           Log in
         </a>
-        <a href="{{ get_signup_url(master) }}" class="navbar-item">
+        <a href="{{ reverse(master, 'accounts:signup') }}" class="navbar-item">
           Sign up
         </a>
         {% endif %}

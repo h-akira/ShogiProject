@@ -1,18 +1,18 @@
 version: 0.2
 
+env:
+  variables:
+    HADS_DEBUG: "true"
+    HADS_USE_MOCK: "false"
+    HADS_NO_AUTH: "false"
+
 phases:
   install:
     runtime-versions:
-      python: 3.12
-    commands:
-      - pip3 install -r requirements.txt -t Layer/python/
-      # - pip3 install git+https://github.com/h-akira/hads.git@main
+      python: 3.13
   build:
     commands:
-      - aws s3 sync $(jq -r ".static.local" admin.json) $(jq -r ".static.s3" admin.json) --delete
-      - aws s3 cp $(jq -r ".favicon.local" admin.json) $(jq -r ".favicon.s3" admin.json)
+      - aws s3 sync static/ s3://hakira0627-sgp-main/CloudFront/static --delete
+      - aws s3 cp favicon/favicon.ico s3://hakira0627-sgp-main/CloudFront/favicon.ico
       - sam build
-      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
-      # - hads-admin.py admin.json --static-sync2s3
-      # - hads-admin.py admin.json --build
-      # - hads-admin.py admin.json --deploy --no-confirm-changeset
+      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --parameter-overrides DEBUG=$HADS_DEBUG USE_MOCK=$HADS_USE_MOCK NO_AUTH=$HADS_NO_AUTH

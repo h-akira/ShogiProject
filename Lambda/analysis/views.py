@@ -1,5 +1,5 @@
-from hads.shourtcuts import json_response
-from hads.shourtcuts import login_required
+from hads.shortcuts import json_response
+from hads.shortcuts import login_required
 from project.common import gen_code
 import boto3
 from botocore.exceptions import ClientError
