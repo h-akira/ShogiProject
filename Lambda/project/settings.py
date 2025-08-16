@@ -24,3 +24,5 @@ LOGOUT_URL = "accounts:logout"  # ログアウトページのURL
 DEBUG = os.environ.get("HADS_DEBUG", "False").lower() == "true" if os.environ.get("HADS_DEBUG") else True
 USE_MOCK = os.environ.get("HADS_USE_MOCK", "False").lower() == "true" if os.environ.get("HADS_USE_MOCK") else False
 NO_AUTH = os.environ.get("HADS_NO_AUTH", "False").lower() == "true" if os.environ.get("HADS_NO_AUTH") else False
+DENY_SIGNUP = os.environ.get("HADS_DENY_SIGNUP", "False").lower() == "true" if os.environ.get("HADS_DENY_SIGNUP") else False
+DENY_LOGIN = os.environ.get("HADS_DENY_LOGIN", "False").lower() == "true" if os.environ.get("HADS_DENY_LOGIN") else False

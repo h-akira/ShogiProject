@@ -1,5 +1,5 @@
 from hads.shortcuts import render, redirect
-from hads.authenticate import login, signup, verify
+from hads.authenticate import login, signup, verify, MaintenanceOptionError
 from .forms import LoginForm, SignupForm, VerifyForm
 
 def login_view(master):
@@ -22,10 +22,14 @@ def login_view(master):
     if master.request.method == 'POST' and form.validate():
         username = form.username.data
         password = form.password.data
-        if login(master, username, password):
-            return redirect(master, 'home')
-        else:
-            context['error'] = 'ログインに失敗しました'
+        try:
+            if login(master, username, password):
+                return redirect(master, 'home')
+            else:
+                context['error'] = 'ログインに失敗しました'
+                return render(master, 'accounts/login.html', context)
+        except MaintenanceOptionError as e:
+            context['error'] = str(e)
             return render(master, 'accounts/login.html', context)
     
     return render(master, 'accounts/login.html', context)
@@ -40,14 +44,18 @@ def signup_view(master):
         username = form.username.data
         email = form.email.data
         password = form.password.data
-        if signup(master, username, email, password):
-            # サインアップ成功後は/accounts/verifyにリダイレクトし、ユーザー名をクエリパラメータで渡す
-            return redirect(master, 'accounts:verify', query_params={
-                'username': username,
-                'message': 'signup_success'
-            })
-        else:
-            context = {'form': form, 'error': 'サインアップに失敗しました'}
+        try:
+            if signup(master, username, email, password):
+                # サインアップ成功後は/accounts/verifyにリダイレクトし、ユーザー名をクエリパラメータで渡す
+                return redirect(master, 'accounts:verify', query_params={
+                    'username': username,
+                    'message': 'signup_success'
+                })
+            else:
+                context = {'form': form, 'error': 'サインアップに失敗しました'}
+                return render(master, 'accounts/signup.html', context)
+        except MaintenanceOptionError as e:
+            context = {'form': form, 'error': str(e)}
             return render(master, 'accounts/signup.html', context)
     
     return render(master, 'accounts/signup.html', {'form': form})

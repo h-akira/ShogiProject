@@ -28,6 +28,20 @@ Parameters:
       - 'true'
       - 'false'
     Description: 'Set to true to allow unconditional login without authentication.'
+  DenySignup:
+    Type: String
+    Default: 'false'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: 'Set to true to deny signup during maintenance.'
+  DenyLogin:
+    Type: String
+    Default: 'false'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: 'Set to true to deny login during maintenance.'
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -73,6 +87,8 @@ Resources:
           HADS_DEBUG: !Ref DEBUG
           HADS_USE_MOCK: !Ref UseMock
           HADS_NO_AUTH: !Ref NoAuth
+          HADS_DENY_SIGNUP: !Ref DenySignup
+          HADS_DENY_LOGIN: !Ref DenyLogin
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
