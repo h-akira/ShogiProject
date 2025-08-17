@@ -27,18 +27,18 @@ def main(master):
   view, kwargs = master.router.path2view(master.request.path)
   response = view(master, **kwargs)
   
-  # Cookie処理前のデバッグログ
-  master.logger.info(f"Before cookie processing - set_cookie: {getattr(master.request, 'set_cookie', None)}")
-  master.logger.info(f"Before cookie processing - clean_cookie: {getattr(master.request, 'clean_cookie', None)}")
-  
+  # # Cookie処理前のデバッグログ
+  # master.logger.info(f"Before cookie processing - set_cookie: {getattr(master.request, 'set_cookie', None)}")
+  # master.logger.info(f"Before cookie processing - clean_cookie: {getattr(master.request, 'clean_cookie', None)}")
+
   add_set_cookie_to_header(master, response)
-  
-  # Cookie処理後のデバッグログ
-  master.logger.info(f"Response structure: {response}")
-  if "multiValueHeaders" in response and "Set-Cookie" in response["multiValueHeaders"]:
-    master.logger.info(f"Cookie headers: {response['multiValueHeaders']['Set-Cookie']}")
-  else:
-    master.logger.info("No cookie headers set")
+
+  # # Cookie処理後のデバッグログ
+  # master.logger.info(f"Response structure: {response}")
+  # if "multiValueHeaders" in response and "Set-Cookie" in response["multiValueHeaders"]:
+  #   master.logger.info(f"Cookie headers: {response['multiValueHeaders']['Set-Cookie']}")
+  # else:
+  #   master.logger.info("No cookie headers set")
   
   return response
 
