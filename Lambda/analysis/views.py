@@ -8,8 +8,9 @@ import datetime
 from zoneinfo import ZoneInfo
 import json
 from project.common import Shogi
+import os
 
-MAIN_TABLE_NAME = "table-sgp-main"
+MAIN_TABLE_NAME = os.environ.get('DYNAMODB_TABLE', 'table-sgp-pro-main')
 AID_LENGTH = 8
 
 @login_required

@@ -5,8 +5,9 @@ import datetime
 from zoneinfo import ZoneInfo
 import urllib.parse
 from project.common import gen_code
+import os
 
-MAIN_TABLE_NAME = "table-sgp-main"
+MAIN_TABLE_NAME = os.environ.get('DYNAMODB_TABLE', 'table-sgp-pro-main')
 TID_LENGTH = 8
 
 def index(master, username):

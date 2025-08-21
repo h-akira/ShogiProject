@@ -42,6 +42,10 @@ Parameters:
       - 'true'
       - 'false'
     Description: 'Set to true to deny login during maintenance.'
+  DynamoDBTable:
+    Type: String
+    Default: 'table-sgp-pro-main'
+    Description: 'DynamoDB table name for the application.'
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -89,6 +93,7 @@ Resources:
           HADS_NO_AUTH: !Ref NoAuth
           HADS_DENY_SIGNUP: !Ref DenySignup
           HADS_DENY_LOGIN: !Ref DenyLogin
+          DYNAMODB_TABLE: !Ref DynamoDBTable
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:

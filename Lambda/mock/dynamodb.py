@@ -1,9 +1,10 @@
 import boto3
+import os
 
 def set_data():
     """DynamoDBのモックデータを設定"""
     dynamodb = boto3.resource('dynamodb', region_name='ap-northeast-1')
-    table_name = 'table-sgp-main'
+    table_name = os.environ.get('DYNAMODB_TABLE', 'table-sgp-pro-main')
 
     # テーブル作成（存在しない場合のみ）
     try:

@@ -9,7 +9,7 @@ from zoneinfo import ZoneInfo
 from project.common import gen_code, encode_for_url, decode_from_url
 import os
 
-MAIN_TABLE_NAME = "table-sgp-main"
+MAIN_TABLE_NAME = os.environ.get('DYNAMODB_TABLE', 'table-sgp-pro-main')
 KID_LENGTH = 12
 SHARE_CODE_LENGTH = 36
 
