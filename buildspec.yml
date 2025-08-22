@@ -5,7 +5,7 @@ env:
     HADS_DEBUG: "true"
     HADS_USE_MOCK: "false"
     HADS_NO_AUTH: "false"
-    HADS_DENY_SIGNUP: "true"
+    HADS_DENY_SIGNUP: "false"
     HADS_DENY_LOGIN: "false"
     HADS_ENV: "pro"
     S3_BUCKET: "hakira0627-sgp-pro-main"
