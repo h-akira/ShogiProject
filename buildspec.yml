@@ -10,6 +10,7 @@ env:
     HADS_ENV: "pro"
     S3_BUCKET: "hakira0627-sgp-pro-main"
     DYNAMODB_TABLE: "table-sgp-pro-main"
+    SQS_QUEUE_NAME: "sqs-sgp-analysis.fifo"
 
 phases:
   install:

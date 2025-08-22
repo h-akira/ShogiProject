@@ -50,9 +50,20 @@ def submit(master):
         "aid": None
       }
     )
+  import os
+  
   sqs = boto3.client('sqs')
-  ssm = boto3.client('ssm')
-  QueueUrl=ssm.get_parameter(Name="/ShogiProject/SQS/Analysis/URL")["Parameter"]["Value"]
+  
+  # 環境変数からキュー名を取得（デフォルトはsqs-sgp-analysis.fifo）
+  queue_name = os.environ.get('SQS_QUEUE_NAME', 'sqs-sgp-analysis.fifo')
+  
+  # アカウントIDを動的取得
+  sts = boto3.client('sts')
+  account_id = sts.get_caller_identity()['Account']
+  
+  # SQS URLを動的生成
+  region = os.environ.get('AWS_REGION', 'ap-northeast-1')
+  QueueUrl = f"https://sqs.{region}.amazonaws.com/{account_id}/{queue_name}"
   # キュー内のメッセージの数が多ければ拒否
   response = sqs.get_queue_attributes(
     QueueUrl=QueueUrl,

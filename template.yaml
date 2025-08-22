@@ -46,6 +46,10 @@ Parameters:
     Type: String
     Default: 'table-sgp-pro-main'
     Description: 'DynamoDB table name for the application.'
+  SQSQueueName:
+    Type: String
+    Default: 'sqs-sgp-analysis.fifo'
+    Description: 'SQS queue name for analysis tasks.'
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -94,6 +98,7 @@ Resources:
           HADS_DENY_SIGNUP: !Ref DenySignup
           HADS_DENY_LOGIN: !Ref DenyLogin
           DYNAMODB_TABLE: !Ref DynamoDBTable
+          SQS_QUEUE_NAME: !Ref SQSQueueName
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
