@@ -320,12 +320,13 @@ def explorer(master, username, slug_base64=None):
 @login_required
 def create(master, username):
   if master.request.method == 'POST':
-    master.logger.info(master.request.body)
+    form_data = master.request.get_form_data()
+    master.logger.info(form_data)
     table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
     now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
     now_str = now.strftime("%Y-%m-%d %H:%M:%S")
-    action = master.request.body["action"]
-    form = KifuForm(**master.request.body)
+    action = form_data["action"]
+    form = KifuForm(form_data)
     system = _get_system_from_table(master)
     if system["kifu_max"] < _count_partition(boto3.resource('dynamodb').Table(MAIN_TABLE_NAME), f"kifu#uname#{username}"):
       context = {
@@ -420,10 +421,11 @@ def edit(master, username, kid):
     kifu_tag_tids = set([item['sk'].split('#')[1] for item in kifu_tag_response['Items']])
     master.logger.info(f"Kifu tag tids: {kifu_tag_tids}")
     if master.request.method == 'POST':
-        master.logger.info(master.request.body)
+        form_data = master.request.get_form_data()
+        master.logger.info(form_data)
         now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
         now_str = now.strftime("%Y-%m-%d %H:%M:%S")
-        form = KifuForm(**master.request.body)
+        form = KifuForm(form_data)
         error_message = _slug_format_checker_return_error_message(form.data['slug'])
         if error_message is not None:
             context = {
@@ -447,9 +449,9 @@ def edit(master, username, kid):
                 "kifu_tag_tids": kifu_tag_tids
             }
             return render(master, 'kifu/edit.html', context)
-        action = master.request.body["action"]
+        action = form_data["action"]
         # タグ付与処理（差分更新）
-        tids_raw = master.request.body.get('tag_tids', [])
+        tids_raw = form_data.get('tag_tids', [])
         if isinstance(tids_raw, str):
             checked_tids = set([tids_raw])
         else:

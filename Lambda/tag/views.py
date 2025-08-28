@@ -26,7 +26,8 @@ def index(master, username):
 def create(master, username):
     table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
     if master.request.method == 'POST':
-        form = TagForm(**master.request.body)
+        form_data = master.request.get_form_data()
+        form = TagForm(form_data)
         if not form.validate():
             return render(master, 'tag/create.html', {'form': form, 'error_message': 'タグ名を入力してください', 'username': username})
         tag_name = form.data['slug'].strip()
@@ -57,7 +58,8 @@ def edit(master, username, tid):
     tag_item = response.get('Item')
     tag_name = tag_item['tname'] if tag_item else ''
     if master.request.method == 'POST':
-        form = TagForm(**master.request.body)
+        form_data = master.request.get_form_data()
+        form = TagForm(form_data)
         if not form.validate():
             return render(master, 'tag/edit.html', {'form': form, 'error_message': 'タグ名を入力してください', 'username': username, 'tid': tid})
         new_tag_name = form.data['slug'].strip()
