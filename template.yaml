@@ -113,7 +113,7 @@ Resources:
                       # Set the CloudWatch role ARN for API Gateway account
                       role_arn = event['ResourceProperties']['RoleArn']
                       apigateway.update_account(
-                          patchOps=[
+                          patchOperations=[
                               {
                                   'op': 'replace',
                                   'path': '/cloudwatchRoleArn',
