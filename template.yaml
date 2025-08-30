@@ -86,6 +86,7 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
       LoggingConfig:
         LogFormat: JSON
+        ApplicationLogLevel: !Ref LogLevel
       Events:
         ApiRoot:
           Type: Api
