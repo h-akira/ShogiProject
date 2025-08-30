@@ -7,6 +7,7 @@ def lambda_handler(event, context):
   sys.path.append(os.path.dirname(__file__))
   master = Master(event, context)
   master.logger.info(f"path: {master.request.path}")
+  master.logger.debug(f"LOG_LEVEL: {master.settings.LOG_LEVEL}")
   try:
     if master.settings.USE_MOCK:
       return use_mock(master)
@@ -27,13 +28,13 @@ def main(master):
   view, kwargs = master.router.path2view(master.request.path)
   response = view(master, **kwargs)
   
-  # Cookie処理前のデバッグログ
+  # Cookie処理前のログ
   master.logger.debug(f"Before cookie processing - set_cookie: {master.request.set_cookie}")
   master.logger.debug(f"Before cookie processing - clean_cookie: {master.request.clean_cookie}")
 
   add_set_cookie_to_header(master, response)
 
-  # Cookie処理後のデバッグログ
+  # Cookie処理後のログ
   master.logger.debug(f"Response structure: {response}")
   if "multiValueHeaders" in response and "Set-Cookie" in response["multiValueHeaders"]:
     master.logger.debug(f"Cookie headers: {response['multiValueHeaders']['Set-Cookie']}")
@@ -53,13 +54,13 @@ def use_mock(master):
   view, kwargs = master.router.path2view(master.request.path)
   response = view(master, **kwargs)
   
-  # Cookie処理前のデバッグログ
+  # Cookie処理前のログ
   master.logger.debug(f"Before cookie processing - set_cookie: {master.request.set_cookie}")
   master.logger.debug(f"Before cookie processing - clean_cookie: {master.request.clean_cookie}")
   
   add_set_cookie_to_header(master, response)
   
-  # Cookie処理後のデバッグログ
+  # Cookie処理後のログ
   master.logger.debug(f"Response structure: {response}")
   if "multiValueHeaders" in response and "Set-Cookie" in response["multiValueHeaders"]:
     master.logger.debug(f"Cookie headers: {response['multiValueHeaders']['Set-Cookie']}")
