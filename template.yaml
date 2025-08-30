@@ -150,6 +150,10 @@ Resources:
                   - apigateway:PATCH
                   - apigateway:GET
                 Resource: !Sub 'arn:aws:apigateway:${AWS::Region}::/account'
+              - Effect: Allow
+                Action:
+                  - iam:PassRole
+                Resource: !GetAtt ApiGatewayLoggingRole.Arn
 
   # Custom resource to configure API Gateway account
   ApiGatewayAccountConfig:
