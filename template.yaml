@@ -70,12 +70,110 @@ Globals:
   Api:
     TracingEnabled: true
 Resources:
+  # CloudWatch Log Group for API Gateway Access Logs
+  ApiGatewayAccessLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/apigateway/${AWS::StackName}-access-logs'
+      RetentionInDays: 7
+
+  # IAM Role for API Gateway to push logs to CloudWatch
+  ApiGatewayLoggingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+
+  # Lambda function to set API Gateway account-level CloudWatch role
+  ApiGatewayAccountConfigFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-apigateway-account-config'
+      Runtime: python3.13
+      Handler: index.handler
+      Role: !GetAtt ApiGatewayAccountConfigRole.Arn
+      Code:
+        ZipFile: |
+          import boto3
+          import json
+          import cfnresponse
+          
+          def handler(event, context):
+              try:
+                  apigateway = boto3.client('apigateway')
+                  
+                  if event['RequestType'] == 'Create' or event['RequestType'] == 'Update':
+                      # Set the CloudWatch role ARN for API Gateway account
+                      role_arn = event['ResourceProperties']['RoleArn']
+                      apigateway.update_account(
+                          patchOps=[
+                              {
+                                  'op': 'replace',
+                                  'path': '/cloudwatchRoleArn',
+                                  'value': role_arn
+                              }
+                          ]
+                      )
+                  
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+              except Exception as e:
+                  print(f"Error: {str(e)}")
+                  cfnresponse.send(event, context, cfnresponse.FAILED, {})
+
+  # IAM Role for the Lambda function
+  ApiGatewayAccountConfigRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: ApiGatewayAccountAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - apigateway:PATCH
+                  - apigateway:GET
+                Resource: !Sub 'arn:aws:apigateway:${AWS::Region}::/account'
+
+  # Custom resource to configure API Gateway account
+  ApiGatewayAccountConfig:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken: !GetAtt ApiGatewayAccountConfigFunction.Arn
+      RoleArn: !GetAtt ApiGatewayLoggingRole.Arn
+
   MainAPIGateway:
     Type: AWS::Serverless::Api
+    DependsOn: ApiGatewayAccountConfig
     Properties:
       Name: 'api-sgp-main'
       StageName: 'stage-01'
       EndpointConfiguration: REGIONAL
+      AccessLogSetting:
+        DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
+        Format: '{ "requestId": "$context.requestId", "extendedRequestId": "$context.extendedRequestId", "ip": "$context.identity.sourceIp", "caller": "$context.identity.caller", "user": "$context.identity.user", "requestTime": "$context.requestTime", "httpMethod": "$context.httpMethod", "resourcePath": "$context.resourcePath", "status": "$context.status", "protocol": "$context.protocol", "responseLength": "$context.responseLength", "responseTime": "$context.responseTime", "error": "$context.error.message", "integrationError": "$context.integrationErrorMessage" }'
+      MethodSettings:
+        - LoggingLevel: INFO
+          ResourcePath: '/*'
+          HttpMethod: '*'
+          MetricsEnabled: true
+          DataTraceEnabled: true
   MainFunction:
     Type: AWS::Serverless::Function
     Properties:
