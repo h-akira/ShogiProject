@@ -100,21 +100,21 @@ def logout_view(master):
     
     try:
         sign_out(master)  # 認証情報クリア + Cookie削除フラグ設定
-        master.logger.info("sign_out completed successfully")
+        master.logger.debug("sign_out completed successfully")
     except Exception as e:
         master.logger.warning(f"Logout warning: {e}")
         # 例外が発生した場合も強制的にCookie削除
         master.request.auth = False
         master.request.username = None
         master.request.clean_cookie = True
-        master.logger.info("Forced cleanup after exception")
+        master.logger.debug("Forced cleanup after exception")
     
     # リダイレクト先URLをログ出力
     from hads.shortcuts import reverse
     home_url = reverse(master, 'home')
-    master.logger.info(f"Redirecting to home URL: {home_url}")
+    master.logger.debug(f"Redirecting to home URL: {home_url}")
     
     redirect_response = redirect(master, 'home')
-    master.logger.info(f"Redirect response: {redirect_response}")
+    master.logger.debug(f"Redirect response: {redirect_response}")
     
     return redirect_response

@@ -321,7 +321,7 @@ def explorer(master, username, slug_base64=None):
 def create(master, username):
   if master.request.method == 'POST':
     form_data = master.request.get_form_data()
-    master.logger.info(form_data)
+    master.logger.debug(form_data)
     table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
     now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
     now_str = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -419,10 +419,10 @@ def edit(master, username, kid):
         KeyConditionExpression=Key('pk').eq(f'tag#kid#{kid}')
     )
     kifu_tag_tids = set([item['sk'].split('#')[1] for item in kifu_tag_response['Items']])
-    master.logger.info(f"Kifu tag tids: {kifu_tag_tids}")
+    master.logger.debug(f"Kifu tag tids: {kifu_tag_tids}")
     if master.request.method == 'POST':
         form_data = master.request.get_form_data()
-        master.logger.info(form_data)
+        master.logger.debug(form_data)
         now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
         now_str = now.strftime("%Y-%m-%d %H:%M:%S")
         form = KifuForm(form_data)
@@ -456,10 +456,10 @@ def edit(master, username, kid):
             checked_tids = set([tids_raw])
         else:
             checked_tids = set(tids_raw)
-        master.logger.info(f"Checked tids: {checked_tids}")
+        master.logger.debug(f"Checked tids: {checked_tids}")
         # 追加が必要なタグ
         add_tids = checked_tids - kifu_tag_tids
-        master.logger.info(f"Add tids: {add_tids}")
+        master.logger.debug(f"Add tids: {add_tids}")
         # 削除が必要なタグ
         remove_tids = kifu_tag_tids - checked_tids
         # 追加

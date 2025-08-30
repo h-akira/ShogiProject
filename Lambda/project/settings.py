@@ -5,6 +5,9 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 STATIC_URL = "/static"  # 先頭の/はあってもなくても同じ扱
 TIMEZONE = "Asia/Tokyo"
 
+# ログレベル設定 (INFO, DEBUG, WARNING, ERROR)
+LOG_LEVEL = "INFO"  # 本番環境では"INFO", デバッグ時は"DEBUG"
+
 # 認証周りの設定 - SSMパラメータ名の定義
 COGNITO_SSM_PARAMS = {
     'USER_POOL_ID': '/Cognito/user_pool_id',
