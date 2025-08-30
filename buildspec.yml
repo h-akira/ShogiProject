@@ -7,6 +7,7 @@ env:
     HADS_NO_AUTH: "false"
     HADS_DENY_SIGNUP: "false"
     HADS_DENY_LOGIN: "false"
+    HADS_LOG_LEVEL: "DEBUG"
     HADS_ENV: "pro"
     S3_BUCKET: "hakira0627-sgp-pro-main"
     DYNAMODB_TABLE: "table-sgp-pro-main"
@@ -21,4 +22,4 @@ phases:
       - aws s3 sync static/ s3://$S3_BUCKET/CloudFront/static --delete
       - aws s3 cp favicon/favicon.ico s3://$S3_BUCKET/CloudFront/favicon.ico
       - sam build
-      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --parameter-overrides ParameterKey=DEBUG,ParameterValue=$HADS_DEBUG ParameterKey=UseMock,ParameterValue=$HADS_USE_MOCK ParameterKey=NoAuth,ParameterValue=$HADS_NO_AUTH ParameterKey=DenySignup,ParameterValue=$HADS_DENY_SIGNUP ParameterKey=DenyLogin,ParameterValue=$HADS_DENY_LOGIN ParameterKey=DynamoDBTable,ParameterValue=$DYNAMODB_TABLE
+      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --parameter-overrides ParameterKey=DEBUG,ParameterValue=$HADS_DEBUG ParameterKey=UseMock,ParameterValue=$HADS_USE_MOCK ParameterKey=NoAuth,ParameterValue=$HADS_NO_AUTH ParameterKey=DenySignup,ParameterValue=$HADS_DENY_SIGNUP ParameterKey=DenyLogin,ParameterValue=$HADS_DENY_LOGIN ParameterKey=LogLevel,ParameterValue=$HADS_LOG_LEVEL ParameterKey=DynamoDBTable,ParameterValue=$DYNAMODB_TABLE

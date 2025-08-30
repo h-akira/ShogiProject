@@ -6,7 +6,7 @@ STATIC_URL = "/static"  # 先頭の/はあってもなくても同じ扱
 TIMEZONE = "Asia/Tokyo"
 
 # ログレベル設定 (INFO, DEBUG, WARNING, ERROR)
-LOG_LEVEL = "INFO"  # 本番環境では"INFO", デバッグ時は"DEBUG"
+LOG_LEVEL = os.environ.get('HADS_LOG_LEVEL', 'INFO')  # 環境変数から取得、未定義時は"INFO"
 
 # 認証周りの設定 - SSMパラメータ名の定義
 COGNITO_SSM_PARAMS = {

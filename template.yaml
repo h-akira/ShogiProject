@@ -28,6 +28,15 @@ Parameters:
       - 'true'
       - 'false'
     Description: 'Set to true to allow unconditional login without authentication.'
+  LogLevel:
+    Type: String
+    Default: 'INFO'
+    AllowedValues:
+      - 'DEBUG'
+      - 'INFO'
+      - 'WARNING'
+      - 'ERROR'
+    Description: 'Set the logging level for the Lambda function.'
   DenySignup:
     Type: String
     Default: 'false'
@@ -97,6 +106,7 @@ Resources:
           HADS_NO_AUTH: !Ref NoAuth
           HADS_DENY_SIGNUP: !Ref DenySignup
           HADS_DENY_LOGIN: !Ref DenyLogin
+          HADS_LOG_LEVEL: !Ref LogLevel
           DYNAMODB_TABLE: !Ref DynamoDBTable
           SQS_QUEUE_NAME: !Ref SQSQueueName
   LambdaExecutionRole:
