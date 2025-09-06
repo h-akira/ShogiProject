@@ -24,7 +24,7 @@
           <i data-lucide="rocket" class="btn-icon"></i>
           今すぐ始める
         </a>
-        <a href="{{ get_login_url(master) }}" class="btn btn-ghost btn-lg">
+        <a href="{{ get_login_url(master) }}" class="btn btn-secondary btn-lg">
           <i data-lucide="log-in" class="btn-icon"></i>
           ログイン
         </a>
@@ -35,7 +35,7 @@
           <i data-lucide="plus-circle" class="btn-icon"></i>
           棋譜を登録
         </a>
-        <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="btn btn-ghost btn-lg">
+        <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="btn btn-secondary btn-lg">
           <i data-lucide="user" class="btn-icon"></i>
           マイページ
         </a>
