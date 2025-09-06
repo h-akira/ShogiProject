@@ -1,63 +1,97 @@
 <!doctype html>
-<html lang="en" class="has-navbar-fixed-top">
+<html lang="ja">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bulma css -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
+    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ static(master, 'css/custom.css') }}">
     
     <!-- Extra CSS -->
-		{% block extra_css %}{% endblock extra_css %}
+    {% block extra_css %}{% endblock extra_css %}
     
-    <title>{% block title %}{% endblock title %}</title>
+    <title>{% block title %}Kifu Pro{% endblock title %}</title>
   </head>
-	<body>  
+  <body>
+    <!-- Header Navigation -->
+    <header class="header">
+      <nav class="nav-container">
+        <div class="nav-brand">
+          <a href="{{ reverse(master, 'home') }}" class="nav-logo">
+            <span class="logo-icon">🏛️</span>
+            <span class="logo-text">Kifu Pro</span>
+          </a>
+        </div>
+        
+        <div class="nav-links" id="navLinks">
+          {% if master.request.auth %}
+          <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="nav-link">
+            <i data-lucide="user" class="nav-icon"></i>
+            <span>マイページ</span>
+          </a>
+          <a href="{{ reverse(master, 'kifu:create', username=master.request.username) }}" class="nav-link">
+            <i data-lucide="plus-circle" class="nav-icon"></i>
+            <span>棋譜登録</span>
+          </a>
+          <a href="{{ reverse(master, 'kifu:explorer', username=master.request.username) }}" class="nav-link">
+            <i data-lucide="search" class="nav-icon"></i>
+            <span>エクスプローラー</span>
+          </a>
+          <a href="{{ reverse(master, 'tag:index', username=master.request.username) }}" class="nav-link">
+            <i data-lucide="tag" class="nav-icon"></i>
+            <span>タグ</span>
+          </a>
+          {% endif %}
+        </div>
+        
+        <div class="nav-actions">
+          {% if master.request.auth %}
+          <div class="user-menu">
+            <span class="user-name">{{ master.request.username }}</span>
+            <a href="{{ get_logout_url(master) }}" class="btn btn-secondary btn-sm">
+              <i data-lucide="log-out" class="btn-icon"></i>
+              Logout
+            </a>
+          </div>
+          {% else %}
+          <div class="auth-buttons">
+            <a href="{{ get_login_url(master) }}" class="btn btn-ghost btn-sm">Log in</a>
+            <a href="{{ get_signup_url(master) }}" class="btn btn-primary btn-sm">Sign up</a>
+          </div>
+          {% endif %}
+        </div>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+          <i data-lucide="menu" class="menu-icon"></i>
+        </button>
+      </nav>
+    </header>
 
-  <nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="main navigation" style="width: 100%;">
-    <div class="navbar-brand">
-      {# <a class="navbar-item" href="https://bulma.io"> #}
-        {# <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"> #}
-      {# </a> #}
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-    <div id="navbarBasicExample" class="navbar-menu">
-      <div class="navbar-start">
-        <a class="navbar-item" href="{{ reverse(master, 'home') }}">ホーム</a>
-        {% if master.request.auth %}
-        <a class="navbar-item" href="{{ reverse(master, 'kifu:index', username=master.request.username) }}">マイページ</a>
-        <a class="navbar-item" href="{{ reverse(master, 'kifu:create', username=master.request.username) }}">棋譜登録</a>
-        <a class="navbar-item" href="{{ reverse(master, 'kifu:explorer', username=master.request.username) }}">エクスプローラー</a>
-        <a class="navbar-item" href="{{ reverse(master, 'tag:index', username=master.request.username) }}">タグ</a>
-        {% endif %}
-        <!-- <a class="navbar-item sidebar-toggle" role="button">記事一覧</a> -->
-      </div>
-      <div class="navbar-end">
-        {% if master.request.auth %}
-        <a class="navbar-item" href="{{ get_logout_url(master) }}">{{ master.request.username }} - Logout</a>
-        {% else %}
-        <a href="{{ get_login_url(master) }}" class="navbar-item">
-          Log in
-        </a>
-        <a href="{{ get_signup_url(master) }}" class="navbar-item">
-          Sign up
-        </a>
-        {% endif %}
-      </div>
-    </div>
-  </nav>
-  {% block content %}{% endblock content %}
-    <!-- Custom JSS -->
+    <!-- Main Content -->
+    <main class="main-content">
+      {% block content %}{% endblock content %}
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <script src="{{ static(master, 'js/menu.js') }}"></script>
     <script src="{{ static(master, 'js/sidebar.js') }}"></script>
+    
     <!-- Extra JavaScript -->
-		{% block extra_js %}{% endblock extra_js %}
+    {% block extra_js %}{% endblock extra_js %}
+    
+    <!-- Initialize Lucide Icons -->
+    <script>
+      lucide.createIcons();
+    </script>
   </body>
 </html>

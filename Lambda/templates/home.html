@@ -3,123 +3,217 @@
 <link rel="stylesheet" href="{{ static(master, 'css/home.css') }}">
 {% endblock extra_css %}
 
-{% block title %}ホーム{% endblock title %}
+{% block title %}Kifu Pro - プロフェッショナル棋譜管理プラットフォーム{% endblock title %}
 
 {% block content %}
-<section class="hero is-primary is-medium">
-  <div class="hero-body">
-    <div class="container has-text-centered">
-      <h1 class="title is-1">
-        将棋棋譜管理システム
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        プロフェッショナル<br>
+        <span class="hero-highlight">棋譜管理</span>プラットフォーム
       </h1>
-      <p class="subtitle is-4">
-        あなたの大切な棋譜を、安全に、効率的に管理
+      <p class="hero-description">
+        あなたの将棋の成長を支える、次世代の棋譜管理システム。<br>
+        AI分析、詳細な戦略記録、そして美しいインターフェースで、<br>
+        将棋の奥深さを探求しましょう。
       </p>
+      {% if not master.request.auth %}
+      <div class="hero-actions">
+        <a href="{{ get_signup_url(master) }}" class="btn btn-primary btn-lg">
+          <i data-lucide="rocket" class="btn-icon"></i>
+          今すぐ始める
+        </a>
+        <a href="{{ get_login_url(master) }}" class="btn btn-ghost btn-lg">
+          <i data-lucide="log-in" class="btn-icon"></i>
+          ログイン
+        </a>
+      </div>
+      {% else %}
+      <div class="hero-actions">
+        <a href="{{ reverse(master, 'kifu:create', username=master.request.username) }}" class="btn btn-primary btn-lg">
+          <i data-lucide="plus-circle" class="btn-icon"></i>
+          棋譜を登録
+        </a>
+        <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="btn btn-ghost btn-lg">
+          <i data-lucide="user" class="btn-icon"></i>
+          マイページ
+        </a>
+      </div>
+      {% endif %}
+    </div>
+    <div class="hero-visual">
+      <div class="floating-card card-1">
+        <div class="card-icon">
+          <i data-lucide="brain" class="feature-icon"></i>
+        </div>
+        <h3>AI分析</h3>
+        <p>高精度な局面解析</p>
+      </div>
+      <div class="floating-card card-2">
+        <div class="card-icon">
+          <i data-lucide="database" class="feature-icon"></i>
+        </div>
+        <h3>データ管理</h3>
+        <p>効率的な棋譜整理</p>
+      </div>
+      <div class="floating-card card-3">
+        <div class="card-icon">
+          <i data-lucide="share-2" class="feature-icon"></i>
+        </div>
+        <h3>共有機能</h3>
+        <p>簡単な棋譜共有</p>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="section">
+<!-- Features Section -->
+<section class="features-section">
   <div class="container">
-    <div class="columns is-variable is-6">
-      <div class="column is-half">
-        <div class="box feature-card">
-          <h3 class="title is-4">
-            <span class="icon-text">
-              <span class="icon">
-                <i class="fas fa-book"></i>
-              </span>
-              <span>概要</span>
-            </span>
-          </h3>
-          <div class="content">
-            <p>
-              将棋棋譜管理システムは、将棋の棋譜を管理するためのシステムです。
-              ユーザーは棋譜を登録し、他のユーザーと共有することができます。
-              また、AIによる局面の解析機能も提供しています。
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="column is-half">
-        <div class="box feature-card">
-          <h3 class="title is-4">
-            <span class="icon-text">
-              <span class="icon">
-                <i class="fas fa-robot"></i>
-              </span>
-              <span>AIによる解析</span>
-            </span>
-          </h3>
-          <div class="content">
-            <p>
-              AIによる局面解析機能はログインしているユーザーのみ利用可能です。
-              共有URLを知っているだけでログインしていないユーザーはAIによる局面解析機能を利用することはできません。
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="warning-box">
-      <h4 class="title is-4 has-text-danger">
-        <span class="icon-text">
-          <span class="icon">
-            <i class="fas fa-exclamation-triangle"></i>
-          </span>
-          <span>アカウント作成について</span>
-        </span>
-      </h4>
-      <p class="has-text-danger">
-        現在、管理者によってアカウントの新規作成はブロックされています。
+    <div class="section-header">
+      <h2 class="section-title">なぜKifu Proなのか</h2>
+      <p class="section-subtitle">
+        将棋愛好家とプロ棋士のために設計された、最先端の機能をご紹介します
       </p>
     </div>
 
-    <div class="box mt-6">
-      <h3 class="title is-4">
-        <span class="icon-text">
-          <span class="icon">
-            <i class="fas fa-info-circle"></i>
-          </span>
-          <span>利用方法</span>
-        </span>
-      </h3>
-      
-      <div class="columns is-multiline">
-        <div class="column is-one-third">
-          <div class="has-text-centered">
-            <p class="mb-4">
-              <span class="step-number">1</span>
-              <span class="title is-5">アカウント作成</span>
-            </p>
-            <p>まずはアカウントを作成してください</p>
-          </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i data-lucide="brain" class="feature-icon"></i>
         </div>
-        
-        <div class="column is-one-third">
-          <div class="has-text-centered">
-            <p class="mb-4">
-              <span class="step-number">2</span>
-              <span class="title is-5">棋譜登録</span>
-            </p>
-            <p>棋譜を簡単に登録できます</p>
-          </div>
+        <h3 class="feature-title">AI駆動分析</h3>
+        <p class="feature-description">
+          最新のAIエンジンによる詳細な局面解析で、あなたの棋力向上をサポート。
+          手の評価値や推奨手順を瞬時に表示します。
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i data-lucide="database" class="feature-icon"></i>
         </div>
-        
-        <div class="column is-one-third">
-          <div class="has-text-centered">
-            <p class="mb-4">
-              <span class="step-number">3</span>
-              <span class="title is-5">共有機能</span>
-            </p>
-            <p>URLで簡単に棋譜を共有</p>
-          </div>
+        <h3 class="feature-title">インテリジェント管理</h3>
+        <p class="feature-description">
+          タグシステムと検索機能で、数千の棋譜から目的の対局を瞬時に発見。
+          戦略パターンや相手別の成績も一目で把握できます。
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i data-lucide="share-2" class="feature-icon"></i>
+        </div>
+        <h3 class="feature-title">シームレス共有</h3>
+        <p class="feature-description">
+          美しいインターフェースで棋譜を共有。研究仲間や師匠との
+          効果的なコミュニケーションを実現します。
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i data-lucide="trending-up" class="feature-icon"></i>
+        </div>
+        <h3 class="feature-title">成長の可視化</h3>
+        <p class="feature-description">
+          対局データの統計分析により、あなたの強化すべきポイントと
+          成長の軌跡を明確に把握できます。
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i data-lucide="shield-check" class="feature-icon"></i>
+        </div>
+        <h3 class="feature-title">セキュアな環境</h3>
+        <p class="feature-description">
+          エンタープライズレベルのセキュリティで、あなたの貴重な
+          棋譜データを安全に保護します。
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i data-lucide="smartphone" class="feature-icon"></i>
+        </div>
+        <h3 class="feature-title">どこでもアクセス</h3>
+        <p class="feature-description">
+          レスポンシブデザインにより、PC、タブレット、スマートフォン
+          どのデバイスからでも最適な体験を提供します。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it Works Section -->
+<section class="how-it-works-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">始め方</h2>
+      <p class="section-subtitle">3つのステップで、あなたの将棋ライフを変革しましょう</p>
+    </div>
+
+    <div class="steps-container">
+      <div class="step-item">
+        <div class="step-number">01</div>
+        <div class="step-content">
+          <h3 class="step-title">アカウント作成</h3>
+          <p class="step-description">
+            簡単な登録プロセスで、すぐにKifu Proの世界へ。
+            セキュアな認証システムで安心してご利用いただけます。
+          </p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">02</div>
+        <div class="step-content">
+          <h3 class="step-title">棋譜の登録</h3>
+          <p class="step-description">
+            直感的なインターフェースで棋譜を登録。
+            対局情報や戦略メモも併せて記録できます。
+          </p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">03</div>
+        <div class="step-content">
+          <h3 class="step-title">分析と成長</h3>
+          <p class="step-description">
+            AI分析で局面を深く理解し、統計データで
+            あなたの棋力向上を実感してください。
+          </p>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- Call to Action -->
+{% if not master.request.auth %}
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">今すぐ将棋の新次元を体験しよう</h2>
+      <p class="cta-description">
+        Kifu Proで、あなたの将棋人生を次のレベルへ
+      </p>
+      <div class="cta-actions">
+        <a href="{{ get_signup_url(master) }}" class="btn btn-primary btn-lg">
+          <i data-lucide="rocket" class="btn-icon"></i>
+          無料で始める
+        </a>
+      </div>
+      <p class="cta-note">※ 現在、新規アカウント作成は管理者により制限されています</p>
+    </div>
+  </div>
+</section>
+{% endif %}
 {% endblock content %}
 
 {% block extra_js %}
