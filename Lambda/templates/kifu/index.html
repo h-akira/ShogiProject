@@ -1,49 +1,317 @@
 {% extends 'base.html' %}
 {% block extra_css %}
+<style>
+.dashboard-page {
+  padding: var(--space-2xl) 0;
+  background: var(--bg-secondary);
+  min-height: calc(100vh - 72px);
+}
+
+.dashboard-header {
+  margin-bottom: var(--space-3xl);
+  text-align: center;
+}
+
+.user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  margin: 0 auto var(--space-lg);
+}
+
+.user-name {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.user-stats {
+  display: flex;
+  gap: var(--space-lg);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: var(--space-lg);
+}
+
+.stat-item {
+  text-align: center;
+  padding: var(--space-md);
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--primary);
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.recent-section {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-2xl);
+  margin-bottom: var(--space-2xl);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.section-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--primary);
+}
+
+.kifu-grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.kifu-card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.kifu-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+.kifu-title {
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  text-decoration: none;
+  margin-bottom: var(--space-sm);
+  display: block;
+  transition: color var(--transition-fast);
+}
+
+.kifu-title:hover {
+  color: var(--primary);
+}
+
+.kifu-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+.kifu-tags {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--gray-100);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.tag:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-3xl);
+  color: var(--text-secondary);
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  color: var(--gray-300);
+  margin: 0 auto var(--space-lg);
+}
+
+.quick-actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: var(--space-2xl);
+}
+
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+}
+
+.action-button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.action-button.secondary {
+  background: var(--gray-200);
+  color: var(--text-primary);
+}
+
+.action-button.secondary:hover {
+  background: var(--gray-300);
+}
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding: var(--space-lg) 0;
+  }
+  
+  .user-stats {
+    gap: var(--space-md);
+  }
+  
+  .recent-section {
+    padding: var(--space-lg);
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+</style>
 {% endblock extra_css %}
 
-{% block title %}ホーム{% endblock title %}
+{% block title %}{{ username }} - マイページ{% endblock title %}
 
 {% block content %}
-<div class="padding-all">
-  <h1 class="title is-1 has-text-centered">{{ username }}</h1>
-  {# {% for item in latest_update_items %} #}
-  {# <p> #}
-  {#   <a href="{{ reverse(master, 'kifu:detail', username=username, kid=item.kid) }}"> #}
-  {#     {{ item.slug }} #}
-  {#   </a> #}
-  {# </p> #}
-  {# {% endfor %} #}
-  <div class="card card-bordered">
-    <div class="card-content">
-      <h3 class="title is-3 has-text-centered">最近の更新</h3>
-      {% for item in latest_update_items %}
-      <h5 class="title is-5">
-        <a href="{{ reverse(master, 'kifu:detail', username=username, kid=item.kid) }}">
-          {{ item.slug }}
-        </a>
-      </h5>
-      <p>
-        (最終更新:{{ item.latest_update }})
-      </p>
-      {% if item.tags and item.tags|length > 0 %}
-      <div class="tags">
-        {% for tag in item.tags %}
-          <a href="{{ reverse(master, 'tag:detail', username=username, tid=tag.tid) }}">
-            <span class="tag is-info is-light">{{ tag.tname }}</span>
+<div class="dashboard-page">
+  <div class="container">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+      <div class="user-avatar">
+        {{ username[0]|upper }}
+      </div>
+      <h1 class="user-name">{{ username }}</h1>
+      
+      <div class="user-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ latest_update_items|length }}</span>
+          <span class="stat-label">棋譜</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">-</span>
+          <span class="stat-label">勝率</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">-</span>
+          <span class="stat-label">総対局数</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <a href="{{ reverse(master, 'kifu:create', username=username) }}" class="action-button">
+        <i data-lucide="plus-circle" style="width: 20px; height: 20px;"></i>
+        棋譜を登録
+      </a>
+      <a href="{{ reverse(master, 'kifu:explorer', username=username) }}" class="action-button secondary">
+        <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+        エクスプローラー
+      </a>
+      <a href="{{ reverse(master, 'tag:index', username=username) }}" class="action-button secondary">
+        <i data-lucide="tag" style="width: 20px; height: 20px;"></i>
+        タグ管理
+      </a>
+    </div>
+
+    <!-- Recent Updates -->
+    <div class="recent-section">
+      <h2 class="section-title">
+        <i data-lucide="clock" class="section-icon"></i>
+        最近の更新
+      </h2>
+
+      {% if latest_update_items %}
+      <div class="kifu-grid">
+        {% for item in latest_update_items %}
+        <div class="kifu-card">
+          <a href="{{ reverse(master, 'kifu:detail', username=username, kid=item.kid) }}" class="kifu-title">
+            {{ item.slug }}
           </a>
+          
+          <div class="kifu-meta">
+            <i data-lucide="calendar" style="width: 16px; height: 16px;"></i>
+            <span>最終更新: {{ item.latest_update }}</span>
+          </div>
+
+          {% if item.tags and item.tags|length > 0 %}
+          <div class="kifu-tags">
+            {% for tag in item.tags %}
+            <a href="{{ reverse(master, 'tag:detail', username=username, tid=tag.tid) }}" class="tag">
+              {{ tag.tname }}
+            </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
         {% endfor %}
       </div>
       {% else %}
-      <p>タグ: なし</p>
+      <div class="empty-state">
+        <i data-lucide="file-plus" class="empty-icon"></i>
+        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-sm); color: var(--text-primary);">まだ棋譜が登録されていません</h3>
+        <p>最初の棋譜を登録して、あなたの将棋の記録を始めましょう。</p>
+        <div style="margin-top: var(--space-lg);">
+          <a href="{{ reverse(master, 'kifu:create', username=username) }}" class="action-button">
+            <i data-lucide="plus-circle" style="width: 20px; height: 20px;"></i>
+            棋譜を登録
+          </a>
+        </div>
+      </div>
       {% endif %}
-      {% if not loop.last %}
-        <hr>
-      {% endif %}
-      {% endfor %}
     </div>
   </div>
 </div>
+{% endblock content %}
 {# <div class="padding-side"> #}
 {#   <div class="columns"> #}
 {#     <div class="column padding-side"> #}

@@ -3,88 +3,438 @@
 <script defer src="https://cdn.jsdelivr.net/npm/shogi-player@1.1.24"></script>
 <link rel="stylesheet" href="{{ static(master, 'css/shogi.css') }}">
 <link rel="stylesheet" href="{{ static(master, 'css/detail.css') }}">
+<style>
+.kifu-detail-page {
+  background: var(--bg-secondary);
+  min-height: calc(100vh - 72px);
+  padding: var(--space-2xl) 0;
+}
+
+.kifu-header {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-2xl);
+  margin-bottom: var(--space-2xl);
+}
+
+.kifu-title {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: var(--space-xl);
+  line-height: 1.2;
+}
+
+.kifu-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.meta-label {
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.meta-value {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.kifu-tags {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--gray-100);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.tag:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.memo-section {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-2xl);
+  margin-bottom: var(--space-2xl);
+}
+
+.memo-title {
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.memo-content {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: var(--text-primary);
+  border: 1px solid var(--gray-200);
+}
+
+.action-bar {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-2xl);
+}
+
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: white;
+  color: var(--text-primary);
+  text-decoration: none;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+}
+
+.action-button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.action-button.primary {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.action-button.primary:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  color: white;
+}
+
+.shogi-board-container {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-2xl);
+  margin-bottom: var(--space-2xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.shogi-board-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+
+.board-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.board-title {
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.board-controls {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.control-button {
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--gray-100);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.control-button:hover {
+  background: var(--gray-200);
+}
+
+.control-button.active {
+  background: var(--primary);
+  color: white;
+}
+
+.board-controls-section {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-2xl);
+}
+
+.control-group {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.board-control-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--gray-100);
+  color: var(--text-secondary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+  justify-content: center;
+}
+
+.board-control-btn:hover {
+  background: var(--gray-200);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.board-control-btn.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.board-control-btn.primary:hover {
+  background: var(--primary-dark);
+}
+
+.board-control-btn.secondary {
+  background: var(--accent);
+  color: white;
+}
+
+.board-control-btn.secondary:hover {
+  background: var(--accent-dark, #8b5cf6);
+}
+
+.board-control-btn.analyze {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.board-control-btn.analyze:hover {
+  background: linear-gradient(135deg, #e072e6 0%, #e84755 100%);
+}
+
+.kifu-text-section {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-2xl);
+  margin-bottom: var(--space-2xl);
+}
+
+.kifu-text-header {
+  margin-bottom: var(--space-lg);
+}
+
+.kifu-text-title {
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.kifu-text-container {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  overflow-x: auto;
+}
+
+.kifu-text {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 768px) {
+  .kifu-detail-page {
+    padding: var(--space-lg) 0;
+  }
+  
+  .kifu-header,
+  .memo-section,
+  .shogi-board-container {
+    padding: var(--space-lg);
+  }
+  
+  .kifu-meta {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  
+  .action-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+</style>
 {% endblock extra_css %}
 
-{% block title %}棋譜{% endblock title %}
+{% block title %}{{ slug }} - 棋譜詳細{% endblock title %}
 
 {% block content %}
-<div class="padding-all">
-  {% if type == 'normal' %}
-  <div class="card">
-    <div class="card-content">
-      <h3 class="title is-3 has-text-centered">{{ slug }}</h3>
-      <div class="columns">
-        <div class="column">
-          <div class="meta-info">
-            <label class="label">作成日時</label>
-            <p>{{ created }}</p>
-          </div>
-          <div class="meta-info">
-            <label class="label">最終更新</label>
-            <p>{{ latest_update }}</p>
-          </div>
-          {% if kifu_tags and kifu_tags|length > 0 %}
-          <div class="meta-info">
-            <label class="label">タグ</label>
-            <div class="tags">
-              {% for tag in kifu_tags %}
-                <a href="{{ reverse(master, 'tag:detail', username=username, tid=tag.tid) }}">
-                  <span class="tag is-info is-light">{{ tag.tname }}</span>
-                </a>
-              {% endfor %}
-            </div>
-          </div>
-          {% endif %}
+<div class="kifu-detail-page">
+  <div class="container">
+    {% if type == 'normal' %}
+    <!-- Kifu Header -->
+    <div class="kifu-header">
+      <h1 class="kifu-title">{{ slug }}</h1>
+      
+      <div class="kifu-meta">
+        <div class="meta-item">
+          <span class="meta-label">
+            <i data-lucide="calendar-plus" style="width: 16px; height: 16px;"></i>
+            作成日時
+          </span>
+          <span class="meta-value">{{ created }}</span>
         </div>
+        
+        <div class="meta-item">
+          <span class="meta-label">
+            <i data-lucide="clock" style="width: 16px; height: 16px;"></i>
+            最終更新
+          </span>
+          <span class="meta-value">{{ latest_update }}</span>
+        </div>
+        
+        {% if kifu_tags and kifu_tags|length > 0 %}
+        <div class="meta-item">
+          <span class="meta-label">
+            <i data-lucide="tag" style="width: 16px; height: 16px;"></i>
+            タグ
+          </span>
+          <div class="kifu-tags">
+            {% for tag in kifu_tags %}
+            <a href="{{ reverse(master, 'tag:detail', username=username, tid=tag.tid) }}" class="tag">
+              {{ tag.tname }}
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
       </div>
     </div>
-  </div>
-  {% endif %}
-
-  {% if memo %}
-  <div class="card">
-    <div class="card-content">
-      <h4 class="title is-4">メモ</h4>
-      <div class="content">
-        <pre class="kifu-text">{{ memo }}</pre>
-      </div>
-    </div>
-  </div>
-  {% endif %}
-
-  {% if type == 'normal' %}
-  <div class="action-buttons field is-grouped">
-    <p class="control">
-      <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="button is-light">
-        <span>編集</span>
-      </a>
-    </p>
-    {% if not share %}
-    <span hidden>
     {% endif %}
-    <p class="control">
-      <a id="share-link" href="{{ reverse(master, 'kifu:share', share_code=share_code) }}" class="button is-light is-info">
-        <span>共有ページ</span>
+
+    {% if memo %}
+    <!-- Memo Section -->
+    <div class="memo-section">
+      <h2 class="memo-title">
+        <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+        メモ
+      </h2>
+      <div class="memo-content">{{ memo }}</div>
+    </div>
+    {% endif %}
+
+    {% if type == 'normal' %}
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <a href="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" class="action-button">
+        <i data-lucide="edit" style="width: 16px; height: 16px;"></i>
+        編集
       </a>
-    </p>
-    <p class="control">
-      <button id="copy-button" class="button is-info is-light">
-        <span>共有URLをコピー</span>
+      
+      {% if not share %}
+      <div style="display: none;">
+      {% endif %}
+      <a id="share-link" href="{{ reverse(master, 'kifu:share', share_code=share_code) }}" class="action-button primary">
+        <i data-lucide="share-2" style="width: 16px; height: 16px;"></i>
+        共有ページ
+      </a>
+      
+      <button id="copy-button" class="action-button">
+        <i data-lucide="copy" style="width: 16px; height: 16px;"></i>
+        URLをコピー
       </button>
-    </p>
-    {% if not share %}
-    </span>
+      {% if not share %}
+      </div>
+      {% endif %}
+    </div>
     {% endif %}
-  </div>
-  {% endif %}
 
-  <div class="card shogi-player-container">
-    <div class="card-content">
+    <!-- Shogi Board -->
+    <div class="shogi-board-container">
+      <div class="board-header">
+        <h2 class="board-title">
+          <i data-lucide="chess-king" style="width: 20px; height: 20px;"></i>
+          棋譜再生
+        </h2>
+      </div>
+      
       <shogi-player-wc
         id="sp"
-        sp_body="
-          {{ kifu }}
-        "
+        sp_body="{{ kifu }}"
         sp_turn="0"
         sp_controller="true"
         sp_slider="true"
@@ -93,39 +443,47 @@
         sp_overlay_nav="true"
       ></shogi-player-wc>
     </div>
-  </div>
   
-  <div class="field">
-    {# <button id="view-button" class="button is-info is-fullwidth"> #}
-    <button id="view-button" class="button is-info">
-      <span>本筋</span>
-    </button>
-    <button id="play-button" class="button is-light">
-      <span>継盤</span>
-    </button>
-  </div>
-
-  <div class="field">
-    <button id="viewpoint-button" class="button is-info is-light is-fullwidth">
-      <span>盤面反転</span>
-    </button>
-  </div>
-
-  {% if master.request.auth %}
-  <div class="field">
-    <button id="analyze-button" class="button is-info is-light is-fullwidth">
-      <span>解析</span>
-    </button>
-  </div>
-  {% endif %}
-
-  <div class="card">
-    <div class="card-content">
-      <h4 class="title is-4">棋譜</h4>
-      <pre class="kifu-text">{{ kifu }}</pre>
+      <!-- Board Controls -->
+      <div class="board-controls-section">
+        <div class="control-group">
+          <button id="view-button" class="board-control-btn primary">
+            <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+            本筋
+          </button>
+          <button id="play-button" class="board-control-btn">
+            <i data-lucide="play" style="width: 16px; height: 16px;"></i>
+            継盤
+          </button>
+        </div>
+        
+        <button id="viewpoint-button" class="board-control-btn secondary">
+          <i data-lucide="rotate-3d" style="width: 16px; height: 16px;"></i>
+          盤面反転
+        </button>
+        
+        {% if master.request.auth %}
+        <button id="analyze-button" class="board-control-btn analyze">
+          <i data-lucide="zap" style="width: 16px; height: 16px;"></i>
+          解析
+        </button>
+        {% endif %}
+      </div>
+      
+      <!-- Kifu Text Section -->
+      <div class="kifu-text-section">
+        <div class="kifu-text-header">
+          <h3 class="kifu-text-title">
+            <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+            棋譜データ
+          </h3>
+        </div>
+        <div class="kifu-text-container">
+          <pre class="kifu-text">{{ kifu }}</pre>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  </div>\n</div>
 {% endblock content %}
 
 {% block extra_js %}
