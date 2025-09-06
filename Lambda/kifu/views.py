@@ -319,10 +319,16 @@ def explorer(master, username, slug_base64=None):
 
 @login_required
 def create(master, username):
+  table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
+  # 自分のタグ一覧を取得
+  tag_response = table.query(
+      KeyConditionExpression=Key('pk').eq(f'tag#uname#{username}')
+  )
+  all_tags = [{'tname': item['tname'], 'tid': item['sk'].split('#')[1]} for item in tag_response['Items']]
+  
   if master.request.method == 'POST':
     form_data = master.request.get_form_data()
     master.logger.debug(form_data)
-    table = boto3.resource('dynamodb').Table(MAIN_TABLE_NAME)
     now = datetime.datetime.now(ZoneInfo(master.settings.TIMEZONE))
     now_str = now.strftime("%Y-%m-%d %H:%M:%S")
     action = form_data["action"]
@@ -332,7 +338,9 @@ def create(master, username):
       context = {
         "type": "create",
         "form": form,
-        "error_message": "Kifu limit exceeded"
+        "error_message": "Kifu limit exceeded",
+        "all_tags": all_tags,
+        "kifu_tag_tids": set()
       }
       return render(master, 'kifu/edit.html', context)
     error_message = _slug_format_checker_return_error_message(form.data['slug'])
@@ -340,14 +348,18 @@ def create(master, username):
       context = {
         "type": "create",
         "form": form,
-        "error_message": error_message
+        "error_message": error_message,
+        "all_tags": all_tags,
+        "kifu_tag_tids": set()
       }
       return render(master, 'kifu/edit.html', context)
     if _check_slug_exists(master, table, username, form.data['slug']+".kif"):
       context = {
         "type": "create",
         "form": form,
-        "error_message": "Slug already exists"
+        "error_message": "Slug already exists",
+        "all_tags": all_tags,
+        "kifu_tag_tids": set()
       }
       return render(master, 'kifu/edit.html', context)
     kid = gen_code(KID_LENGTH)
@@ -370,11 +382,33 @@ def create(master, username):
       response = table.put_item(
         Item=Item
       )
+      
+      # タグ付与処理
+      tids_raw = form_data.get('tag_tids', [])
+      if isinstance(tids_raw, str):
+          checked_tids = set([tids_raw])
+      else:
+          checked_tids = set(tids_raw)
+      master.logger.debug(f"Checked tids for new kifu: {checked_tids}")
+      
+      # 選択されたタグを棋譜に付与
+      for tag in all_tags:
+          if tag['tid'] in checked_tids:
+              table.put_item(Item={
+                  'pk': f'tag#kid#{kid}',
+                  'sk': f'tid#{tag['tid']}',
+                  'clsi_sk': f'tname#{tag['tname']}',
+                  'tname': tag['tname'],
+                  'latest_update': now_str
+              })
+      
       if action == "continue":
         context = {
           "type": "create",
           "form": form,
-          "error_message": None
+          "error_message": None,
+          "all_tags": all_tags,
+          "kifu_tag_tids": set()
         }
         return redirect(master, "kifu:edit", username=username, kid=kid)
       elif action == "end":
@@ -391,7 +425,9 @@ def create(master, username):
       context = {
         "type": "create",
         "form": form,
-        "error_message": error_message
+        "error_message": error_message,
+        "all_tags": all_tags,
+        "kifu_tag_tids": set()
       }
       return render(master, 'kifu/edit.html', context)
   elif master.request.method == 'GET':
@@ -399,7 +435,9 @@ def create(master, username):
     context = {
       "type": "create",
       "form": form,
-      "error_message": None
+      "error_message": None,
+      "all_tags": all_tags,
+      "kifu_tag_tids": set()
     }
     return render(master, 'kifu/edit.html', context)
   else:
