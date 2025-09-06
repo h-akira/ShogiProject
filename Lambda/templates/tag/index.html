@@ -1,30 +1,69 @@
 {% extends 'base.html' %}
 {% block extra_css %}
+<link rel="stylesheet" href="{{ static(master, 'css/tag.css') }}">
 {% endblock extra_css %}
 
-{% block title %}ホーム{% endblock title %}
+{% block title %}タグ管理 - {{ username }}{% endblock title %}
 
 {% block content %}
-<div class="padding-all">
-  <h1 class="title is-1 has-text-centered">タグ</h1>
-  <a href="{{ reverse(master, 'tag:create', username=username) }}" class="button is-info mb-4">新規作成</a>
-  {% if tags %}
-    <ul>
-      {% for tag in tags %}
-        <li class="mb-2">
-          <a href="{{ reverse(master, 'tag:detail', username=username, tid=tag.tid) }}">
-            <span class="tag is-info is-light">{{ tag.tname }}</span>
+<div class="tag-management-page">
+  <div class="container">
+    <!-- Tag Header -->
+    <div class="tag-header">
+      <h1 class="tag-title">
+        <i data-lucide="tags" style="width: 28px; height: 28px;"></i>
+        タグ管理
+      </h1>
+      
+      <a href="{{ reverse(master, 'tag:create', username=username) }}" class="create-tag-btn">
+        <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+        新しいタグを作成
+      </a>
+    </div>
+
+    <!-- Tags Content -->
+    <div class="tags-content">
+      {% if tags %}
+      <div class="tags-grid">
+        {% for tag in tags %}
+        <div class="tag-item">
+          <div class="tag-info">
+            <a href="{{ reverse(master, 'tag:detail', username=username, tid=tag.tid) }}" class="tag-badge">
+              <i data-lucide="tag" style="width: 14px; height: 14px;"></i>
+              {{ tag.tname }}
+            </a>
+          </div>
+          
+          <div class="tag-actions">
+            <a href="{{ reverse(master, 'tag:edit', username=username, tid=tag.tid) }}" class="tag-action-btn edit">
+              <i data-lucide="edit-2" style="width: 14px; height: 14px;"></i>
+              編集
+            </a>
+            <a href="{{ reverse(master, 'tag:delete', username=username, tid=tag.tid) }}" 
+               onclick="return confirm('タグ「{{ tag.tname }}」を削除しますか？\n付与されている棋譜からも削除されます。');" 
+               class="tag-action-btn delete">
+              <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+              削除
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <i data-lucide="tag" class="empty-icon"></i>
+        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-sm); color: var(--text-primary);">タグがありません</h3>
+        <p>最初のタグを作成して、棋譜を整理しましょう。</p>
+        <div style="margin-top: var(--space-lg);">
+          <a href="{{ reverse(master, 'tag:create', username=username) }}" class="create-tag-btn">
+            <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+            タグを作成
           </a>
-          <a href="{{ reverse(master, 'tag:edit', username=username, tid=tag.tid) }}" class="button is-small is-light ml-2">編集</a>
-          <a href="{{ reverse(master, 'tag:delete', username=username, tid=tag.tid) }}" 
-             onclick="return confirm('タグ「{{ tag.tname }}」を削除しますか？\n付与されている棋譜からも削除されます。');" 
-             class="button is-small is-danger is-light ml-1">削除</a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>タグがありません。</p>
-  {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
 </div>
 {% endblock content %}
 

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ static(master, 'css/custom.css') }}">
+    <link rel="stylesheet" href="{{ static(master, 'css/main.css') }}">
     
     <!-- Extra CSS -->
     {% block extra_css %}{% endblock extra_css %}
@@ -88,14 +88,9 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <script src="{{ static(master, 'js/menu.js') }}"></script>
-    <script src="{{ static(master, 'js/sidebar.js') }}"></script>
+    <script src="{{ static(master, 'js/base.js') }}"></script>
     
     <!-- Extra JavaScript -->
     {% block extra_js %}{% endblock extra_js %}
-    
-    <!-- Initialize Lucide Icons -->
-    <script>
-      lucide.createIcons();
-    </script>
   </body>
 </html>

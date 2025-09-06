@@ -1,75 +1,99 @@
 {% extends 'base.html' %}
-{% block title %}タグ詳細 - {{ tag_name }}{% endblock title %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ static(master, 'css/tag.css') }}">
+{% endblock extra_css %}
+
+{% block title %}タグ詳細 - {{ tag_name }} - {{ username }}{% endblock title %}
+
 {% block content %}
-<div class="padding-all">
-  <div class="card">
-    <div class="card-content">
-      <h1 class="title is-2">
-        <span class="tag is-info is-large">{{ tag_name }}</span>
-      </h1>
-      
-      <div class="columns">
-        <div class="column">
-          <div class="meta-info">
-            <label class="label">作成日時</label>
-            <p>{{ tag_created }}</p>
-          </div>
-          <div class="meta-info">
-            <label class="label">最終更新</label>
-            <p>{{ tag_latest_update }}</p>
-          </div>
-          <div class="meta-info">
-            <label class="label">付与棋譜数</label>
-            <p>{{ kifu_count }}件</p>
-          </div>
+<div class="tag-detail-page">
+  <div class="container">
+    <!-- Tag Info Card -->
+    <div class="tag-info-card">
+      <div class="tag-header">
+        <div class="tag-name-badge">
+          <i data-lucide="tag" style="width: 24px; height: 24px;"></i>
+          {{ tag_name }}
         </div>
       </div>
       
-      <div class="field is-grouped">
-        <div class="control">
-          <a href="{{ reverse(master, 'tag:edit', username=username, tid=tid) }}" class="button is-info">編集</a>
+      <div class="tag-meta">
+        <div class="meta-item">
+          <div class="meta-label">
+            <i data-lucide="calendar-plus" style="width: 16px; height: 16px;"></i>
+            作成日時
+          </div>
+          <div class="meta-value">{{ tag_created }}</div>
         </div>
-        <div class="control">
-          <a href="{{ reverse(master, 'tag:index', username=username) }}" class="button is-light">戻る</a>
+        <div class="meta-item">
+          <div class="meta-label">
+            <i data-lucide="clock" style="width: 16px; height: 16px;"></i>
+            最終更新
+          </div>
+          <div class="meta-value">{{ tag_latest_update }}</div>
         </div>
-        <div class="control">
-          <a href="{{ reverse(master, 'tag:delete', username=username, tid=tid) }}" 
-             onclick="return confirm('タグ「{{ tag_name }}」を削除しますか？\n付与されている棋譜からも削除されます。');" 
-             class="button is-danger is-light">削除</a>
+        <div class="meta-item">
+          <div class="meta-label">
+            <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
+            付与棋譜数
+          </div>
+          <div class="meta-value">{{ kifu_count }}件</div>
         </div>
+      </div>
+      
+      <div class="tag-actions">
+        <a href="{{ reverse(master, 'tag:edit', username=username, tid=tid) }}" class="tag-action-btn edit">
+          <i data-lucide="edit-2" style="width: 16px; height: 16px;"></i>
+          編集
+        </a>
+        <a href="{{ reverse(master, 'tag:index', username=username) }}" class="tag-action-btn back">
+          <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+          戻る
+        </a>
+        <a href="{{ reverse(master, 'tag:delete', username=username, tid=tid) }}" 
+           onclick="return confirm('タグ「{{ tag_name }}」を削除しますか？\n付与されている棋譜からも削除されます。');" 
+           class="tag-action-btn delete">
+          <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+          削除
+        </a>
       </div>
     </div>
-  </div>
 
-  {% if kifu_list and kifu_list|length > 0 %}
-  <div class="card">
-    <div class="card-content">
-      <h2 class="title is-4">このタグが付与されている棋譜</h2>
+    <!-- Kifu List Section -->
+    <div class="kifu-list-section">
+      <h2 class="kifu-list-title">
+        <i data-lucide="list" style="width: 20px; height: 20px;"></i>
+        このタグが付与されている棋譜
+      </h2>
       
-      {% for kifu in kifu_list %}
-      <div class="box">
-        <h3 class="title is-5">
-          <a href="{{ reverse(master, 'kifu:detail', username=username, kid=kifu.kid) }}">
+      {% if kifu_list and kifu_list|length > 0 %}
+      <div class="kifu-grid">
+        {% for kifu in kifu_list %}
+        <div class="kifu-card">
+          <a href="{{ reverse(master, 'kifu:detail', username=username, kid=kifu.kid) }}" class="kifu-title">
             {{ kifu.slug }}
           </a>
-        </h3>
-        <p class="subtitle is-6">
-          作成: {{ kifu.created }} | 最終更新: {{ kifu.latest_update }}
-        </p>
+          <div class="kifu-meta">
+            <div class="kifu-meta-item">
+              <i data-lucide="calendar-plus" style="width: 14px; height: 14px;"></i>
+              <span>作成: {{ kifu.created }}</span>
+            </div>
+            <div class="kifu-meta-item">
+              <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
+              <span>最終更新: {{ kifu.latest_update }}</span>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
       </div>
-      {% if not loop.last %}
-        <hr>
+      {% else %}
+      <div class="empty-kifu-state">
+        <i data-lucide="file-x" class="empty-kifu-icon"></i>
+        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-sm); color: var(--text-primary);">棋譜が見つかりません</h3>
+        <p>このタグが付与されている棋譜はまだありません。</p>
+      </div>
       {% endif %}
-      {% endfor %}
     </div>
   </div>
-  {% else %}
-  <div class="card">
-    <div class="card-content">
-      <h2 class="title is-4">このタグが付与されている棋譜</h2>
-      <p>このタグが付与されている棋譜はありません。</p>
-    </div>
-  </div>
-  {% endif %}
 </div>
 {% endblock content %}

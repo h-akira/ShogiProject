@@ -1,32 +1,58 @@
 {% extends 'base.html' %}
-{% block title %}タグ編集{% endblock title %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ static(master, 'css/tag.css') }}">
+{% endblock extra_css %}
+
+{% block title %}タグ編集 - {{ username }}{% endblock title %}
+
 {% block content %}
-<div class="padding-all">
-  <h1 class="title is-2">タグ編集</h1>
-  <form method="post">
-    {{ form.csrf_token }}
-    <div class="field">
-      <label class="label">タグ名</label>
-      <div class="control">
-        {{ form.slug(class_="input", placeholder="例: 四間飛車") }}
+<div class="tag-edit-page">
+  <div class="container">
+    <div class="tag-edit-container">
+      <div class="tag-edit-card">
+        <div class="tag-edit-header">
+          <h1 class="tag-edit-title">
+            <i data-lucide="edit-3" style="width: 24px; height: 24px;"></i>
+            タグを編集
+          </h1>
+          <p class="tag-edit-subtitle">
+            タグ名を変更できます
+          </p>
+        </div>
+        
+        <form method="post">
+          {{ form.csrf_token }}
+          
+          <div class="form-group">
+            <label class="form-label">タグ名</label>
+            {{ form.slug(class="form-input" + (" error" if error_message else ""), placeholder="例: 四間飛車") }}
+            {% if error_message %}
+            <div class="form-error">
+              <i data-lucide="alert-circle" style="width: 14px; height: 14px;"></i>
+              {{ error_message }}
+            </div>
+            {% endif %}
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="save-btn">
+              <i data-lucide="save" style="width: 16px; height: 16px;"></i>
+              変更を保存
+            </button>
+            <a href="{{ reverse(master, 'tag:index', username=username) }}" class="cancel-btn">
+              <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+              戻る
+            </a>
+            <a href="{{ reverse(master, 'tag:delete', username=username, tid=tid) }}" 
+               onclick="return confirm('このタグを削除しますか？\n付与されている棋譜からも削除されます。');" 
+               class="delete-btn">
+              <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+              削除
+            </a>
+          </div>
+        </form>
       </div>
     </div>
-    {% if error_message %}
-      <p class="help is-danger">{{ error_message }}</p>
-    {% endif %}
-    <div class="field is-grouped">
-      <div class="control">
-        <button type="submit" class="button is-info">保存</button>
-      </div>
-      <div class="control">
-        <a href="{{ reverse(master, 'tag:index', username=username) }}" class="button is-light">戻る</a>
-      </div>
-      <div class="control">
-        <a href="{{ reverse(master, 'tag:delete', username=username, tid=tid) }}" 
-           onclick="return confirm('このタグを削除しますか？\n付与されている棋譜からも削除されます。');" 
-           class="button is-danger is-light">削除</a>
-      </div>
-    </div>
-  </form>
+  </div>
 </div>
 {% endblock content %}

@@ -1,21 +1,52 @@
 {% extends 'base.html' %}
-{% block title %}タグ作成{% endblock title %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ static(master, 'css/tag.css') }}">
+{% endblock extra_css %}
+
+{% block title %}タグ作成 - {{ username }}{% endblock title %}
+
 {% block content %}
-<div class="padding-all">
-  <h1 class="title is-2">タグ作成</h1>
-  <form method="post">
-    {{ form.csrf_token }}
-    <div class="field">
-      <label class="label">タグ名</label>
-      <div class="control">
-        {{ form.slug(class_="input", placeholder="例: 四間飛車") }}
+<div class="tag-create-page">
+  <div class="container">
+    <div class="tag-create-container">
+      <div class="tag-create-card">
+        <div class="tag-create-header">
+          <h1 class="tag-create-title">
+            <i data-lucide="tag" style="width: 24px; height: 24px;"></i>
+            新しいタグを作成
+          </h1>
+          <p class="tag-create-subtitle">
+            棋譜を分類するためのタグを作成します
+          </p>
+        </div>
+        
+        <form method="post">
+          {{ form.csrf_token }}
+          
+          <div class="form-group">
+            <label class="form-label">タグ名</label>
+            {{ form.slug(class="form-input" + (" error" if error_message else ""), placeholder="例: 四間飛車") }}
+            {% if error_message %}
+            <div class="form-error">
+              <i data-lucide="alert-circle" style="width: 14px; height: 14px;"></i>
+              {{ error_message }}
+            </div>
+            {% endif %}
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="create-btn">
+              <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+              タグを作成
+            </button>
+            <a href="{{ reverse(master, 'tag:index', username=username) }}" class="cancel-btn">
+              <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+              戻る
+            </a>
+          </div>
+        </form>
       </div>
     </div>
-    {% if error_message %}
-      <p class="help is-danger">{{ error_message }}</p>
-    {% endif %}
-    <button type="submit" class="button is-info">作成</button>
-    <a href="{{ reverse(master, 'tag:index', username=username) }}" class="button is-light">戻る</a>
-  </form>
+  </div>
 </div>
 {% endblock content %}
