@@ -113,20 +113,20 @@ document.getElementById("play-button").addEventListener("click", () => {
   el.setAttribute("sp_mode", "play");
   el.setAttribute("sp_turn", latestTurn.toString());
   // ボタンを強調表示
-  playButton.classList.add("is-info");
-  playButton.classList.remove("is-light");
-  viewButton.classList.remove("is-info");
-  viewButton.classList.add("is-light");
+  playButton.classList.add("primary");
+  viewButton.classList.remove("primary");
+  // 現在のモード表示を更新
+  document.getElementById("current-mode").textContent = "継盤";
 });
 
 document.getElementById("view-button").addEventListener("click", () => {
   el.setAttribute("sp_mode", "view");
   el.setAttribute("sp_turn", latestTurn.toString());
   // ボタンを強調表示
-  playButton.classList.remove("is-info");
-  playButton.classList.add("is-light");
-  viewButton.classList.add("is-info");
-  viewButton.classList.remove("is-light");
+  playButton.classList.remove("primary");
+  viewButton.classList.add("primary");
+  // 現在のモード表示を更新
+  document.getElementById("current-mode").textContent = "本筋";
 });
 
 document.getElementById("viewpoint-button").addEventListener("click", () => {
