@@ -1,57 +1,182 @@
 {% extends 'base.html' %}
 {% block extra_css %}
+<link rel="stylesheet" href="{{ static(master, 'css/kifu-edit.css') }}">
 {% endblock extra_css %}
 
-{% block title %}ホーム{% endblock title %}
+{% block title %}
+  {% if type == "create" %}棋譜登録 - {{ username }}
+  {% else %}棋譜編集 - {{ username }}{% endif %}
+{% endblock title %}
 
 {% block content %}
-{# <div class="padding-top-10 padding-bottom-10"> #}
-<div class="padding-all">
-  <h1 class="title is-1 has-text-centered">ホーム</h1>
-  {% if type == "edit" %}
-  <form class="" action="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" method="post">
-    {{ form.csrf_token }}
-    <button type="submit" name="action" value="end" class="button is-link">保存して終了</button>
-    <button type="submit" name="action" value="continue" class="button is-link">保存して継続</button>
-    <a href="{{ reverse(master, 'kifu:delete', username=master.request.username, kid=kid) }}" onclick="return confirm('本当に削除しますか？');" class="button is-danger is-light">削除</a>
-    <a href="{{ reverse(master, 'kifu:detail', username=username, kid=kid) }}" class="button is-link is-light">戻る</a>
-  {% elif type == "create" %}
-  <form class="" action="{{ reverse(master, 'kifu:create', username=master.request.username) }}" method="post">
-    {{ form.csrf_token }}
-    <button type="submit" name="action" value="end" class="button is-link">保存して終了</button>
-    <button type="submit" name="action" value="continue" class="button is-link">保存して継続</button>
-    <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="button is-link is-light">戻る</a>
-  {% endif %}
-    {% if error_message %}
-    <p>{{ error_message }}</p>
-    {% endif %}
-    <p>
-      スラッグ：{{ form.slug }}.kif
-      {% if type == "create" %}
-      <button type="button" id="generate-slug" class="button is-info is-small">
-        生成
-      </button>
-      {% endif %}
-    </p>
-    <p>共有　　：{{ form.share }}</p>
-    <p>先後　　：{{ form.first_or_second }}</p>
-    <p>勝敗　　：{{ form.result }}</p>
-    <p>棋譜</p>
-    <p>{{ form.kifu }}</p>
-    <p>メモ</p>
-    <p>{{ form.memo }}</p>
-    <div class="field">
-      <label class="label">タグ付与</label>
-      <div class="tags">
-        {% for tag in all_tags %}
-          <label class="checkbox mr-2">
-            <input type="checkbox" name="tag_tids" value="{{ tag.tid }}" {% if tag.tid in kifu_tag_tids %}checked{% endif %}>
-            <span class="tag is-info is-light">{{ tag.tname }}</span>
-          </label>
-        {% endfor %}
+<div class="kifu-edit-page">
+  <div class="container">
+    <div class="kifu-edit-container">
+      <!-- Header -->
+      <div class="kifu-edit-header">
+        <h1 class="kifu-edit-title">
+          {% if type == "create" %}
+            <i data-lucide="plus-circle" style="width: 24px; height: 24px;"></i>
+            新しい棋譜を登録
+          {% else %}
+            <i data-lucide="edit-3" style="width: 24px; height: 24px;"></i>
+            棋譜を編集
+          {% endif %}
+        </h1>
+        <p class="kifu-edit-subtitle">
+          {% if type == "create" %}
+            対局情報と棋譜データを入力してください
+          {% else %}
+            棋譜の内容を編集できます
+          {% endif %}
+        </p>
+      </div>
+
+      <!-- Form -->
+      <div class="kifu-form-card">
+        {% if type == "edit" %}
+        <form action="{{ reverse(master, 'kifu:edit', username=username, kid=kid) }}" method="post">
+        {% else %}
+        <form action="{{ reverse(master, 'kifu:create', username=master.request.username) }}" method="post">
+        {% endif %}
+          {{ form.csrf_token }}
+          
+          {% if error_message %}
+          <div class="error-message">
+            <i data-lucide="alert-circle" style="width: 16px; height: 16px;"></i>
+            {{ error_message }}
+          </div>
+          {% endif %}
+
+          <!-- Basic Information Section -->
+          <div class="form-section">
+            <h2 class="form-section-title">
+              <i data-lucide="info" style="width: 20px; height: 20px;"></i>
+              基本情報
+            </h2>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">スラッグ</label>
+                <div class="slug-input-group">
+                  {{ form.slug(class="form-input slug-input") }}
+                  <span class="slug-extension">.kif</span>
+                  {% if type == "create" %}
+                  <button type="button" id="generate-slug" class="generate-slug-btn">
+                    <i data-lucide="shuffle" style="width: 14px; height: 14px;"></i>
+                    生成
+                  </button>
+                  {% endif %}
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">共有設定</label>
+                <div class="checkbox-group">
+                  {{ form.share(class="checkbox-input") }}
+                  <span>他のユーザーに公開する</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">先後</label>
+                {{ form.first_or_second(class="form-select") }}
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">勝敗</label>
+                {{ form.result(class="form-select") }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Kifu Data Section -->
+          <div class="form-section">
+            <h2 class="form-section-title">
+              <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+              棋譜データ
+            </h2>
+            
+            <div class="form-group">
+              <label class="form-label">棋譜（KIF形式）</label>
+              {{ form.kifu(class="form-textarea", placeholder="棋譜データを入力してください...") }}
+            </div>
+          </div>
+
+          <!-- Memo Section -->
+          <div class="form-section">
+            <h2 class="form-section-title">
+              <i data-lucide="message-square" style="width: 20px; height: 20px;"></i>
+              メモ
+            </h2>
+            
+            <div class="form-group">
+              <label class="form-label">メモ・感想</label>
+              {{ form.memo(class="form-textarea", placeholder="対局の感想や分析メモを入力してください...") }}
+            </div>
+          </div>
+
+          <!-- Tags Section -->
+          {% if all_tags %}
+          <div class="form-section">
+            <h2 class="form-section-title">
+              <i data-lucide="tags" style="width: 20px; height: 20px;"></i>
+              タグ付与
+            </h2>
+            
+            <div class="tag-selection">
+              {% for tag in all_tags %}
+              <div class="tag-checkbox">
+                <input type="checkbox" name="tag_tids" value="{{ tag.tid }}" 
+                       id="tag_{{ tag.tid }}" 
+                       {% if tag.tid in kifu_tag_tids %}checked{% endif %}>
+                <label for="tag_{{ tag.tid }}" class="tag-label">
+                  <i data-lucide="tag" style="width: 12px; height: 12px;"></i>
+                  {{ tag.tname }}
+                </label>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <button type="submit" name="action" value="end" class="save-btn">
+              <i data-lucide="save" style="width: 16px; height: 16px;"></i>
+              保存して終了
+            </button>
+            
+            <button type="submit" name="action" value="continue" class="save-continue-btn">
+              <i data-lucide="edit" style="width: 16px; height: 16px;"></i>
+              保存して継続
+            </button>
+            
+            {% if type == "edit" %}
+            <a href="{{ reverse(master, 'kifu:detail', username=username, kid=kid) }}" class="cancel-btn">
+              <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+              戻る
+            </a>
+            
+            <a href="{{ reverse(master, 'kifu:delete', username=master.request.username, kid=kid) }}" 
+               onclick="return confirm('本当に削除しますか？');" 
+               class="delete-btn">
+              <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+              削除
+            </a>
+            {% else %}
+            <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="cancel-btn">
+              <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+              戻る
+            </a>
+            {% endif %}
+          </div>
+        </form>
       </div>
     </div>
-  </form>
+  </div>
 </div>
 {% endblock content %}
 
