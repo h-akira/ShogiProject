@@ -115,8 +115,6 @@ document.getElementById("play-button").addEventListener("click", () => {
   // ボタンを強調表示
   playButton.classList.add("primary");
   viewButton.classList.remove("primary");
-  // 現在のモード表示を更新
-  document.getElementById("current-mode").textContent = "継盤";
 });
 
 document.getElementById("view-button").addEventListener("click", () => {
@@ -125,8 +123,6 @@ document.getElementById("view-button").addEventListener("click", () => {
   // ボタンを強調表示
   playButton.classList.remove("primary");
   viewButton.classList.add("primary");
-  // 現在のモード表示を更新
-  document.getElementById("current-mode").textContent = "本筋";
 });
 
 document.getElementById("viewpoint-button").addEventListener("click", () => {

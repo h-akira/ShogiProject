@@ -222,34 +222,6 @@
   margin-bottom: var(--space-2xl);
 }
 
-.current-mode-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-lg);
-  padding: var(--space-md);
-  background: var(--gray-25);
-  border-radius: var(--radius-md);
-  border: 2px solid var(--primary);
-}
-
-.mode-label {
-  font-size: 0.875rem;
-  font-weight: var(--font-weight-medium);
-  color: var(--text-secondary);
-}
-
-.mode-value {
-  font-size: 1rem;
-  font-weight: var(--font-weight-bold);
-  color: var(--primary);
-  padding: var(--space-xs) var(--space-sm);
-  background: var(--primary);
-  color: white;
-  border-radius: var(--radius-sm);
-}
-
 .control-group {
   display: flex;
   gap: var(--space-sm);
@@ -475,10 +447,6 @@
   
       <!-- Board Controls -->
       <div class="board-controls-section">
-        <div class="current-mode-indicator">
-          <span class="mode-label">現在のモード:</span>
-          <span id="current-mode" class="mode-value">本筋</span>
-        </div>
         <div class="control-group">
           <button id="view-button" class="board-control-btn primary">
             <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
