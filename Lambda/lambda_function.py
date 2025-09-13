@@ -25,7 +25,7 @@ def lambda_handler(event, context):
 def main(master):
   from hads.authenticate import set_auth_by_cookie, add_set_cookie_to_header
   set_auth_by_cookie(master)
-  view, kwargs = master.router.path2view(master.request.path)
+  view, kwargs = master.get_view(master.request.path)
   response = view(master, **kwargs)
   
   # Cookie処理前のログ
@@ -51,7 +51,7 @@ def use_mock(master):
   set_dynamodb_data()
   set_ssm_data()
   set_auth_by_cookie(master)
-  view, kwargs = master.router.path2view(master.request.path)
+  view, kwargs = master.get_view(master.request.path)
   response = view(master, **kwargs)
   
   # Cookie処理前のログ
