@@ -1,84 +1,310 @@
 {% extends 'base.html' %}
 
-{% block title %}メール確認 - 将棋プロジェクト{% endblock title %}
+{% block title %}メール確認 - Kifu Pro{% endblock title %}
+
+{% block extra_css %}
+<style>
+.auth-page {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+}
+
+.auth-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.auth-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+.auth-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: var(--space-3xl);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.auth-logo {
+  font-size: 2rem;
+  margin-bottom: var(--space-md);
+  color: var(--primary);
+}
+
+.auth-title {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.auth-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.verify-instructions {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  text-align: center;
+}
+
+.verify-instructions .icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-md);
+  display: block;
+}
+
+.verify-instructions p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.form-group {
+  margin-bottom: var(--space-lg);
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--space-md);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: all var(--transition-fast);
+  background: var(--bg-primary);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.form-input.error {
+  border-color: var(--error);
+}
+
+.verification-code-input {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.1em;
+}
+
+.form-error {
+  font-size: 0.75rem;
+  color: var(--error);
+  margin-top: var(--space-xs);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.alert {
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  margin-bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.alert-danger {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.alert-success {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.auth-submit {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.auth-submit:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.auth-submit:active {
+  transform: translateY(0);
+}
+
+.auth-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  text-align: center;
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--gray-200);
+}
+
+.auth-link {
+  text-decoration: none;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.auth-link:hover {
+  color: var(--primary-dark);
+}
+
+.auth-link.secondary {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 480px) {
+  .auth-container {
+    padding: var(--space-md);
+  }
+  
+  .auth-card {
+    padding: var(--space-xl);
+  }
+}
+</style>
+{% endblock extra_css %}
 
 {% block content %}
-<section class="section">
-    <div class="container">
-        <div class="columns is-centered">
-            <div class="column is-half">
-                <div class="card">
-                    <header class="card-header">
-                        <p class="card-header-title">
-                            メールアドレス確認
-                        </p>
-                    </header>
-                    <div class="card-content">
-                        {% if error %}
-                        <div class="notification is-danger">
-                            {{ error }}
-                        </div>
-                        {% endif %}
-                        
-                        {% if message %}
-                        <div class="notification is-success">
-                            {{ message }}
-                        </div>
-                        {% endif %}
-                        
-                        <p class="mb-4">
-                            メールアドレスに送信された確認コードを入力してください。
-                        </p>
-                        
-                        <form method="post">
-                            <div class="field">
-                                <label class="label">{{ form.username.label }}</label>
-                                <div class="control">
-                                    {{ form.username(class="input") }}
-                                </div>
-                                {% if form.username.errors %}
-                                <div class="help is-danger">
-                                    {% for error in form.username.errors %}
-                                    {{ error }}
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="field">
-                                <label class="label">{{ form.code.label }}</label>
-                                <div class="control">
-                                    {{ form.code(class="input") }}
-                                </div>
-                                {% if form.code.errors %}
-                                <div class="help is-danger">
-                                    {% for error in form.code.errors %}
-                                    {{ error }}
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="field">
-                                <div class="control">
-                                    <button type="submit" class="button is-primary is-fullwidth">
-                                        確認
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <footer class="card-footer">
-                        <a href="{{ get_login_url(master) }}" class="card-footer-item">
-                            ログイン
-                        </a>
-                        <a href="{{ reverse(master, 'home') }}" class="card-footer-item">
-                            ホームに戻る
-                        </a>
-                    </footer>
-                </div>
-            </div>
+<div class="auth-page">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">📧</div>
+        <h1 class="auth-title">メールアドレス確認</h1>
+        <p class="auth-subtitle">アカウント登録を完了するために、<br>確認コードを入力してください</p>
+      </div>
+
+      <div class="verify-instructions">
+        <span class="icon">✉️</span>
+        <p>
+          登録されたメールアドレスに6桁の確認コードを送信しました。<br>
+          メールボックスをご確認の上、コードを入力してください。
+        </p>
+      </div>
+
+      {% if error %}
+      <div class="alert alert-danger">
+        <i data-lucide="alert-circle" style="width: 16px; height: 16px;"></i>
+        {{ error }}
+      </div>
+      {% endif %}
+      
+      {% if message %}
+      <div class="alert alert-success">
+        <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+        {{ message }}
+      </div>
+      {% endif %}
+      
+      <form method="post">
+        <div class="form-group">
+          <label class="form-label">{{ form.username.label }}</label>
+          {{ form.username(class="form-input" + (" error" if form.username.errors else "")) }}
+          {% if form.username.errors %}
+          <div class="form-error">
+            <i data-lucide="alert-triangle" style="width: 12px; height: 12px;"></i>
+            {% for error in form.username.errors %}
+            {{ error }}
+            {% endfor %}
+          </div>
+          {% endif %}
         </div>
+        
+        <div class="form-group">
+          <label class="form-label">{{ form.code.label }}</label>
+          {{ form.code(class="form-input verification-code-input" + (" error" if form.code.errors else ""), placeholder="000000", maxlength="6") }}
+          {% if form.code.errors %}
+          <div class="form-error">
+            <i data-lucide="alert-triangle" style="width: 12px; height: 12px;"></i>
+            {% for error in form.code.errors %}
+            {{ error }}
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        
+        <button type="submit" class="auth-submit">
+          <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+          確認コードを送信
+        </button>
+      </form>
+
+      <div class="auth-links">
+        <a href="{{ get_login_url(master) }}" class="auth-link">
+          <i data-lucide="log-in" style="width: 16px; height: 16px;"></i>
+          ログインページへ
+        </a>
+        <a href="{{ get_signup_url(master) }}" class="auth-link">
+          <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i>
+          新規登録に戻る
+        </a>
+        <a href="{{ reverse(master, 'home') }}" class="auth-link secondary">
+          <i data-lucide="home" style="width: 16px; height: 16px;"></i>
+          ホームに戻る
+        </a>
+      </div>
     </div>
-</section>
+  </div>
+</div>
 {% endblock content %}
