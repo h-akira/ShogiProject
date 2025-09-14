@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   ShogiProject
 
-  Shogi game record management system with HADS framework
+  Shogi game record management system with WAMBDA framework
 
 
 Parameters:
@@ -204,12 +204,12 @@ Resources:
             RestApiId: !Ref MainAPIGateway
       Environment:
         Variables:
-          HADS_DEBUG: !Ref DEBUG
-          HADS_USE_MOCK: !Ref UseMock
-          HADS_NO_AUTH: !Ref NoAuth
-          HADS_DENY_SIGNUP: !Ref DenySignup
-          HADS_DENY_LOGIN: !Ref DenyLogin
-          HADS_LOG_LEVEL: !Ref LogLevel
+          WAMBDA_DEBUG: !Ref DEBUG
+          WAMBDA_USE_MOCK: !Ref UseMock
+          WAMBDA_NO_AUTH: !Ref NoAuth
+          WAMBDA_DENY_SIGNUP: !Ref DenySignup
+          WAMBDA_DENY_LOGIN: !Ref DenyLogin
+          WAMBDA_LOG_LEVEL: !Ref LogLevel
           DYNAMODB_TABLE: !Ref DynamoDBTable
           SQS_QUEUE_NAME: !Ref SQSQueueName
   LambdaExecutionRole:

@@ -8,7 +8,6 @@ env:
     WAMBDA_DENY_SIGNUP: "true"
     WAMBDA_DENY_LOGIN: "false"
     WAMBDA_LOG_LEVEL: "DEBUG"
-    WAMBDA_ENV: "pro"
     S3_BUCKET: "hakira0627-sgp-pro-main"
     DYNAMODB_TABLE: "table-sgp-pro-main"
     SQS_QUEUE_NAME: "sqs-sgp-analysis.fifo"
