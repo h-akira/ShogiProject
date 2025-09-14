@@ -1,4 +1,4 @@
-from hads.shortcuts import render
+from wambda.shortcuts import render
 
 def home(master):
   context = {}

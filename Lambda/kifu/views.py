@@ -1,5 +1,5 @@
-from hads.shortcuts import render
-from hads.shortcuts import login_required, redirect
+from wambda.shortcuts import render
+from wambda.shortcuts import login_required, redirect
 from .forms import KifuForm
 import boto3
 from botocore.exceptions import ClientError

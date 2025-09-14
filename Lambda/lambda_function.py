@@ -1,6 +1,6 @@
 import sys
 import os
-from hads.handler import Master
+from wambda.handler import Master
 from moto import mock_aws
 
 def lambda_handler(event, context):
@@ -18,12 +18,12 @@ def lambda_handler(event, context):
       master.logger.warning("favicon.ico not found")
     else:
       master.logger.exception(e)
-    from hads.shortcuts import error_render
+    from wambda.shortcuts import error_render
     import traceback
     return error_render(master, traceback.format_exc())
 
 def main(master):
-  from hads.authenticate import set_auth_by_cookie, add_set_cookie_to_header
+  from wambda.authenticate import set_auth_by_cookie, add_set_cookie_to_header
   set_auth_by_cookie(master)
   view, kwargs = master.get_view(master.request.path)
   response = view(master, **kwargs)
@@ -47,7 +47,7 @@ def main(master):
 def use_mock(master):
   from mock.dynamodb import set_data as set_dynamodb_data
   from mock.ssm import set_data as set_ssm_data
-  from hads.authenticate import set_auth_by_cookie, add_set_cookie_to_header
+  from wambda.authenticate import set_auth_by_cookie, add_set_cookie_to_header
   set_dynamodb_data()
   set_ssm_data()
   set_auth_by_cookie(master)
@@ -70,5 +70,5 @@ def use_mock(master):
   return response
 
 if __name__ == "__main__":
-  from hads.debug import main_debug_handler
+  from wambda.debug import main_debug_handler
   main_debug_handler(lambda_handler)

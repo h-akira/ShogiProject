@@ -1,4 +1,4 @@
-from hads.urls import Path
+from wambda.urls import Path
 from .views import index, explorer, create, edit, detail, delete, share
 
 urlpatterns = [

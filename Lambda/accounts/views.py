@@ -1,5 +1,5 @@
-from hads.shortcuts import render, redirect
-from hads.authenticate import login, signup, verify, MaintenanceOptionError
+from wambda.shortcuts import render, redirect
+from wambda.authenticate import login, signup, verify, MaintenanceOptionError
 from .forms import LoginForm, SignupForm, VerifyForm
 
 def login_view(master):
@@ -96,7 +96,7 @@ def verify_view(master):
     return render(master, 'accounts/verify.html', context)
 
 def logout_view(master):
-    from hads.authenticate import sign_out
+    from wambda.authenticate import sign_out
     
     try:
         sign_out(master)  # 認証情報クリア + Cookie削除フラグ設定
@@ -110,7 +110,7 @@ def logout_view(master):
         master.logger.debug("Forced cleanup after exception")
     
     # リダイレクト先URLをログ出力
-    from hads.shortcuts import reverse
+    from wambda.shortcuts import reverse
     home_url = reverse(master, 'home')
     master.logger.debug(f"Redirecting to home URL: {home_url}")
     

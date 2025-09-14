@@ -6,7 +6,7 @@ AIによる局面の解析機能も有しています。
 [ShogiProject_Analysis](https://github.com/h-akira/ShogiProject_Analysis)
 の2つのリポジトリからなります。
 また、Webアプリケーションフレームワークとして
-[hads](https://github.com/h-akira/hads)
+[wambda](https://github.com/h-akira/wambda)
 を使用しています。
 
 ## 構成

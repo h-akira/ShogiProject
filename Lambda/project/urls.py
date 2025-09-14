@@ -1,4 +1,4 @@
-from hads.urls import Path, Router
+from wambda.urls import Path, Router
 from .views import home
 
 urlpatterns = [

@@ -1,4 +1,4 @@
-from hads.shortcuts import render, redirect
+from wambda.shortcuts import render, redirect
 from .forms import TagForm
 import boto3
 import datetime

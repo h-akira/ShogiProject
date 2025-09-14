@@ -1,4 +1,4 @@
-from hads.urls import Path
+from wambda.urls import Path
 from .views import submit, inquire
 
 urlpatterns = [
