@@ -49,6 +49,15 @@
             <i data-lucide="tag" class="nav-icon"></i>
             <span>タグ</span>
           </a>
+          {% else %}
+          <a href="{{ get_login_url(master) }}" class="nav-link">
+            <i data-lucide="log-in" class="nav-icon"></i>
+            <span>Log in</span>
+          </a>
+          <a href="{{ get_signup_url(master) }}" class="nav-link">
+            <i data-lucide="user-plus" class="nav-icon"></i>
+            <span>Sign up</span>
+          </a>
           {% endif %}
         </div>
         
