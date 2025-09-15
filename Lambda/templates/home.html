@@ -20,10 +20,17 @@
       </p>
       {% if not master.request.auth %}
       <div class="hero-actions">
+        {% if master.settings.DENY_SIGNUP %}
+        <button class="btn btn-primary btn-lg" disabled>
+          <i data-lucide="lock" class="btn-icon"></i>
+          サインアップ停止中
+        </button>
+        {% else %}
         <a href="{{ get_signup_url(master) }}" class="btn btn-primary btn-lg">
           <i data-lucide="rocket" class="btn-icon"></i>
           今すぐ始める
         </a>
+        {% endif %}
         <a href="{{ get_login_url(master) }}" class="btn btn-secondary btn-lg">
           <i data-lucide="log-in" class="btn-icon"></i>
           ログイン
@@ -203,12 +210,21 @@
         KifuCloudで、あなたの将棋人生を次のレベルへ
       </p>
       <div class="cta-actions">
+        {% if master.settings.DENY_SIGNUP %}
+        <button class="btn btn-primary btn-lg" disabled>
+          <i data-lucide="lock" class="btn-icon"></i>
+          現在サインアップ停止中
+        </button>
+        {% else %}
         <a href="{{ get_signup_url(master) }}" class="btn btn-primary btn-lg">
           <i data-lucide="rocket" class="btn-icon"></i>
           無料で始める
         </a>
+        {% endif %}
       </div>
+      {% if master.settings.DENY_SIGNUP %}
       <p class="cta-note">※ 現在、新規アカウント作成は管理者により制限されています</p>
+      {% endif %}
     </div>
   </div>
 </section>
