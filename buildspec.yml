@@ -1,13 +1,14 @@
 version: 0.2
 
 env:
+  parameter-store:
+    WAMBDA_DEBUG: /wambda/debug
+    WAMBDA_USE_MOCK: /wambda/use_mock
+    WAMBDA_NO_AUTH: /wambda/no_auth
+    WAMBDA_DENY_SIGNUP: /wambda/deny_signup
+    WAMBDA_DENY_LOGIN: /wambda/deny_login
+    WAMBDA_LOG_LEVEL: /wambda/log_level
   variables:
-    WAMBDA_DEBUG: "true"
-    WAMBDA_USE_MOCK: "false"
-    WAMBDA_NO_AUTH: "false"
-    WAMBDA_DENY_SIGNUP: "true"
-    WAMBDA_DENY_LOGIN: "false"
-    WAMBDA_LOG_LEVEL: "INFO"
     S3_BUCKET: "hakira0627-sgp-pro-main"
     DYNAMODB_TABLE: "table-sgp-pro-main"
     SQS_QUEUE_NAME: "sqs-sgp-analysis.fifo"
