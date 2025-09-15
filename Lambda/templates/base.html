@@ -53,10 +53,17 @@
             <i data-lucide="log-in" class="nav-icon"></i>
             <span>Log in</span>
           </a>
+          {% if master.settings.DENY_SIGNUP %}
+          <span class="nav-link" style="opacity: 0.5; cursor: not-allowed;">
+            <i data-lucide="lock" class="nav-icon"></i>
+            <span>Sign up (停止中)</span>
+          </span>
+          {% else %}
           <a href="{{ get_signup_url(master) }}" class="nav-link">
             <i data-lucide="user-plus" class="nav-icon"></i>
             <span>Sign up</span>
           </a>
+          {% endif %}
           {% endif %}
         </div>
         
@@ -72,7 +79,11 @@
           {% else %}
           <div class="auth-buttons">
             <a href="{{ get_login_url(master) }}" class="btn btn-ghost btn-sm">Log in</a>
+            {% if master.settings.DENY_SIGNUP %}
+            <button class="btn btn-primary btn-sm" disabled>Sign up</button>
+            {% else %}
             <a href="{{ get_signup_url(master) }}" class="btn btn-primary btn-sm">Sign up</a>
+            {% endif %}
           </div>
           {% endif %}
         </div>
