@@ -266,8 +266,7 @@ body {
 }
 
 /* Hide mobile auth links on desktop */
-.nav-links .nav-link[href*="login"],
-.nav-links .nav-link[href*="signup"] {
+.nav-links .auth-link {
   display: none;
 }
 
@@ -285,8 +284,7 @@ body {
   }
   
   /* Show mobile auth links on mobile */
-  .nav-links .nav-link[href*="login"],
-  .nav-links .nav-link[href*="signup"] {
+  .nav-links .auth-link {
     display: flex;
   }
 }

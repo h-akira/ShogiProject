@@ -49,17 +49,17 @@
             <span>タグ</span>
           </a>
           {% else %}
-          <a href="{{ get_login_url(master) }}" class="nav-link">
+          <a href="{{ get_login_url(master) }}" class="nav-link auth-link">
             <i data-lucide="log-in" class="nav-icon"></i>
             <span>Log in</span>
           </a>
           {% if master.settings.DENY_SIGNUP %}
-          <span class="nav-link" style="opacity: 0.5; cursor: not-allowed;">
+          <span class="nav-link auth-link" style="opacity: 0.5; cursor: not-allowed;">
             <i data-lucide="lock" class="nav-icon"></i>
-            <span>Sign up (停止中)</span>
+            <span>Sign up</span>
           </span>
           {% else %}
-          <a href="{{ get_signup_url(master) }}" class="nav-link">
+          <a href="{{ get_signup_url(master) }}" class="nav-link auth-link">
             <i data-lucide="user-plus" class="nav-icon"></i>
             <span>Sign up</span>
           </a>
@@ -80,7 +80,10 @@
           <div class="auth-buttons">
             <a href="{{ get_login_url(master) }}" class="btn btn-ghost btn-sm">Log in</a>
             {% if master.settings.DENY_SIGNUP %}
-            <button class="btn btn-primary btn-sm" disabled>Sign up</button>
+            <button class="btn btn-primary btn-sm" disabled>
+              <i data-lucide="lock" style="width: 14px; height: 14px; margin-right: 4px;"></i>
+              Sign up
+            </button>
             {% else %}
             <a href="{{ get_signup_url(master) }}" class="btn btn-primary btn-sm">Sign up</a>
             {% endif %}
