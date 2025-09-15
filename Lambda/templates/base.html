@@ -48,6 +48,16 @@
             <i data-lucide="tag" class="nav-icon"></i>
             <span>タグ</span>
           </a>
+          <div class="nav-user-info auth-link">
+            <span class="nav-link" style="pointer-events: none;">
+              <i data-lucide="user" class="nav-icon"></i>
+              <span>{{ master.request.username }}</span>
+            </span>
+            <a href="{{ get_logout_url(master) }}" class="nav-link">
+              <i data-lucide="log-out" class="nav-icon"></i>
+              <span>Logout</span>
+            </a>
+          </div>
           {% else %}
           <a href="{{ get_login_url(master) }}" class="nav-link auth-link">
             <i data-lucide="log-in" class="nav-icon"></i>

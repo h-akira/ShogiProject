@@ -270,6 +270,14 @@ body {
   display: none;
 }
 
+.nav-user-info {
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--gray-200);
+  margin-top: var(--space-sm);
+}
+
 @media (max-width: 768px) {
   .mobile-menu-toggle {
     display: block;
@@ -285,6 +293,10 @@ body {
   
   /* Show mobile auth links on mobile */
   .nav-links .auth-link {
+    display: flex;
+  }
+  
+  .nav-user-info {
     display: flex;
   }
 }
