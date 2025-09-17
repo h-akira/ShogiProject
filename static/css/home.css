@@ -138,21 +138,24 @@
 }
 
 .card-1 {
-  top: 20%;
-  left: 10%;
+  top: 15%;
+  left: 5%;
   animation-delay: 0s;
+  z-index: 3;
 }
 
 .card-2 {
-  top: 50%;
-  right: 20%;
+  top: 35%;
+  right: 15%;
   animation-delay: 2s;
+  z-index: 2;
 }
 
 .card-3 {
-  bottom: 20%;
-  left: 20%;
+  bottom: 15%;
+  right: 45%;
   animation-delay: 4s;
+  z-index: 1;
 }
 
 @keyframes float {
