@@ -129,11 +129,16 @@ def user_profile_view(master):
     email = None
     try:
         from wambda.authenticate import get_user_info
+        master.logger.debug(f"Attempting to get user info for: {master.request.username}")
         user_info = get_user_info(master, master.request.username)
+        master.logger.debug(f"Got user info: {user_info}")
         if user_info:
             email = user_info.get('email')
+            master.logger.debug(f"Extracted email: {email}")
     except Exception as e:
         master.logger.warning(f"Failed to get user email: {e}")
+        import traceback
+        master.logger.warning(f"Traceback: {traceback.format_exc()}")
     
     context = {
         'username': master.request.username,
