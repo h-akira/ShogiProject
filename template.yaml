@@ -225,7 +225,6 @@ Resources:
             Action: "sts:AssumeRole"
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-        - "arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
       Policies:
         - PolicyName: "policy-sgp-lambda-exec"
           PolicyDocument:
@@ -241,6 +240,17 @@ Resources:
                   - "dynamodb:DeleteItem"
                   - "sqs:getQueueAttributes"
                   - "sqs:sendMessage"
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - "cognito-idp:InitiateAuth"
+                  - "cognito-idp:ForgotPassword"
+                  - "cognito-idp:ConfirmForgotPassword"
+                  - "cognito-idp:ChangePassword"
+                  - "cognito-idp:SignUp"
+                  - "cognito-idp:ConfirmSignUp"
+                  - "cognito-idp:AdminGetUser"
+                  - "cognito-idp:GlobalSignOut"
                 Resource: "*"
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group

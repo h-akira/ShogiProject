@@ -19,11 +19,23 @@
     </div>
     {% endif %}
 
+    <div class="profile-header">
+      <div class="profile-avatar">
+        {{ username[0].upper() }}
+      </div>
+      <h2 class="profile-username">{{ username }}</h2>
+      <p class="profile-email">{{ email or 'メールアドレス未設定' }}</p>
+    </div>
+
     <div class="profile-card">
       <div class="profile-info">
         <div class="info-row">
           <label class="info-label">ユーザー名</label>
           <span class="info-value">{{ username }}</span>
+        </div>
+        <div class="info-row">
+          <label class="info-label">メールアドレス</label>
+          <span class="info-value">{{ email or 'メールアドレス未設定' }}</span>
         </div>
       </div>
 

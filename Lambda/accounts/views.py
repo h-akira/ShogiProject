@@ -125,7 +125,20 @@ def user_profile_view(master):
     if not master.request.auth:
         return redirect(master, 'accounts:login')
     
-    context = {'username': master.request.username}
+    # Get user email from Cognito if available
+    email = None
+    try:
+        from wambda.authenticate import get_user_info
+        user_info = get_user_info(master, master.request.username)
+        if user_info:
+            email = user_info.get('email')
+    except Exception as e:
+        master.logger.warning(f"Failed to get user email: {e}")
+    
+    context = {
+        'username': master.request.username,
+        'email': email
+    }
     
     if master.request.method == 'GET':
         query_params = master.event.get('queryStringParameters') or {}
