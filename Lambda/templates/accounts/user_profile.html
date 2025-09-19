@@ -2,6 +2,10 @@
 
 {% block title %}ユーザー情報 - KifuCloud{% endblock title %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ static(master, 'css/accounts.css') }}">
+{% endblock extra_css %}
+
 {% block content %}
 <div class="container">
   <div class="profile-container">
