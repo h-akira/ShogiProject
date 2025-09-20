@@ -2,92 +2,137 @@
 
 {% block title %}アカウント情報 - KifuCloud{% endblock title %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ static(master, 'css/accounts.css') }}">
+{% endblock extra_css %}
+
 {% block content %}
-<main class="main">
-  <div class="container">
-    <div class="page-header">
-      <h1 class="page-title">
-        <i data-lucide="user" class="page-icon"></i>
-        アカウント情報
-      </h1>
+<div class="account-page fade-in">
+  <div class="account-container">
+    <!-- Page Header -->
+    <div class="account-header">
+      <h1 class="account-title">アカウント情報</h1>
+      <p class="account-subtitle">
+        あなたのプロフィール情報を確認し、アカウント設定を管理できます
+      </p>
     </div>
 
-    <div class="content-grid">
-      <div class="content-main">
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">
-              <i data-lucide="user" class="card-icon"></i>
-              ユーザー情報
-            </h2>
+    <!-- Breadcrumb -->
+    <nav class="account-breadcrumb">
+      <ol class="breadcrumb-list">
+        <li class="breadcrumb-item">
+          <a href="{{ reverse(master, 'home') }}" class="breadcrumb-link">ホーム</a>
+          <span class="breadcrumb-separator">›</span>
+        </li>
+        <li class="breadcrumb-item">
+          <span class="breadcrumb-current">アカウント情報</span>
+        </li>
+      </ol>
+    </nav>
+
+    <!-- Main Content Grid -->
+    <div class="account-grid">
+      <div class="account-main slide-up">
+        <!-- User Information Section -->
+        <div class="account-section">
+          <div class="section-header">
+            <i data-lucide="user" class="section-icon"></i>
+            <h2 class="section-title">ユーザー情報</h2>
           </div>
 
-          <div class="card-content">
-            <div class="form-group">
-              <label class="label">ユーザー名</label>
-              <div class="text-display">{{ username }}</div>
+          <div class="user-info-grid">
+            <div class="info-item">
+              <div class="info-label">ユーザー名</div>
+              <div class="info-value">{{ username }}</div>
             </div>
 
             {% if user_info.email %}
-            <div class="form-group">
-              <label class="label">メールアドレス</label>
-              <div class="text-display">{{ user_info.email }}</div>
+            <div class="info-item">
+              <div class="info-label">メールアドレス</div>
+              <div class="info-value">{{ user_info.email }}</div>
             </div>
             {% endif %}
 
             {% if user_info.sub %}
-            <div class="form-group">
-              <label class="label">ユーザーID</label>
-              <div class="text-display monospace">{{ user_info.sub }}</div>
+            <div class="info-item">
+              <div class="info-label">ユーザーID</div>
+              <div class="info-value monospace">{{ user_info.sub }}</div>
+            </div>
+            {% endif %}
+
+            {% if user_info.email_verified %}
+            <div class="info-item">
+              <div class="info-label">メール認証状態</div>
+              <div class="info-value">
+                {% if user_info.email_verified == 'true' %}
+                  <span style="color: var(--success);">✓ 認証済み</span>
+                {% else %}
+                  <span style="color: var(--warning);">⚠ 未認証</span>
+                {% endif %}
+              </div>
             </div>
             {% endif %}
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">
-              <i data-lucide="settings" class="card-icon"></i>
-              アカウント管理
-            </h2>
+        <!-- Account Management Section -->
+        <div class="account-section">
+          <div class="section-header">
+            <i data-lucide="settings" class="section-icon"></i>
+            <h2 class="section-title">アカウント管理</h2>
           </div>
 
-          <div class="card-content">
-            <div class="action-buttons">
-              <a href="{{ reverse(master, 'accounts:change_password') }}" class="btn btn-primary">
-                <i data-lucide="key" class="btn-icon"></i>
-                パスワード変更
-              </a>
+          <div class="action-buttons">
+            <a href="{{ reverse(master, 'accounts:change_password') }}" class="action-btn">
+              <i data-lucide="key" class="btn-icon"></i>
+              パスワード変更
+            </a>
 
-              <a href="{{ get_logout_url(master) }}" class="btn btn-secondary">
-                <i data-lucide="log-out" class="btn-icon"></i>
-                ログアウト
-              </a>
-            </div>
+            <a href="{{ get_logout_url(master) }}" class="action-btn secondary">
+              <i data-lucide="log-out" class="btn-icon"></i>
+              ログアウト
+            </a>
           </div>
         </div>
       </div>
 
-      <div class="content-sidebar">
-        <div class="sidebar-card">
-          <h3 class="sidebar-title">クイックアクション</h3>
-          <div class="sidebar-actions">
-            <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="sidebar-link">
-              <i data-lucide="user" class="sidebar-icon"></i>
-              <span>マイページ</span>
-            </a>
-            <a href="{{ reverse(master, 'kifu:create', username=master.request.username) }}" class="sidebar-link">
-              <i data-lucide="plus-circle" class="sidebar-icon"></i>
-              <span>棋譜登録</span>
-            </a>
-            <a href="{{ reverse(master, 'home') }}" class="sidebar-link">
-              <i data-lucide="home" class="sidebar-icon"></i>
-              <span>ホーム</span>
-            </a>
+      <!-- Sidebar -->
+      <div class="account-sidebar slide-up">
+        <h3 class="sidebar-title">ナビゲーション</h3>
+        <nav class="sidebar-nav">
+          <a href="{{ reverse(master, 'accounts:profile') }}" class="sidebar-link active">
+            <i data-lucide="user" class="sidebar-icon"></i>
+            <span>アカウント情報</span>
+          </a>
+          <a href="{{ reverse(master, 'accounts:change_password') }}" class="sidebar-link">
+            <i data-lucide="key" class="sidebar-icon"></i>
+            <span>パスワード変更</span>
+          </a>
+          <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="sidebar-link">
+            <i data-lucide="book-open" class="sidebar-icon"></i>
+            <span>マイページ</span>
+          </a>
+          <a href="{{ reverse(master, 'kifu:create', username=master.request.username) }}" class="sidebar-link">
+            <i data-lucide="plus-circle" class="sidebar-icon"></i>
+            <span>棋譜登録</span>
+          </a>
+          <a href="{{ reverse(master, 'home') }}" class="sidebar-link">
+            <i data-lucide="home" class="sidebar-icon"></i>
+            <span>ホーム</span>
+          </a>
+        </nav>
+
+        <div class="help-box">
+          <div class="help-title">
+            <i data-lucide="help-circle" style="width: 14px; height: 14px;"></i>
+            ヘルプ
+          </div>
+          <div class="help-content">
+            <p>アカウント情報の管理について質問がある場合は、サポートチームまでお問い合わせください。</p>
           </div>
         </div>
       </div>
     </div>
   </div>
-</main>
+</div>
 {% endblock content %}
