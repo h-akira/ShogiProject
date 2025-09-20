@@ -168,6 +168,14 @@ def user_profile_view(master):
         'user_info': user_info
     }
 
+    # URLパラメータからメッセージを取得
+    query_params = master.event.get('queryStringParameters') or {}
+    message_type = query_params.get('message', '')
+
+    # メッセージ設定
+    if message_type == 'password_changed':
+        context['message'] = 'パスワードが正常に変更されました'
+
     return render(master, 'accounts/user_profile.html', context)
 
 def change_password_view(master):
@@ -197,9 +205,9 @@ def change_password_view(master):
 
         try:
             if change_password(master, current_password, new_password):
-                # パスワード変更成功後はリダイレクトしてメッセージを表示
-                return redirect(master, 'accounts:change_password', query_params={
-                    'message': 'success'
+                # パスワード変更成功後はアカウント情報ページにリダイレクト
+                return redirect(master, 'accounts:profile', query_params={
+                    'message': 'password_changed'
                 })
             else:
                 context['error'] = 'パスワード変更に失敗しました。現在のパスワードを確認してください。'

@@ -27,6 +27,13 @@
           <h2 class="section-title">ユーザー情報</h2>
         </div>
 
+        {% if message %}
+        <div class="account-alert success">
+          <i data-lucide="check-circle" class="alert-icon"></i>
+          <div>{{ message }}</div>
+        </div>
+        {% endif %}
+
         <div class="user-info-grid">
           <div class="info-item">
             <div class="info-label">ユーザー名</div>
