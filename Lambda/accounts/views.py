@@ -126,9 +126,25 @@ def user_profile_view(master):
     if not master.request.auth:
         return redirect(master, 'accounts:login')
 
+    # Get complete user information from Cognito
+    from wambda.authenticate import get_user_info
+
+    # Start with JWT token data
+    user_info = master.request.decode_token.copy() if hasattr(master.request, 'decode_token') and master.request.decode_token else {}
+
+    # Get additional user info from Cognito (including email_verified)
+    cognito_user_info = get_user_info(master, master.request.username)
+    if cognito_user_info:
+        master.logger.debug(f"Cognito user info for {master.request.username}: {cognito_user_info}")
+        user_info.update(cognito_user_info)
+    else:
+        master.logger.warning(f"Failed to get Cognito user info for {master.request.username}")
+
+    master.logger.debug(f"Final user_info for profile view: {user_info}")
+
     context = {
         'username': master.request.username,
-        'user_info': master.request.decode_token if hasattr(master.request, 'decode_token') else {}
+        'user_info': user_info
     }
 
     return render(master, 'accounts/user_profile.html', context)

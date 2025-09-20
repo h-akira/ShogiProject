@@ -54,6 +54,17 @@
   }
 }
 
+/* Single Column Layout */
+.account-main-single {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+}
+
 /* Main Content Area */
 .account-main {
   background: white;
