@@ -213,6 +213,12 @@ body {
   font-weight: var(--font-weight-medium);
   color: var(--text-primary);
   font-size: 0.875rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.user-name:hover {
+  color: var(--primary);
 }
 
 .auth-buttons {
