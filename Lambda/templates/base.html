@@ -49,10 +49,10 @@
             <span>タグ</span>
           </a>
           <div class="nav-user-info auth-link">
-            <span class="nav-link" style="pointer-events: none;">
+            <a href="{{ reverse(master, 'accounts:profile') }}" class="nav-link">
               <i data-lucide="user" class="nav-icon"></i>
               <span>{{ master.request.username }}</span>
-            </span>
+            </a>
             <a href="{{ get_logout_url(master) }}" class="nav-link">
               <i data-lucide="log-out" class="nav-icon"></i>
               <span>Logout</span>
@@ -80,7 +80,7 @@
         <div class="nav-actions">
           {% if master.request.auth %}
           <div class="user-menu">
-            <span class="user-name">{{ master.request.username }}</span>
+            <a href="{{ reverse(master, 'accounts:profile') }}" class="user-name">{{ master.request.username }}</a>
             <a href="{{ get_logout_url(master) }}" class="btn btn-secondary btn-sm">
               <i data-lucide="log-out" class="btn-icon"></i>
               Logout

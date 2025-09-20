@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}アカウント情報 - KifuCloud{% endblock title %}
+
+{% block content %}
+<main class="main">
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">
+        <i data-lucide="user" class="page-icon"></i>
+        アカウント情報
+      </h1>
+    </div>
+
+    <div class="content-grid">
+      <div class="content-main">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i data-lucide="user" class="card-icon"></i>
+              ユーザー情報
+            </h2>
+          </div>
+
+          <div class="card-content">
+            <div class="form-group">
+              <label class="label">ユーザー名</label>
+              <div class="text-display">{{ username }}</div>
+            </div>
+
+            {% if user_info.email %}
+            <div class="form-group">
+              <label class="label">メールアドレス</label>
+              <div class="text-display">{{ user_info.email }}</div>
+            </div>
+            {% endif %}
+
+            {% if user_info.sub %}
+            <div class="form-group">
+              <label class="label">ユーザーID</label>
+              <div class="text-display monospace">{{ user_info.sub }}</div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i data-lucide="settings" class="card-icon"></i>
+              アカウント管理
+            </h2>
+          </div>
+
+          <div class="card-content">
+            <div class="action-buttons">
+              <a href="{{ reverse(master, 'accounts:change_password') }}" class="btn btn-primary">
+                <i data-lucide="key" class="btn-icon"></i>
+                パスワード変更
+              </a>
+
+              <a href="{{ get_logout_url(master) }}" class="btn btn-secondary">
+                <i data-lucide="log-out" class="btn-icon"></i>
+                ログアウト
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-sidebar">
+        <div class="sidebar-card">
+          <h3 class="sidebar-title">クイックアクション</h3>
+          <div class="sidebar-actions">
+            <a href="{{ reverse(master, 'kifu:index', username=master.request.username) }}" class="sidebar-link">
+              <i data-lucide="user" class="sidebar-icon"></i>
+              <span>マイページ</span>
+            </a>
+            <a href="{{ reverse(master, 'kifu:create', username=master.request.username) }}" class="sidebar-link">
+              <i data-lucide="plus-circle" class="sidebar-icon"></i>
+              <span>棋譜登録</span>
+            </a>
+            <a href="{{ reverse(master, 'home') }}" class="sidebar-link">
+              <i data-lucide="home" class="sidebar-icon"></i>
+              <span>ホーム</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
