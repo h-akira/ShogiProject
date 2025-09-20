@@ -126,19 +126,40 @@ def user_profile_view(master):
     if not master.request.auth:
         return redirect(master, 'accounts:login')
 
-    # Get complete user information from Cognito
-    from wambda.authenticate import get_user_info
-
     # Start with JWT token data
     user_info = master.request.decode_token.copy() if hasattr(master.request, 'decode_token') and master.request.decode_token else {}
 
-    # Get additional user info from Cognito (including email_verified)
-    cognito_user_info = get_user_info(master, master.request.username)
-    if cognito_user_info:
-        master.logger.debug(f"Cognito user info for {master.request.username}: {cognito_user_info}")
-        user_info.update(cognito_user_info)
-    else:
-        master.logger.warning(f"Failed to get Cognito user info for {master.request.username}")
+    # Get complete user information directly from Cognito SDK
+    try:
+        import boto3
+        from botocore.exceptions import ClientError
+        from wambda.authenticate import get_cognito_settings
+
+        client = boto3.client('cognito-idp', region_name=master.settings.REGION)
+        cognito_settings = get_cognito_settings(master)
+
+        response = client.admin_get_user(
+            UserPoolId=cognito_settings['USER_POOL_ID'],
+            Username=master.request.username
+        )
+
+        # Process all user attributes
+        for attr in response.get('UserAttributes', []):
+            attr_name = attr['Name']
+            attr_value = attr['Value']
+
+            # Convert boolean values appropriately
+            if attr_name == 'email_verified':
+                user_info[attr_name] = attr_value.lower() == 'true'
+            else:
+                user_info[attr_name] = attr_value
+
+        master.logger.debug(f"Cognito user info for {master.request.username}: {user_info}")
+
+    except ClientError as e:
+        master.logger.warning(f"Failed to get Cognito user info: {e}")
+    except Exception as e:
+        master.logger.error(f"Error getting user info: {e}")
 
     master.logger.debug(f"Final user_info for profile view: {user_info}")
 
