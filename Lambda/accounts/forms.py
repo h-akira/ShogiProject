@@ -107,3 +107,25 @@ class ResetPasswordForm(Form):
       return False
 
     return True
+
+class DeleteAccountForm(Form):
+  current_password = PasswordField(
+    render_kw={'style': 'width: 200px;'},
+    validators=[DataRequired(), Length(min=8, max=63)],
+    label='現在のパスワード'
+  )
+  confirmation = StringField(
+    render_kw={'style': 'width: 200px;'},
+    validators=[DataRequired()],
+    label='削除の確認'
+  )
+
+  def validate(self):
+    if not super().validate():
+      return False
+
+    if self.confirmation.data != 'DELETE':
+      self.confirmation.errors.append('削除を確認するため「DELETE」と入力してください')
+      return False
+
+    return True

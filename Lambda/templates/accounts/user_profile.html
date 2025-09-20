@@ -92,6 +92,11 @@
             <i data-lucide="log-out" class="btn-icon"></i>
             ログアウト
           </a>
+
+          <a href="{{ reverse(master, 'accounts:delete_account') }}" class="action-btn danger" onclick="return confirm('本当にアカウントを削除しますか？この操作は元に戻せません。')">
+            <i data-lucide="trash-2" class="btn-icon"></i>
+            アカウント削除
+          </a>
         </div>
       </div>
     </div>

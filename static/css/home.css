@@ -1,3 +1,44 @@
+/* ===== Notification Banner ===== */
+.notification-banner {
+  position: fixed;
+  top: 72px;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  padding: var(--space-md) 0;
+  animation: slideDown 0.3s ease-out;
+}
+
+.notification-banner.success {
+  background: linear-gradient(135deg, var(--success), #059669);
+  color: white;
+}
+
+.notification-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0 var(--space-lg);
+}
+
+.notification-icon {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 /* ===== Hero Section ===== */
 .hero-section {
   position: relative;
