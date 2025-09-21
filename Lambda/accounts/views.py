@@ -12,9 +12,8 @@ def login_view(master):
     
     # URLパラメータからメッセージを取得
     if master.request.method == 'GET':
-        query_params = master.event.get('queryStringParameters') or {}
-        message_type = query_params.get('message', '')
-        
+        message_type = master.request.query_params.get('message', '')
+
         # メッセージ設定
         if message_type == 'verify_success':
             context['message'] = 'メールアドレスの確認が完了しました'
@@ -72,13 +71,12 @@ def verify_view(master):
     
     # URLパラメータからユーザー名とメッセージを取得
     if master.request.method == 'GET':
-        query_params = master.event.get('queryStringParameters') or {}
-        username = query_params.get('username', '')
-        message_type = query_params.get('message', '')
-        
+        username = master.request.query_params.get('username', '')
+        message_type = master.request.query_params.get('message', '')
+
         if username:
             form.username.data = username
-        
+
         # メッセージ設定
         if message_type == 'signup_success':
             context['message'] = 'サインアップが完了しました。確認コードをメールで送信しました。'
@@ -169,8 +167,7 @@ def user_profile_view(master):
     }
 
     # URLパラメータからメッセージを取得
-    query_params = master.event.get('queryStringParameters') or {}
-    message_type = query_params.get('message', '')
+    message_type = master.request.query_params.get('message', '')
 
     # メッセージ設定
     if message_type == 'password_changed':
@@ -260,8 +257,7 @@ def change_password_view(master):
 
     # URLパラメータからメッセージを取得
     if master.request.method == 'GET':
-        query_params = master.event.get('queryStringParameters') or {}
-        message_type = query_params.get('message', '')
+        message_type = master.request.query_params.get('message', '')
 
         # メッセージ設定
         if message_type == 'success':
@@ -325,9 +321,8 @@ def reset_password_view(master):
 
     # URLパラメータからユーザー名とメッセージを取得
     if master.request.method == 'GET':
-        query_params = master.event.get('queryStringParameters') or {}
-        username = query_params.get('username', '')
-        message_type = query_params.get('message', '')
+        username = master.request.query_params.get('username', '')
+        message_type = master.request.query_params.get('message', '')
 
         if username:
             form.username.data = username
