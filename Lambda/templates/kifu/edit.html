@@ -57,9 +57,9 @@
             
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label">キー <span class="form-hint">（例: 社団戦/2025/鈴木）</span></label>
+                <label class="form-label">キー（スラッシュ区切り）</label>
                 <div class="slug-input-group">
-                  {{ form.slug(class="form-input slug-input") }}
+                  {{ form.slug(class="form-input slug-input", placeholder="例: 名人戦/2025/第1局") }}
                   <span class="slug-extension">.kif</span>
                   {% if type == "create" %}
                   <button type="button" id="generate-slug" class="generate-slug-btn">
