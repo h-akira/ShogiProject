@@ -51,38 +51,62 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   function startAnalysis() {
-    pollCount = 0;
-    intervalId = setInterval(() => {
-      pollCount++;
-      if (pollCount > 20) {
-        clearInterval(intervalId);
-        showError('応答がありません');
-        resetButton();
-        return;
-      }
+    const analysisTimeSelect = document.getElementById('analysis-time-select');
+    const analysisTime = parseInt(analysisTimeSelect.value);
 
-      fetch(`/analysis/inquire/${aid}`)
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          if (data.status === 'running') {
-            // 何もしない
-          } else if (data.status === 'successed') {
-            clearInterval(intervalId);
-            showResult(data.message);
-            resetButton();
-          } else {
-            clearInterval(intervalId);
-            showError('解析に失敗しました');
-            resetButton();
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
+    // 解析時間に応じた初期待機時間を設定
+    let initialDelay;
+    if (analysisTime <= 3000) {
+      initialDelay = 2000; // 3秒の場合は2秒待機
+    } else if (analysisTime <= 5000) {
+      initialDelay = 4000; // 5秒の場合は4秒待機
+    } else {
+      initialDelay = 9000; // 10秒の場合は9秒待機
+    }
+
+    // 最初の問い合わせは1秒後に実行
+    setTimeout(() => {
+      checkAnalysisResult();
+    }, 1000);
+
+    // 初期待機後、0.5秒間隔でポーリング開始
+    setTimeout(() => {
+      pollCount = 0;
+      intervalId = setInterval(() => {
+        pollCount++;
+        if (pollCount > 20) {
           clearInterval(intervalId);
+          showError('応答がありません');
           resetButton();
-        });
-    }, 2000);
+          return;
+        }
+        checkAnalysisResult();
+      }, 500);
+    }, initialDelay);
+  }
+
+  function checkAnalysisResult() {
+    fetch(`/analysis/inquire/${aid}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.status === 'running') {
+          // 何もしない
+        } else if (data.status === 'successed') {
+          if (intervalId) clearInterval(intervalId);
+          showResult(data.message);
+          resetButton();
+        } else {
+          if (intervalId) clearInterval(intervalId);
+          showError('解析に失敗しました');
+          resetButton();
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        if (intervalId) clearInterval(intervalId);
+        resetButton();
+      });
   }
 
   function resetButton() {

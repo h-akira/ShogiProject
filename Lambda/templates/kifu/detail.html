@@ -278,10 +278,62 @@
   background: linear-gradient(135deg, #e072e6 0%, #e84755 100%);
 }
 
-.analysis-controls {
-  display: flex;
+.analysis-time-select {
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  background: white;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+  justify-content: center;
+  flex: 1;
+}
+
+.analysis-time-select:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.analysis-time-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+.analysis-button {
+  display: inline-flex;
   align-items: center;
   gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+  justify-content: center;
+  flex: 1;
+}
+
+.analysis-button:hover {
+  background: linear-gradient(135deg, #e072e6 0%, #e84755 100%);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.analysis-button:disabled {
+  background: var(--gray-400);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .board-control-select {
@@ -493,15 +545,15 @@
         </button>
         
         {% if master.request.auth %}
-        <div class="analysis-controls">
-          <select id="analysis-time-select" class="board-control-select">
+        <div class="control-group">
+          <select id="analysis-time-select" class="analysis-time-select">
             <option value="3000">3秒</option>
             <option value="5000">5秒</option>
             <option value="10000">10秒</option>
           </select>
-          <button id="analyze-button" class="board-control-btn analyze">
+          <button id="analyze-button" class="analysis-button">
             <i data-lucide="zap" style="width: 16px; height: 16px;"></i>
-            解析
+            解析開始
           </button>
         </div>
         {% endif %}
