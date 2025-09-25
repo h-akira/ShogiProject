@@ -53,9 +53,11 @@ def submit(master):
 
   # Get and validate movetime parameter
   movetime = body.get("movetime", 3000)  # Default to 3 seconds
+  master.logger.info(f"Received movetime: {movetime}")
   if movetime not in [3000, 5000, 10000]:
     master.logger.warning(f"Invalid movetime value: {movetime}, using default 3000")
     movetime = 3000
+  master.logger.info(f"Using movetime: {movetime}")
   import os
   
   sqs = boto3.client('sqs')
@@ -125,6 +127,7 @@ def submit(master):
     "position": position,
     "movetime": movetime
   }
+  master.logger.info(f"Sending to SQS: {data}")
   message = json.dumps(data)
   response = sqs.send_message(
     QueueUrl=QueueUrl,

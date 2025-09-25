@@ -95,14 +95,18 @@ document.addEventListener('DOMContentLoaded', function() {
     errorMessage.innerText = message;
     errorMessage.style.color = 'red';
     errorMessage.className = 'analysis-error';
-    analyzeButton.parentNode.insertBefore(errorMessage, analyzeButton);
+    // analysis-controlsの親ノード（board-controls-section）の後に挿入
+    const analysisControls = analyzeButton.closest('.analysis-controls');
+    analysisControls.parentNode.insertBefore(errorMessage, analysisControls.nextSibling);
   }
 
   function showResult(message) {
     const result = document.createElement('pre');
     result.innerText = message;
     result.className = 'analysis-result has-text-left';
-    analyzeButton.parentNode.insertBefore(result, analyzeButton.nextSibling);
+    // analysis-controlsの親ノード（board-controls-section）の後に挿入
+    const analysisControls = analyzeButton.closest('.analysis-controls');
+    analysisControls.parentNode.insertBefore(result, analysisControls.nextSibling);
   }
 
   function clearMessages() {
