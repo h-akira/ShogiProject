@@ -19,13 +19,19 @@ document.addEventListener('DOMContentLoaded', function() {
     clearMessages(); // 以前のメッセージをクリア
     analyzeButton.innerText = '解析中';
     analyzeButton.disabled = true;
+
+    // プルダウンから解析時間を取得
+    const analysisTimeSelect = document.getElementById('analysis-time-select');
+    const analysisTime = parseInt(analysisTimeSelect.value);
+
     fetch('/analysis/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        'position': latestSfen
+        'position': latestSfen,
+        'movetime': analysisTime
       })
     })
     .then(response => response.json())

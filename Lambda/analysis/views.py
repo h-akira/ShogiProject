@@ -32,7 +32,7 @@ def submit(master):
   if position is None:
     master.logger.error("Position not found")
     return json_response(
-      master, 
+      master,
       {
         "submit": "reject",
         "aid": None
@@ -50,6 +50,12 @@ def submit(master):
         "aid": None
       }
     )
+
+  # Get and validate movetime parameter
+  movetime = body.get("movetime", 3000)  # Default to 3 seconds
+  if movetime not in [3000, 5000, 10000]:
+    master.logger.warning(f"Invalid movetime value: {movetime}, using default 3000")
+    movetime = 3000
   import os
   
   sqs = boto3.client('sqs')
@@ -116,7 +122,8 @@ def submit(master):
   data = {
     "username": master.request.username,
     "aid": aid,
-    "position": position
+    "position": position,
+    "movetime": movetime
   }
   message = json.dumps(data)
   response = sqs.send_message(
