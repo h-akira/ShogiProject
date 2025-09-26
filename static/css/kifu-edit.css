@@ -121,6 +121,7 @@
 
 .slug-input {
   flex: 1;
+  min-width: 0;
 }
 
 .slug-extension {
@@ -350,24 +351,25 @@
   }
   
   .slug-input-group {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-md);
+    display: block;
   }
 
   .slug-input {
     width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
+    margin-bottom: var(--space-sm);
+    flex: none;
   }
 
   .slug-extension {
-    align-self: flex-start;
-    margin-top: calc(-1 * var(--space-md));
+    display: block;
     margin-bottom: var(--space-sm);
   }
 
   .generate-slug-btn {
-    align-self: flex-start;
-    margin-top: 0;
+    display: block;
+    width: auto;
+    margin: 0;
   }
 }
