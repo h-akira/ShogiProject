@@ -350,26 +350,4 @@
     align-items: stretch;
   }
   
-  .slug-input-group {
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-  }
-
-  .slug-input {
-    flex: 1 1 100%;
-    min-width: 0;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  .slug-extension {
-    flex: 0 0 auto;
-    order: 2;
-  }
-
-  .generate-slug-btn {
-    flex: 0 0 auto;
-    order: 3;
-  }
 }
