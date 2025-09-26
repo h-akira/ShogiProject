@@ -59,14 +59,14 @@
               <div class="form-group">
                 <label class="form-label">キー（スラッシュ区切り）</label>
                 <div class="slug-input-group">
-                  {{ form.slug(class="form-input slug-input", placeholder="例: 名人戦/2025/第1局") }}
-                  <span class="slug-extension">.kif</span>
                   {% if type == "create" %}
                   <button type="button" id="generate-slug" class="generate-slug-btn">
                     <i data-lucide="shuffle" style="width: 14px; height: 14px;"></i>
                     生成
                   </button>
                   {% endif %}
+                  {{ form.slug(class="form-input slug-input", placeholder="例: 名人戦/2025/第1局") }}
+                  <span class="slug-extension">.kif</span>
                 </div>
               </div>
               
