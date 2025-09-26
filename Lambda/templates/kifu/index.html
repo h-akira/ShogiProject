@@ -16,21 +16,6 @@
       <h1 class="dashboard-user-name">{{ username }}</h1>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="quick-actions">
-      <a href="{{ reverse(master, 'kifu:create', username=username) }}" class="action-button">
-        <i data-lucide="plus-circle" style="width: 20px; height: 20px;"></i>
-        棋譜を登録
-      </a>
-      <a href="{{ reverse(master, 'kifu:explorer', username=username) }}" class="action-button secondary">
-        <i data-lucide="search" style="width: 20px; height: 20px;"></i>
-        エクスプローラー
-      </a>
-      <a href="{{ reverse(master, 'tag:index', username=username) }}" class="action-button secondary">
-        <i data-lucide="tag" style="width: 20px; height: 20px;"></i>
-        タグ管理
-      </a>
-    </div>
 
     <!-- Recent Updates -->
     <div class="recent-section">
