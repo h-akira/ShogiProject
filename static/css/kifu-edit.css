@@ -316,20 +316,33 @@
   .kifu-edit-page {
     padding: var(--space-lg) 0;
   }
-  
+
+  .kifu-edit-container {
+    margin: 0 var(--space-md);
+    max-width: calc(100vw - 2 * var(--space-md));
+  }
+
   .kifu-edit-header,
   .kifu-form-card {
     padding: var(--space-lg);
   }
-  
+
   .kifu-edit-title {
     font-size: 1.5rem;
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
   }
-  
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
   .form-actions,
   .form-actions-top {
     flex-direction: column;
@@ -339,9 +352,22 @@
   .slug-input-group {
     flex-direction: column;
     align-items: stretch;
+    gap: var(--space-md);
   }
-  
+
+  .slug-input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .slug-extension {
+    align-self: flex-start;
+    margin-top: calc(-1 * var(--space-md));
+    margin-bottom: var(--space-sm);
+  }
+
   .generate-slug-btn {
     align-self: flex-start;
+    margin-top: 0;
   }
 }

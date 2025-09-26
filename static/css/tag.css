@@ -513,7 +513,13 @@
   .tag-detail-page {
     padding: var(--space-lg) 0;
   }
-  
+
+  .tag-create-container,
+  .tag-edit-container {
+    margin: 0 var(--space-md);
+    max-width: calc(100vw - 2 * var(--space-md));
+  }
+
   .tag-header,
   .tags-content,
   .tag-create-card,
@@ -521,6 +527,12 @@
   .tag-info-card,
   .kifu-list-section {
     padding: var(--space-lg);
+  }
+
+  .form-input {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .tag-title,
