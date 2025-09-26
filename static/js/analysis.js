@@ -119,8 +119,8 @@ document.addEventListener('DOMContentLoaded', function() {
     errorMessage.innerText = message;
     errorMessage.style.color = 'red';
     errorMessage.className = 'analysis-error';
-    // analysis-controlsの親ノード（board-controls-section）の後に挿入
-    const analysisControls = analyzeButton.closest('.analysis-controls');
+    // analysis-controls-verticalの親ノード（board-controls-section）の後に挿入
+    const analysisControls = analyzeButton.closest('.analysis-controls-vertical');
     analysisControls.parentNode.insertBefore(errorMessage, analysisControls.nextSibling);
   }
 
@@ -128,8 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const result = document.createElement('pre');
     result.innerText = message;
     result.className = 'analysis-result has-text-left';
-    // analysis-controlsの親ノード（board-controls-section）の後に挿入
-    const analysisControls = analyzeButton.closest('.analysis-controls');
+    // analysis-controls-verticalの親ノード（board-controls-section）の後に挿入
+    const analysisControls = analyzeButton.closest('.analysis-controls-vertical');
     analysisControls.parentNode.insertBefore(result, analysisControls.nextSibling);
   }
 
