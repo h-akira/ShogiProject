@@ -11,13 +11,13 @@
   box-shadow: var(--shadow-sm);
   padding: var(--space-2xl);
   margin-bottom: var(--space-2xl);
+  text-align: center;
 }
 
 .tag-title {
   font-size: 1.75rem;
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
-  text-align: center;
   margin-bottom: var(--space-lg);
   display: flex;
   align-items: center;
@@ -36,7 +36,6 @@
   border-radius: var(--radius-md);
   font-weight: var(--font-weight-medium);
   transition: all var(--transition-fast);
-  margin-bottom: var(--space-lg);
 }
 
 .create-tag-btn:hover {
@@ -117,13 +116,15 @@
 }
 
 .tag-action-btn.edit {
-  background: var(--gray-100);
-  color: var(--text-secondary);
+  background: #f0f9ff;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
 }
 
 .tag-action-btn.edit:hover {
-  background: var(--gray-200);
-  color: var(--text-primary);
+  background: #e0f2fe;
+  color: #0c4a6e;
+  border-color: #7dd3fc;
 }
 
 .tag-action-btn.delete {
