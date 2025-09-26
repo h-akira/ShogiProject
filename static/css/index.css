@@ -173,35 +173,35 @@
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-md) var(--space-lg);
-  background: #f0f0ff;
-  color: #5a5a8a;
+  background: #f0f9ff;
+  color: #1e40af;
   text-decoration: none;
   border-radius: var(--radius-md);
   font-weight: var(--font-weight-medium);
   transition: all var(--transition-fast);
-  border: 1px solid #e0e0f0;
+  border: 1px solid #dbeafe;
 }
 
 .action-button:hover {
-  background: #e8e8ff;
-  color: #4a4a7a;
+  background: #dbeafe;
+  color: #1d4ed8;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
-  border-color: #d0d0e0;
+  border-color: #bfdbfe;
 }
 
 .action-button.secondary {
-  background: #f0f0ff;
-  color: #5a5a8a;
-  border: 1px solid #e0e0f0;
+  background: #f0f9ff;
+  color: #1e40af;
+  border: 1px solid #dbeafe;
 }
 
 .action-button.secondary:hover {
-  background: #e8e8ff;
-  color: #4a4a7a;
+  background: #dbeafe;
+  color: #1d4ed8;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
-  border-color: #d0d0e0;
+  border-color: #bfdbfe;
 }
 
 /* Responsive styles for dashboard page */

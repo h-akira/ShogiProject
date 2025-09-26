@@ -34,18 +34,21 @@
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-md) var(--space-lg);
-  background: var(--primary);
-  color: white;
+  background: #f0f9ff;
+  color: #1e40af;
   text-decoration: none;
   border-radius: var(--radius-md);
   font-weight: var(--font-weight-medium);
   transition: all var(--transition-fast);
+  border: 1px solid #dbeafe;
 }
 
 .create-tag-btn:hover {
-  background: var(--primary-dark);
+  background: #dbeafe;
+  color: #1d4ed8;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+  border-color: #bfdbfe;
 }
 
 .tags-content {
@@ -87,18 +90,20 @@
   align-items: center;
   gap: var(--space-xs);
   padding: var(--space-sm) var(--space-md);
-  background: var(--primary);
-  color: white;
+  background: #eff6ff;
+  color: #1e40af;
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: var(--font-weight-medium);
   text-decoration: none;
   transition: all var(--transition-fast);
+  border: 1px solid #bfdbfe;
 }
 
 .tag-badge:hover {
-  background: var(--primary-dark);
-  color: white;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-color: #93c5fd;
 }
 
 .tag-actions {
@@ -254,9 +259,9 @@
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-md) var(--space-xl);
-  background: var(--primary);
-  color: white;
-  border: none;
+  background: #f0f9ff;
+  color: #1e40af;
+  border: 1px solid #dbeafe;
   border-radius: var(--radius-md);
   font-size: 1rem;
   font-weight: var(--font-weight-medium);
@@ -266,9 +271,11 @@
 
 .create-btn:hover,
 .save-btn:hover {
-  background: var(--primary-dark);
+  background: #dbeafe;
+  color: #1d4ed8;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+  border-color: #bfdbfe;
 }
 
 .cancel-btn {
@@ -343,12 +350,13 @@
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-lg) var(--space-xl);
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white;
+  background: #eff6ff;
+  color: #1e40af;
   border-radius: var(--radius-xl);
   font-size: 1.5rem;
   font-weight: var(--font-weight-bold);
-  box-shadow: var(--shadow-md);
+  border: 2px solid #bfdbfe;
+  box-shadow: var(--shadow-sm);
 }
 
 .tag-meta {
@@ -384,14 +392,17 @@
 }
 
 .tag-actions .tag-action-btn.edit {
-  background: var(--primary);
-  color: white;
+  background: #f0f9ff;
+  color: #1e40af;
+  border: 1px solid #dbeafe;
 }
 
 .tag-actions .tag-action-btn.edit:hover {
-  background: var(--primary-dark);
+  background: #dbeafe;
+  color: #1d4ed8;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+  border-color: #bfdbfe;
 }
 
 .tag-actions .tag-action-btn.back {
