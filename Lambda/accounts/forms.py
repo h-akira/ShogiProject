@@ -3,14 +3,14 @@ from wtforms.validators import DataRequired, Length, ValidationError
 import re
 
 class AlphanumericValidator:
-  """Validates that field contains only ASCII alphanumeric characters and underscores"""
+  """Validates that field contains only ASCII alphanumeric characters, underscores, and hyphens"""
   def __init__(self, message=None):
     if not message:
-      message = 'ユーザー名には半角英数字とアンダースコア(_)のみ使用できます'
+      message = 'ユーザー名には半角英数字、アンダースコア(_)、ハイフン(-)のみ使用できます'
     self.message = message
 
   def __call__(self, form, field):
-    if not re.match(r'^[a-zA-Z0-9_]+$', field.data):
+    if not re.match(r'^[a-zA-Z0-9_-]+$', field.data):
       raise ValidationError(self.message)
 
 class LoginForm(Form):

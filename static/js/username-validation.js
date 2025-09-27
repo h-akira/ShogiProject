@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Real-time validation
     usernameField.addEventListener('input', function() {
       const value = this.value;
-      const isValid = /^[a-zA-Z0-9_]*$/.test(value);
+      const isValid = /^[a-zA-Z0-9_-]*$/.test(value);
 
       // Remove existing error styling
       this.classList.remove('error');
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         this.classList.add('error');
         const errorDiv = document.createElement('div');
         errorDiv.className = 'form-error client-error';
-        errorDiv.textContent = 'ユーザー名には半角英数字とアンダースコア(_)のみ使用できます';
+        errorDiv.textContent = 'ユーザー名には半角英数字、アンダースコア(_)、ハイフン(-)のみ使用できます';
         this.parentNode.appendChild(errorDiv);
       }
     });
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) {
       form.addEventListener('submit', function(e) {
         const value = usernameField.value;
-        if (value && !/^[a-zA-Z0-9_]+$/.test(value)) {
+        if (value && !/^[a-zA-Z0-9_-]+$/.test(value)) {
           e.preventDefault();
           usernameField.focus();
 
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
             usernameField.classList.add('error');
             const errorDiv = document.createElement('div');
             errorDiv.className = 'form-error client-error';
-            errorDiv.textContent = 'ユーザー名には半角英数字とアンダースコア(_)のみ使用できます';
+            errorDiv.textContent = 'ユーザー名には半角英数字、アンダースコア(_)、ハイフン(-)のみ使用できます';
             usernameField.parentNode.appendChild(errorDiv);
           }
         }
