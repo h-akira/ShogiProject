@@ -6,6 +6,10 @@
 <link rel="stylesheet" href="{{ static(master, 'css/auth.css') }}">
 {% endblock extra_css %}
 
+{% block extra_js %}
+<script src="{{ static(master, 'js/username-validation.js') }}"></script>
+{% endblock extra_js %}
+
 {% block content %}
 <div class="auth-page">
   <div class="auth-container">

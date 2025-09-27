@@ -1,10 +1,22 @@
 from wtforms import Form, BooleanField, StringField, PasswordField, validators, IntegerField, TextAreaField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, ValidationError
+import re
+
+class AlphanumericValidator:
+  """Validates that field contains only ASCII alphanumeric characters and underscores"""
+  def __init__(self, message=None):
+    if not message:
+      message = 'ユーザー名には半角英数字とアンダースコア(_)のみ使用できます'
+    self.message = message
+
+  def __call__(self, form, field):
+    if not re.match(r'^[a-zA-Z0-9_]+$', field.data):
+      raise ValidationError(self.message)
 
 class LoginForm(Form):
   username = StringField(
     render_kw={'style': 'width: 200px;'},
-    validators=[DataRequired(), Length(min=1, max=63)],
+    validators=[DataRequired(), Length(min=1, max=63), AlphanumericValidator()],
     label='ユーザー名'
   )
   password = PasswordField(
@@ -16,7 +28,7 @@ class LoginForm(Form):
 class SignupForm(Form):
   username = StringField(
     render_kw={'style': 'width: 200px;'},
-    validators=[DataRequired(), Length(min=1, max=63)],
+    validators=[DataRequired(), Length(min=1, max=63), AlphanumericValidator()],
     label='ユーザー名　　'
   )
   password = PasswordField(
@@ -33,7 +45,7 @@ class SignupForm(Form):
 class VerifyForm(Form):
   username = StringField(
     render_kw={'style': 'width: 200px;'},
-    validators=[DataRequired(), Length(min=1, max=63)],
+    validators=[DataRequired(), Length(min=1, max=63), AlphanumericValidator()],
     label='ユーザー名'
   )
   code = StringField(
@@ -72,14 +84,14 @@ class ChangePasswordForm(Form):
 class ForgotPasswordForm(Form):
   username = StringField(
     render_kw={'style': 'width: 200px;'},
-    validators=[DataRequired(), Length(min=1, max=63)],
+    validators=[DataRequired(), Length(min=1, max=63), AlphanumericValidator()],
     label='ユーザー名'
   )
 
 class ResetPasswordForm(Form):
   username = StringField(
     render_kw={'style': 'width: 200px;'},
-    validators=[DataRequired(), Length(min=1, max=63)],
+    validators=[DataRequired(), Length(min=1, max=63), AlphanumericValidator()],
     label='ユーザー名'
   )
   confirmation_code = StringField(
