@@ -59,7 +59,7 @@
             </a>
           </div>
           {% else %}
-          <a href="{{ get_login_url(master) }}" class="nav-link auth-link">
+          <a href="{{ get_login_url(master) }}" class="nav-link auth-link" data-testid="login-button-mobile">
             <i data-lucide="log-in" class="nav-icon"></i>
             <span>Log in</span>
           </a>
@@ -88,7 +88,7 @@
           </div>
           {% else %}
           <div class="auth-buttons">
-            <a href="{{ get_login_url(master) }}" class="btn btn-ghost btn-sm">Log in</a>
+            <a href="{{ get_login_url(master) }}" class="btn btn-ghost btn-sm" data-testid="login-button">Log in</a>
             {% if master.settings.DENY_SIGNUP %}
             <button class="btn btn-primary btn-sm" disabled>
               <i data-lucide="lock" style="width: 14px; height: 14px; margin-right: 4px;"></i>
