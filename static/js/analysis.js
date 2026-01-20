@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
       checkAnalysisResult();
     }, 1000);
 
-    // 初期待機後、0.5秒間隔でポーリング開始
+    // 初期待機後、0.7秒間隔でポーリング開始
     setTimeout(() => {
       pollCount = 0;
       intervalId = setInterval(() => {
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
           return;
         }
         checkAnalysisResult();
-      }, 500);
+      }, 700);
     }, initialDelay);
   }
 
