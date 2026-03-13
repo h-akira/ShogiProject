@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
       pollCount = 0;
       intervalId = setInterval(() => {
         pollCount++;
-        if (pollCount > 20) {
+        if (pollCount > 22) {
           clearInterval(intervalId);
           showError('応答がありません');
           resetButton();
